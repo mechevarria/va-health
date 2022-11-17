@@ -22,6 +22,11 @@
     </div>
     <ul class="c-sidebar-nav" @mouseenter="mouseEnter" @mouseleave="mouseLeave">
       <li class="c-sidebar-nav-item">
+        <router-link class="c-sidebar-nav-link" to="/home/status" @click.native="closeOnMobile">
+          <i class="c-sidebar-nav-icon cib-python"></i> Status
+        </router-link>
+      </li>
+      <li class="c-sidebar-nav-item">
         <router-link class="c-sidebar-nav-link" to="/home/form" @click.native="closeOnMobile">
           <i class="c-sidebar-nav-icon cil-notes"></i> Form
         </router-link>
@@ -30,11 +35,6 @@
         <router-link class="c-sidebar-nav-link" to="/home/table" @click.native="closeOnMobile">
           <i class="c-sidebar-nav-icon cil-list"></i> Table
         </router-link>
-      </li>
-      <li class="c-sidebar-nav-item">
-        <a class="c-sidebar-nav-link" href="https://github.com/mechevarria" target="_blank">
-          <i class="c-sidebar-nav-icon cib-github"></i> Github
-        </a>
       </li>
     </ul>
     <button class="c-sidebar-minimizer c-class-toggler" type="button" @click="toggleMin"></button>
