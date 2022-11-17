@@ -5,7 +5,14 @@
         <div class="card-body">
           <h4 class="card-title">Eureka API Status</h4>
           <div class="card-text">
-            <pre>{{data}}</pre>
+            <pre>{{ data }}</pre>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="card-text">
+            <highcharts :options="chartOptions"></highcharts>
           </div>
         </div>
       </div>
@@ -15,16 +22,45 @@
 </template>
 
 <script>
+import { Chart } from 'highcharts-vue'
 import axios from 'axios'
 import msgMixin from '../mixins/msg-mixin'
 
 export default {
   name: 'AppHome',
+  components: {
+    highcharts: Chart
+  },
   mixins: [msgMixin],
   data() {
     return {
       data: [],
-      isBusy: false
+      isBusy: false,
+      chartOptions: {
+        chart: {
+          type: 'networkgraph'
+        },
+        plotOptions: {
+          networkgraph: {
+            keys: ['from', 'to']
+          }
+        },
+        title: {
+          text: 'Network Graph'
+        },
+        series: [{
+          name: 'sample',
+          data: [
+            { from: 'A', to: 'B' },
+            { from: 'A', to: 'C' },
+            { from: 'A', to: 'D' },
+            { from: 'A', to: 'E' },
+            { from: 'A', to: 'F' },
+            { from: 'A', to: 'G' },
+            { from: 'B', to: 'C' }
+          ]
+        }]
+      }
     }
   },
   methods: {
