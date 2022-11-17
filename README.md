@@ -20,7 +20,7 @@ AYASDI_APISERVER="http://platform.ayasdi.com/workbench/"
 ## frontend-vue
 Sample web application integrating bootstrap based coreui with [Vue](https://vuejs.org/). Initial scafold done with Vue CLI. The project can be deployed as a [docker](https://docs.docker.com/install/) container or pushed directly with a [buildpack](https://docs.cloudfoundry.org/buildpacks/nginx/index.html) to [Microsoft Azure](https://azure.microsoft.com/en-us/)
 
-![form](screenshots/form.png)
+![screenshot](screenshots/screenshot.png)
 
 ## Integration and Links
 
@@ -47,6 +47,8 @@ npm install
 npm run serve
 ```
 
+* The server will be running on [http://localhost:3000](http://localhost:3000)
+
 ### Compiles and minifies for production
 ```
 npm run build
@@ -65,8 +67,6 @@ docker-build.sh
 ```bash
 docker-run.sh
 ```
-
-* The server will be running on [http://localhost:5000](http://localhost:5000)
 
 ## Deploy to Microsoft Azure
 
