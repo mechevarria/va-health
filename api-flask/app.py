@@ -23,7 +23,7 @@ api = Api(app)
 
 class Status(Resource):
     def get(self):
-        return jsonify(is_connected = conn.is_connected)
+        return jsonify(is_connected = conn.is_connected, eureka_user = eureka_user, eureka_url = eureka_url)
 
 
 api.add_resource(Status, '/status')
