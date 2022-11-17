@@ -1,0 +1,5 @@
+# python ignores
+api-flask/.env
+
+# node ignore
+frontend-vue/node_modules
