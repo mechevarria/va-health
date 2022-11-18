@@ -9,7 +9,7 @@
       "type": "python",
       "request": "launch",
       "program": "~/miniconda3/envs/sai/bin/flask",
-      "cwd": "~/git/va-health/api-flask",
+      "cwd": "${workspaceFolder}/api-flask",
       "env": {
         "FLASK_APP": "app.py",
         "FLASK_DEBUG": "1"
