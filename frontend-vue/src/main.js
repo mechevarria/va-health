@@ -4,13 +4,9 @@ import { NavPlugin, DropdownPlugin, ToastPlugin, TablePlugin, PaginationPlugin, 
 import VueMobileDetection from 'vue-mobile-detection'
 import 'perfect-scrollbar/dist/perfect-scrollbar'
 import '@popperjs/core/dist/esm/popper'
-import Highcharts from 'highcharts'
-import Networkgraph from 'highcharts/modules/networkgraph'
 import HighchartsVue from 'highcharts-vue'
 import router from './app-router'
 import store from './app-store'
-
-Networkgraph(Highcharts)
 
 Vue.config.productionTip = false
 
