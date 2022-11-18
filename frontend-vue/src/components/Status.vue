@@ -12,7 +12,9 @@
       <div class="card">
         <div class="card-body">
           <div class="card-text">
-            <highcharts :options="chartOptions"></highcharts>
+            <span v-if="!isBusy">
+              <highcharts :options="chartOptions"></highcharts>
+            </span>
           </div>
         </div>
       </div>
@@ -23,8 +25,12 @@
 
 <script>
 import { Chart } from 'highcharts-vue'
+import Highcharts from 'highcharts'
+import Networkgraph from 'highcharts/modules/networkgraph'
 import axios from 'axios'
 import msgMixin from '../mixins/msg-mixin'
+
+Networkgraph(Highcharts)
 
 export default {
   name: 'AppHome',
@@ -38,7 +44,8 @@ export default {
       isBusy: false,
       chartOptions: {
         chart: {
-          type: 'networkgraph'
+          type: 'networkgraph',
+          height: '300px'
         },
         plotOptions: {
           networkgraph: {
@@ -50,27 +57,31 @@ export default {
         },
         series: [{
           name: 'sample',
-          data: [
-            { from: 'A', to: 'B' },
-            { from: 'A', to: 'C' },
-            { from: 'A', to: 'D' },
-            { from: 'A', to: 'E' },
-            { from: 'A', to: 'F' },
-            { from: 'A', to: 'G' },
-            { from: 'B', to: 'C' }
-          ]
+          data: []
         }]
       }
     }
   },
   methods: {
     getStatus() {
-      this.isBusy = true
       const url = '/api/status'
       axios
         .get(url)
         .then((res) => {
           this.data = JSON.stringify(res.data, null, 2)
+        })
+        .catch((err) => {
+          console.error(err)
+          this.errorMsg(err.message)
+        })
+    },
+    getGraph() {
+      this.isBusy = true
+      const url = '/api/graph'
+      axios
+        .get(url)
+        .then((res) => {
+          this.chartOptions.series[0].data = res.data
         })
         .catch((err) => {
           console.error(err)
@@ -82,6 +93,7 @@ export default {
     }
   },
   created() {
+    this.getGraph()
     this.getStatus()
   }
 }
