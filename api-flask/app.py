@@ -2,9 +2,10 @@ import os
 
 import ayasdi.core as ac
 from flask import Flask
-from flask import jsonify
 from flask_restful import Api, Resource
 from dotenv import load_dotenv
+from status import StatusService
+from graph import GraphService
 
 load_dotenv()
 
@@ -22,11 +23,17 @@ api = Api(app)
 
 
 class Status(Resource):
-    def get(self):
-        return jsonify(is_connected = conn.is_connected, eureka_user = eureka_user, eureka_url = eureka_url)
+  service = StatusService(conn, eureka_user, eureka_url)
+  def get(self):
+    return self.service.get()
 
+class Graph(Resource):
+  service = GraphService()
+  def get(self):
+    return self.service.get()
 
 api.add_resource(Status, '/status')
+api.add_resource(Graph, '/graph')
 
 if __name__ == '__main__':
     app.run(debug=True)
