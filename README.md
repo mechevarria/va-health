@@ -67,15 +67,3 @@ docker-build.sh
 ```bash
 docker-run.sh
 ```
-
-## Deploy to Microsoft Azure
-
-> TODO
-
-### Docker
-
-* Deploy a docker container with the following command
-
-```bash
-cf-push-docker.sh
-```
