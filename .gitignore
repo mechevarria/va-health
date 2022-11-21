@@ -4,3 +4,4 @@ api-flask/__pycache__
 
 # node ignore
 frontend-vue/node_modules
+frontend-vue/dist
