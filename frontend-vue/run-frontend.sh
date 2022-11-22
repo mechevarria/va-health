@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-python3 app.py
+npm run serve
