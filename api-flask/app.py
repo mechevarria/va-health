@@ -8,6 +8,7 @@ from flask_smorest import Api
 from dotenv import load_dotenv
 from resources.status import blp as StatusBlueprint
 from resources.graph import blp as GraphBlueprint
+from resources.kpi import blp as KpiBlueprint
 # from resources.graph import GraphService
 
 from db import user
@@ -18,7 +19,7 @@ load_dotenv()
 user['name'] = os.getenv('EUREKA_USER')
 user['password'] = os.getenv('EUREKA_PASS')
 user['api_url'] = os.getenv('AYASDI_APISERVER')
-
+user['source_name'] = os.getenv('SOURCE_NAME')
 
 print(f'{user["name"]} is connecting to {user["api_url"] }')
 # The Ayasdi Api needs to be namespaced to prevent a conflict with the Flask Api
@@ -55,6 +56,7 @@ def before_request_callback():
 
 api.register_blueprint(StatusBlueprint)
 api.register_blueprint(GraphBlueprint)
+api.register_blueprint(KpiBlueprint)
 
 # api.add_resource(Status, '/status')
 # api.add_resource(Graph, '/graph')
