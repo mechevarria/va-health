@@ -15,6 +15,7 @@ conda install Flask-RESTful
 EUREKA_USER="firstname.lastname@symphonyai.com"
 EUREKA_PASS="my_password"
 AYASDI_APISERVER="http://platform.ayasdi.com/workbench/"
+SOURCE_NAME="iris.csv"
 ```
 
 ## frontend-vue
