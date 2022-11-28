@@ -27,7 +27,7 @@ class GraphService(MethodView):
     """
     src = user['connection'].get_source(name=user['source_name'])
     #TODO: Remove hardwired and get id from user.  Once filter enabled
-    network_id = -4920673681958740057
+    network_id = "-4920673681958740057"
     nw = src.get_network(id=network_id)
     node_groups = nw.get_node_groups()
     print(len(node_groups))
@@ -43,8 +43,8 @@ class GraphService(MethodView):
     data = []
 
     #create nodes with edges to self to ensure all nodes make it into the graph
-    for f, t in combs:
-      data.append({'from': f, 'to': f})
+    for k in groups.keys():
+      data.append({'from': k, 'to': k})
 
     #Create Nodes with edges
     for f, t in combs:

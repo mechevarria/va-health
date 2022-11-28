@@ -47,7 +47,9 @@ def before_request_callback():
         connection = ac.Api(username=user['name'], password=user['password'], url=user['api_url'])
         print("User Connected:", connection.is_connected)
 
-
+@app.get("/test")
+def get_test():
+    return {"message": "The test worked!"}
 
 # class Graph(Resource):
 #   service = GraphService()
