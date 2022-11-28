@@ -1,11 +1,16 @@
-import ayasdi.core as ac
+from flask import request
+from flask.views import MethodView
+from flask_smorest import Blueprint, abort
 from flask import jsonify
 
+from db import user
 
-class GraphService():
+blp = Blueprint("graph", __name__, description="Operations on graph")
 
-    def get(self):
-        data = [
+@blp.route("/graph")
+class GraphService(MethodView):
+  def get(self):
+    data = [
             {'from': 'A', 'to': 'C'},
             {'from': 'A', 'to': 'D'},
             {'from': 'A', 'to': 'E'},
@@ -14,4 +19,5 @@ class GraphService():
             {'from': 'B', 'to': 'C'},
             {'from': 'B', 'to': 'D'}
         ]
-        return jsonify(data)
+    return jsonify(data)
+
