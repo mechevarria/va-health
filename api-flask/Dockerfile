@@ -5,5 +5,6 @@ COPY ayasdi-sdk-3.0.0.7.tar.gz .
 COPY requirements.txt .
 RUN pip install -r /app/requirements.txt
 # copying Python files last to prevent unnecessary layers in docker
-COPY *.py .
+# COPY *.py .
+COPY . .
 CMD ["flask", "run", "--host", "0.0.0.0"]
