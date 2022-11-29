@@ -2,17 +2,22 @@
   <span>
     <div class="card-deck">
       <div class="card">
+        <div class="card-header">
+          Eureka API Status <i class="spinner-border spinner-border-sm mr-1" v-if="statusBusy"></i> 
+        </div>
         <div class="card-body">
-          <h4 class="card-title">Eureka API Status</h4>
           <div class="card-text">
             <pre>{{ data }}</pre>
           </div>
         </div>
       </div>
       <div class="card">
+        <div class="card-header">
+          Network Graph <i class="spinner-border spinner-border-sm mr-1" v-if="graphBusy"></i> 
+        </div>
         <div class="card-body">
           <div class="card-text">
-            <span v-if="!isBusy">
+            <span v-if="!graphBusy">
               <highcharts :options="chartOptions"></highcharts>
             </span>
           </div>
@@ -41,7 +46,8 @@ export default {
   data() {
     return {
       data: [],
-      isBusy: false,
+      statusBusy: false,
+      graphBusy: false,
       chartOptions: {
         chart: {
           type: 'networkgraph',
@@ -53,7 +59,7 @@ export default {
           }
         },
         title: {
-          text: 'Network Graph'
+          text: ''
         },
         series: [{
           name: 'sample',
@@ -64,6 +70,7 @@ export default {
   },
   methods: {
     getStatus() {
+      this.statusBusy = true
       const url = '/api/status'
       axios
         .get(url)
@@ -74,9 +81,12 @@ export default {
           console.error(err)
           this.errorMsg(err.message)
         })
+        .finally(() => {
+          this.statusBusy = false
+        })
     },
     getGraph() {
-      this.isBusy = true
+      this.graphBusy = true
       const url = '/api/graph'
       axios
         .get(url)
@@ -88,7 +98,7 @@ export default {
           this.errorMsg(err.message)
         })
         .finally(() => {
-          this.isBusy = false
+          this.graphBusy = false
         })
     }
   },
