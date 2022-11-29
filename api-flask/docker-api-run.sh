@@ -15,4 +15,7 @@ docker run \
     --env AYASDI_APISERVER=$AYASDI_APISERVER \
     --env EUREKA_USER=$EUREKA_USER \
     --env EUREKA_PASS=$EUREKA_PASS \
+    --env SOURCE_NAME=$SOURCE_NAME \
+    --env FLASK_APP=$FLASK_APP \
+    --env FLASK_DEBUG=$FLASK_DEBUG \
     quay.io/mechevarria/api-flask
