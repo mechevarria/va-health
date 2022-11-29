@@ -1,0 +1,138 @@
+{
+	"info": {
+		"_postman_id": "e18bfb93-00a7-4186-a961-24e0de0845e5",
+		"name": "VA-Health",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1420797"
+	},
+	"item": [
+		{
+			"name": "test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test('Test message should return', () => {\r",
+							"    pm.expect(jsonData.message).to.eql('The test worked!');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api}}/test",
+					"host": [
+						"{{api}}"
+					],
+					"path": [
+						"test"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test('is_connected should be true', () => {\r",
+							"    pm.expect(jsonData.is_connected).to.eql(true);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api}}/status",
+					"host": [
+						"{{api}}"
+					],
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "kpi",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test('kpi array has at least one entry', () => {\r",
+							"    pm.expect(jsonData.length).to.be.greaterThan(0)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api}}/kpi",
+					"host": [
+						"{{api}}"
+					],
+					"path": [
+						"kpi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "graph",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test('graph array has at least one entry', () => {\r",
+							"    pm.expect(jsonData.length).to.be.greaterThan(0)\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api}}/graph",
+					"host": [
+						"{{api}}"
+					],
+					"path": [
+						"graph"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
