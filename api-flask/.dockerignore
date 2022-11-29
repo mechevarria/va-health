@@ -1,1 +1,4 @@
 __pycache__
+resources/__pycache__
+docker-api-*.sh
+postman
