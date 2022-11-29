@@ -9,6 +9,7 @@ pip install ayasdi-sdk-3.0.0.7.tar.gz
 conda install python-dotenv
 conda install Flask
 conda install Flask-RESTful
+pip install flask-smorest
 ```
 * Set necessary environment variables in `api-flask/.env`
 ```properties
@@ -16,6 +17,8 @@ EUREKA_USER="firstname.lastname@symphonyai.com"
 EUREKA_PASS="my_password"
 AYASDI_APISERVER="http://platform.ayasdi.com/workbench/"
 SOURCE_NAME="iris.csv"
+FLASK_APP="app.py"
+FLASK_DEBUG="1"
 ```
 
 ## frontend-vue
@@ -61,10 +64,17 @@ npm run build
 
 * Build and push the image with this script. You will have to edit the quay.io registry endpoint for the push command to work
 ```bash
-docker-build.sh
+docker-frontend-build.sh
 ```
 
 * Run the continer with this script
 ```bash
-docker-run.sh
+docker-frontend-run.sh
 ```
+
+## Testing api-flask in [Postman](https://www.postman.com/downloads/)
+
+TODO
+
+* Import the environment
+* Import the collection
