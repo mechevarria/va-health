@@ -4,12 +4,10 @@ import ayasdi.core as ac
 from flask import Flask
 from flask_smorest import Api
 
-# from flask_restful import Api, Resource
 from dotenv import load_dotenv
 from resources.status import blp as StatusBlueprint
 from resources.graph import blp as GraphBlueprint
 from resources.kpi import blp as KpiBlueprint
-# from resources.graph import GraphService
 
 from db import user
 
@@ -51,15 +49,6 @@ def before_request_callback():
 def get_test():
     return {"message": "The test worked!"}
 
-# class Graph(Resource):
-#   service = GraphService()
-#   def get(self):
-#     return self.service.get()
-
 api.register_blueprint(StatusBlueprint)
 api.register_blueprint(GraphBlueprint)
 api.register_blueprint(KpiBlueprint)
-
-# api.add_resource(Status, '/status')
-# api.add_resource(Graph, '/graph')
-
