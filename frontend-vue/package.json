@@ -1,6 +1,6 @@
 {
-  "name": "frontend-vue",
-  "version": "0.0.2",
+  "name": "Clinical-Health",
+  "version": "0.0.4",
   "author": "Mike Echevarria <michael.echevarria@symphonyai.com>",
   "scripts": {
     "serve": "vue-cli-service serve",
