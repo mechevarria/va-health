@@ -5,6 +5,7 @@ import AppForm from './components/Form.vue'
 import AppTable from './components/Table.vue'
 import AppDetail from './components/Detail.vue'
 import AppStatus from './components/Status.vue'
+import AppDashboard from './components/Dashboard.vue'
 
 Vue.use(VueRouter)
 
@@ -27,6 +28,10 @@ const routes = [{
     path: '/home/status',
     component: AppStatus,
     name: 'status'
+},  {
+    path: '/home/dashboard',
+    component: AppDashboard,
+    name: 'dashboard'
 }, {
     path: '*',
     redirect: '/home'
