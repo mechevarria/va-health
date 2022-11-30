@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from resources.status import blp as StatusBlueprint
 from resources.graph import blp as GraphBlueprint
 from resources.kpi import blp as KpiBlueprint
+from resources.filter import blp as FilterBlueprint
 
 from db import user
 
@@ -52,3 +53,5 @@ def get_test():
 api.register_blueprint(StatusBlueprint)
 api.register_blueprint(GraphBlueprint)
 api.register_blueprint(KpiBlueprint)
+api.register_blueprint(FilterBlueprint)
+

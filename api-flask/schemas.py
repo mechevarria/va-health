@@ -6,15 +6,16 @@ class KpiCardSchema(Schema):
 
 
 class FilterSchema(Schema):
-    id=fields.Str(dump_only=True)
     name=fields.Str(required=True)
 
-class CategoricalFilterSchema(FilterSchema):
-    name=fields.Str(required=True)
-    value=fields.Str(required=True)
-    is_equal=fields.Bool(required=True)
+    categorical = fields.Bool(required=True)
+    value=fields.Str(required=False)
+    is_equal=fields.Bool(required=False)
+    
+    min=fields.Float(required=False)
+    max=fields.Float(required=False)
 
-class NumericFilterSchema(FilterSchema):
+class AppliedFilter(Schema):
+    id=fields.Str(required=True)
     name=fields.Str(required=True)
-    min=fields.Float(required=True)
-    max=fields.Float(required=True)
+    
