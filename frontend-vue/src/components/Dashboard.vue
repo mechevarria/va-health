@@ -1,8 +1,7 @@
 <template>
   <span>
-    <h4>Clinical Dashboard</h4>
-      <AppKpi />
-    <li>Graph</li>
+    <AppKpi />
+    <AppNetwork />
     <li>Groups</li>
     <li>Demographics</li>
     <router-view></router-view>
@@ -11,22 +10,13 @@
 
 <script>
 import AppKpi from './Kpi.vue'
-import msgMixin from '../mixins/msg-mixin'
+import AppNetwork from './Network.vue'
 
 export default {
   name: 'AppDashboard',
   components: {
-    AppKpi
-  },
-  mixins: [msgMixin],
-  data() {
-    return {
-      data: [],
-    }
-  },
-  methods: {
-  },
-  created() {
+    AppKpi,
+    AppNetwork
   }
 }
 </script>
