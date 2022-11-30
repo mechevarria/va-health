@@ -10,7 +10,7 @@ from resources.graph import blp as GraphBlueprint
 from resources.kpi import blp as KpiBlueprint
 from resources.filter import blp as FilterBlueprint
 
-from db import user
+from globals import user, get_all_group_id
 
 print(user)
 
@@ -48,6 +48,7 @@ def before_request_callback():
 
 @app.get("/test")
 def get_test():
+    return get_all_group_id("all_rows")
     return {"message": "The test worked!"}
 
 api.register_blueprint(StatusBlueprint)

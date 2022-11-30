@@ -4,7 +4,7 @@ from flask_smorest import Blueprint, abort
 from flask import jsonify
 from schemas import FilterSchema, AppliedFilter
 
-from db import user
+from globals import user, get_all_group_id
 
 blp = Blueprint("filter", __name__, description="Operations on filters")
 
@@ -12,6 +12,12 @@ blp = Blueprint("filter", __name__, description="Operations on filters")
 @blp.route("/filter")
 class FilterService(MethodView):
   def generate_filter_name(self, filters):
+    '''
+    Returns a unique named based on filter values
+
+    paramaters 
+    filters: a list of FilterSchema
+    '''
     _name = []
     for filter in filters:
       if filter['categorical']:
@@ -22,6 +28,14 @@ class FilterService(MethodView):
     return '; '.join(_name)
 
   def generate_filter_dict(self, filters):
+    '''
+    Returns a list of dictionaries formated for the platform sdk
+    this list of dictionaries can be used to create a filter_set in the platform and then the filter
+    set can be used to generate a group
+
+    paramaters 
+    filters: a list of FilterSchema
+    '''
     _fds = []
     for filter in filters:
       if filter['categorical']:
@@ -34,10 +48,7 @@ class FilterService(MethodView):
   @blp.response(200, AppliedFilter)
   def get(self):
     '''Returns the ID for the default group / no filters applied'''
-    src = user['connection'].get_source(name=user['source_name'])
-    grp = src.create_group(name="all_rows")
-    applied_filter = {"id": grp['id'], "name": "all_rows"}
-    return applied_filter
+    return get_all_group_id()
 
   @blp.arguments(FilterSchema(many=True))
   @blp.response(200, AppliedFilter)
@@ -55,12 +66,12 @@ class FilterService(MethodView):
     #check to see if filter has already been applied
     src = user['connection'].get_source(name=user['source_name'])
     grp = src.get_group(name=name)
+
     #note: is group not found returns {'msg': 'Group with given parameter does not exist'}
     #if found it returns the group dict
     if "id" in grp.keys():
       #group had been created before, just return id and name
       applied_filter = {"id": grp['id'], "name": name}
-      return applied_filter
     else:
       #create a filter set
       fs = src.create_filter_set(self.generate_filter_dict(filter_data))
@@ -68,4 +79,7 @@ class FilterService(MethodView):
       grp = src.create_group(name=name, filter_set=fs)
 
       applied_filter = {"id": grp['id'], "name": name}
-      return applied_filter
+
+    return applied_filter
+    
+

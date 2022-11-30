@@ -3,7 +3,7 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask import jsonify
 
-from db import user
+from globals import user, get_all_group_id
 
 blp = Blueprint("status", __name__, description="Operations on status")
 
