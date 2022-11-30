@@ -31,10 +31,17 @@ class FilterService(MethodView):
 
     return _fds
 
+  @blp.response(200, AppliedFilter)
+  def get(self):
+    '''Returns the ID for the default group / no filters applied'''
+    src = user['connection'].get_source(name=user['source_name'])
+    grp = src.create_group(name="all_rows")
+    applied_filter = {"id": grp['id'], "name": "all_rows"}
+    return applied_filter
+
   @blp.arguments(FilterSchema(many=True))
   @blp.response(200, AppliedFilter)
   def post(self, filter_data):
-
     #check each filter to make sure categorical and numeric formatted correctly
     for filter in filter_data:
       if filter['categorical']:
