@@ -1,7 +1,7 @@
 <template>
   <span>
     <h4>Clinical Dashboard</h4>
-    <li>KPI</li>
+      <AppKpi />
     <li>Graph</li>
     <li>Groups</li>
     <li>Demographics</li>
@@ -10,10 +10,14 @@
 </template>
 
 <script>
+import AppKpi from './Kpi.vue'
 import msgMixin from '../mixins/msg-mixin'
 
 export default {
   name: 'AppDashboard',
+  components: {
+    AppKpi
+  },
   mixins: [msgMixin],
   data() {
     return {
