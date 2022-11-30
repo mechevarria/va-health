@@ -27,11 +27,6 @@
         </router-link>
       </li>
       <li class="c-sidebar-nav-item">
-        <router-link class="c-sidebar-nav-link" to="/home/status" @click.native="closeOnMobile">
-          <i class="c-sidebar-nav-icon cib-python"></i> Status
-        </router-link>
-      </li>
-      <li class="c-sidebar-nav-item">
         <router-link class="c-sidebar-nav-link" to="/home/form" @click.native="closeOnMobile">
           <i class="c-sidebar-nav-icon cil-notes"></i> Form
         </router-link>
