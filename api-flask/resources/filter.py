@@ -39,7 +39,7 @@ class FilterService(MethodView):
     _fds = []
     for filter in filters:
       if filter['categorical']:
-        _fds.append({"column_name": filter["name"], "in_set": [filter['value']], "not": filter["is_equal"]})
+        _fds.append({"column_name": filter["name"], "in_set": [filter['value']], "not": not filter["is_equal"]})
       else:
         _fds.append({"column_name": filter["name"], "in_range": [filter["min"], filter["max"]]})
 
@@ -77,6 +77,34 @@ class FilterService(MethodView):
       fs = src.create_filter_set(self.generate_filter_dict(filter_data))
       #Create the groups from the filters
       grp = src.create_group(name=name, filter_set=fs)
+
+      #create the network
+      #TODO - OAA with Target?  Or using metric and lense from base network
+      network = src.create_network(name,{
+                    'row_group_id': grp['id'],
+                    'column_set_id': src.get_column_set(name='features')['id'],
+                    'metric': {'id': 'Angle'},
+                    'lenses': [{'resolution': 30, 'id': 'Metric PCA coord 1',
+                                'equalize': True, 'gain': 3.0},
+                              {'resolution': 30, 'id': 'Metric PCA coord 2',
+                                'equalize': True, 'gain': 3.0}]
+                      }
+                    )
+      
+      #TODO - Change from hard coded target to env or passed as param
+      coloring_values = network.get_coloring_values(name='SpeciesColor')
+
+      autogroups = network.autogroup_create(algorithm='AHCL', 
+                                          coloring_values=coloring_values,
+                                          cutoff_strength=0.75, 
+                                          min_node_count=3,
+                                          name=grp['id'])
+
+      gs = src.create_group_set(name=name, group_ids = [g['id'] for g in autogroups.groups])    
+      #create comparisons vs rest
+      for g in gs.groups:
+        #TODO Leave as async.  This allows the kpis and networks to be redrawn, the explains will take longer
+        src.compare_groups(group_1_name=g['name'],group_2_name="Rest", async_=True)
 
       applied_filter = {"id": grp['id'], "name": name}
 
