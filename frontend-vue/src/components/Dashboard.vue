@@ -2,8 +2,8 @@
   <span>
     <AppKpi />
     <AppNetwork />
-    <li>Groups</li>
-    <li>Demographics</li>
+    <AppGroup />
+    <AppGroupDetails />
     <router-view></router-view>
   </span>
 </template>
@@ -11,12 +11,16 @@
 <script>
 import AppKpi from './Kpi.vue'
 import AppNetwork from './Network.vue'
+import AppGroup from './Group.vue'
+import AppGroupDetails from './GroupDetails.vue'
 
 export default {
   name: 'AppDashboard',
   components: {
     AppKpi,
-    AppNetwork
+    AppNetwork,
+    AppGroup,
+    AppGroupDetails
   }
 }
 </script>
