@@ -5,9 +5,7 @@
     </div>
     <div class="card-body">
       <div class="card-text">
-        <span v-if="!isBusy">
-          <highcharts :options="chartOptions"></highcharts>
-        </span>
+        <highcharts class="hc" v-if="!isBusy" :options="chartOptions" :highcharts="hcInstance"></highcharts>
       </div>
     </div>
   </div>
@@ -30,6 +28,7 @@ export default {
   mixins: [msgMixin],
   data() {
     return {
+      hcInstance: Highcharts,
       data: [],
       isBusy: false,
       chartOptions: {
@@ -46,8 +45,10 @@ export default {
           text: ''
         },
         series: [{
-          name: 'sample',
-          data: []
+          colorByPoint: true,
+          name: 'networkgraph',
+          data: [],
+          nodes: []
         }]
       }
     }
@@ -75,3 +76,24 @@ export default {
   }
 }
 </script>
+<style>
+.highcharts-color-0 {
+  fill: #321fdb;
+}
+
+.hightcharts-color-1 {
+  fill: #2eb85c;
+}
+
+.hightcharts-color-2 {
+  fill: #e55353;
+}
+
+.hightcharts-color-3 {
+  fill: #f9b115;
+}
+
+.hightcharts-color-4 {
+  fill: #3399ff;
+}
+</style>
