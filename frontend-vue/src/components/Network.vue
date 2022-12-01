@@ -1,7 +1,7 @@
 <template>
   <div class="card">
     <div class="card-header">
-      Network Graph <i class="spinner-border spinner-border-sm mr-1" v-if="isBusy"></i>
+      Patient Segments <i class="spinner-border spinner-border-sm mr-1" v-if="isBusy"></i>
     </div>
     <div class="card-body">
       <div class="card-text">
