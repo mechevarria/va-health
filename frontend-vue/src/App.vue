@@ -38,10 +38,14 @@ export default {
 </script>
 
 <style lang="scss">
-// Just in case we want to change up theme colors
-// $theme-colors: (
-//   primary: #6f42c1
-// );
+//Just in case we want to change up theme colors
+$theme-colors: (
+  primary: #671aa0,
+  info: #1EACFC,
+  danger: #fa089e,
+  warn: #FFB600,
+  success: #00bb9c
+);
 
 @import '~perfect-scrollbar/css/perfect-scrollbar.css';
 @import '~@coreui/coreui/scss/coreui';
