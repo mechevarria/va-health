@@ -21,20 +21,21 @@ def compute_kpis(src, group_id):
   kpis.append({"name": "Total Patients", "value": grp['row_count']})
 
   #Get number of vaccinated
-  vac_values = group_stat(src, grp, 'vaccination_status')
+  vac_values = group_stat(src, grp, 'TotalSeriesCount')
   vac_percent = sum(vac_values) / len(vac_values) 
   kpis.append({"name": "Vaccination Precentage", "value": vac_percent})
   
   #Get Hospitilization rate
-  hr = group_stat(src, grp, 'hopitilization')
+  hr = group_stat(src, grp, 'Hospitalization60d')
   hrp = sum(hr) / len(hr) 
   kpis.append({"name": "Hospitilization Rate", "value": hrp})
 
-  #TODO: Visit type (3 seperate cards or 1 card?)
-  kpis.append({"name": "Visit Type %", "value": -1})
+  in_per_vis = group_stat(src, grp, 'visits_count_proportion_Presumed In Person_period4_2021-03-01_2022-03-01')
+  in_per_vis = sum(in_per_vis) / len(in_per_vis) 
+  kpis.append({"name": "In Person Visit %", "value": in_per_vis})
 
   #Get average a1c for the group
-  a1c = group_stat(src, grp, 'a1c')
+  a1c = group_stat(src, grp, 'A1C_last_period4_2021-03-01_2022-03-01')
   a1c = sum(a1c) / len(a1c) 
   kpis.append({"name": "Average A1C", "value": a1c})
 
@@ -57,11 +58,6 @@ class DefaultKPIService(MethodView):
     except:
       abort(404, message="Error getting KPI from source")
 
-
-# @blp.route("/kpi/<string:filter_id>")
-# class Item(MethodView):
-#     @blp.response(200, ItemSchema)
-#     def get(self, item_id):
 
 @blp.route("/kpi/<string:filter_id>")
 class FilteredKPIService(MethodView):

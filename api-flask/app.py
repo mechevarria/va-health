@@ -48,7 +48,6 @@ def before_request_callback():
 
 @app.get("/test")
 def get_test():
-    return get_all_group_id("all_rows")
     return {"message": "The test worked!"}
 
 api.register_blueprint(StatusBlueprint)

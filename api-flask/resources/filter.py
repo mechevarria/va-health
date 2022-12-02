@@ -100,11 +100,9 @@ class FilterService(MethodView):
                                           min_node_count=3,
                                           name=grp['id'])
 
-      gs = src.create_group_set(name=name, group_ids = [g['id'] for g in autogroups.groups])    
       #create comparisons vs rest
-      for g in gs.groups:
-        #TODO Leave as async.  This allows the kpis and networks to be redrawn, the explains will take longer
-        src.compare_groups(group_1_name=g['name'],group_2_name="Rest", async_=True)
+      for g in autogroups.groups:
+        src.compare_groups(group_1_name=g['name'],group_2_name="Rest", async_=False)
 
       applied_filter = {"id": grp['id'], "name": name}
 
