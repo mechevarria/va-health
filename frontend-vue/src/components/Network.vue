@@ -36,17 +36,15 @@ export default {
           type: 'networkgraph',
           height: '300px'
         },
-        plotOptions: {
-          networkgraph: {
-            keys: ['from', 'to']
-          }
-        },
         title: {
           text: ''
         },
         series: [{
           colorByPoint: true,
           name: 'networkgraph',
+          marker: {
+            radius: 15
+          },
           data: [],
           nodes: []
         }]
@@ -58,9 +56,13 @@ export default {
       this.isBusy = true
       const url = '/api/graph'
       axios
-        .get(url)
+        .post(url, {
+          //filter_id: 18310991,
+          color_name: 'species_color'
+        })
         .then((res) => {
-          this.chartOptions.series[0].data = res.data
+          this.chartOptions.series[0].data = res.data.data
+          this.chartOptions.series[0].nodes = res.data.nodes
         })
         .catch((err) => {
           console.error(err)
