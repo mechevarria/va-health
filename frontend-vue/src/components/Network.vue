@@ -42,9 +42,6 @@ export default {
         series: [{
           colorByPoint: true,
           name: 'networkgraph',
-          marker: {
-            radius: 15
-          },
           data: [],
           nodes: []
         }]
@@ -63,6 +60,15 @@ export default {
         .then((res) => {
           this.chartOptions.series[0].data = res.data.data
           this.chartOptions.series[0].nodes = res.data.nodes
+          this.chartOptions.series[0].nodes.forEach(node => {
+            let max = 30
+            let min = 10
+            let radius = Math.random() * (max - min) + min;
+            let marker = {
+              radius : radius
+            }
+            node.marker = marker
+          });
         })
         .catch((err) => {
           console.error(err)
@@ -78,24 +84,3 @@ export default {
   }
 }
 </script>
-<style>
-.highcharts-color-0 {
-  fill: #321fdb;
-}
-
-.hightcharts-color-1 {
-  fill: #2eb85c;
-}
-
-.hightcharts-color-2 {
-  fill: #e55353;
-}
-
-.hightcharts-color-3 {
-  fill: #f9b115;
-}
-
-.hightcharts-color-4 {
-  fill: #3399ff;
-}
-</style>
