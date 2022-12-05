@@ -34,7 +34,9 @@ def get_compares(src, network_name):
     top_continuous_explainers = [f"{c['name']} {'higher' if c['ks_sign']=='+' else 'lower'} than cohort -> {'Significant' if c['ks_score']>= 0.7 else 'Moderate'}" for c in top_continuous_explainers]
     _exp['explains'] = top_continuous_explainers
     #TODO - categorical explainers
-  return _exp
+
+    _explainers.append(_exp)
+  return _explainers
 
 @blp.route("/explain")
 class ExplainService(MethodView):
