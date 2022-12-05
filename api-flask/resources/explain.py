@@ -9,16 +9,8 @@ from globals import user
 
 blp = Blueprint("explain", __name__, description="Operations on explains")
 
+#TODO: Add schema
 def get_compares(src, network_name):
-  # TODO:
-  #  Get network(Done)
-  # Get network node groups(Done)
-  # get explain for each group(Done)
-  #filter out top explains
-  #decide on return
-  #High/Med/Low
-  #Higher / Lower than rest
-  #What about categorical
   _explainers = []
 
   nw = src.get_network(name=network_name)
@@ -46,7 +38,7 @@ def get_compares(src, network_name):
 
 @blp.route("/explain")
 class ExplainService(MethodView):
-  # @blp.response(200, ExplainerSchema(many=True))
+  @blp.response(200, ExplainerSchema(many=True))
   def get(self):
     '''Gets Top explainers for all groups in default netowrk'''
     try:
@@ -54,7 +46,7 @@ class ExplainService(MethodView):
       #TODO: Must use final network name for VA source
       #Place holder is OAA_1 here
       network_name = "OAA 1"
-      return jsonify(get_compares(src, network_name))
+      return get_compares(src, network_name)
 
     except:
       abort(404, message="Error getting explains from server")
@@ -63,7 +55,7 @@ class ExplainService(MethodView):
 @blp.route("/explain/<string:filter_id>")
 class FilteredExplainService(MethodView):
   '''Gets Top explainers for all groups the specified filter id'''
-  # @blp.response(200, ExplainerSchema(many=True))
+  @blp.response(200, ExplainerSchema(many=True))
   def get(self, filter_id):
     '''Gets all KPI values the source'''
     try:

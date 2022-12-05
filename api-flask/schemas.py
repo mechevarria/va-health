@@ -8,7 +8,7 @@ class ExplainerSchema(Schema):
     id=fields.Str(required=True)
     name=fields.Str(required=True)
     group_size=fields.Int(required=True)
-    value=fields.Float(required=True)
+    explains=fields.List(fields.String(required=True))
 
 class FilterSchema(Schema):
     name=fields.Str(required=True)
