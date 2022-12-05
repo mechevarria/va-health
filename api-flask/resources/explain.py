@@ -57,18 +57,18 @@ class ExplainService(MethodView):
       abort(404, message="Error getting explains from server")
 
 
-# @blp.route("/explain/<string:filter_id>")
-# class FilteredExplainService(MethodView):
-#   '''Gets Top explainers for all groups the specified filter id'''
-#   # @blp.response(200, ExplainerSchema(many=True))
-#   def get(self, filter_id):
-#     '''Gets all KPI values the source'''
-#     try:
-#       src = user['connection'].get_source(name=user['source_name'])
-#       grp = src.get_group(id=filter_id)
-#       network_name = grp['name']
+@blp.route("/explain/<string:filter_id>")
+class FilteredExplainService(MethodView):
+  '''Gets Top explainers for all groups the specified filter id'''
+  # @blp.response(200, ExplainerSchema(many=True))
+  def get(self, filter_id):
+    '''Gets all KPI values the source'''
+    try:
+      src = user['connection'].get_source(name=user['source_name'])
+      grp = src.get_group(id=filter_id)
+      network_name = grp['name']
 
-#       return get_compares(src, network_name)
+      return get_compares(src, network_name)
 
-#     except:
-#       abort(404, message="Error getting explains from server")
+    except:
+      abort(404, message="Error getting explains from server")
