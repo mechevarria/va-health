@@ -1,14 +1,12 @@
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from flask import jsonify
 from schemas import FilterSchema, AppliedFilter
 
 from globals import user, get_all_group_id
 
 blp = Blueprint("filter", __name__, description="Operations on filters")
 
-# @blp.route("/filter")
 @blp.route("/filter")
 class FilterService(MethodView):
   def generate_filter_name(self, filters):

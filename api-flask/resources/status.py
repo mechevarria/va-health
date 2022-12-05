@@ -1,7 +1,6 @@
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from flask import jsonify
 
 from globals import user, get_all_group_id
 

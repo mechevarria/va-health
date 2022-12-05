@@ -1,7 +1,6 @@
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from flask import jsonify
 from schemas import KpiCardSchema
 
 from globals import user, get_all_group_id
@@ -61,7 +60,7 @@ class DefaultKPIService(MethodView):
 
 @blp.route("/kpi/<string:filter_id>")
 class FilteredKPIService(MethodView):
-  '''Gets all KPI values the speficief filter id'''
+  '''Gets all KPI values the specific filter id'''
 
   @blp.response(200, KpiCardSchema(many=True))
   def get(self, filter_id):
