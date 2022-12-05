@@ -31,9 +31,15 @@ def get_compares(src, network_name):
 
     comp = src.get_comparison(name=f"{grp['name']} vs. Rest on All columns")
     top_continuous_explainers = list(filter(lambda e: e['ks_score'] > 0.5, comp['continuous_explainers']))
-    top_continuous_explainers = [f"{c['name']} {'higher' if c['ks_sign']=='+' else 'lower'} than cohort -> {'Significant' if c['ks_score']>= 0.7 else 'Moderate'}" for c in top_continuous_explainers]
-    _exp['explains'] = top_continuous_explainers
-    #TODO - categorical explainers
+    sorted_continuous_explainers = sorted(top_continuous_explainers, key=lambda d: d['ks_score'])
+    sorted_continuous_explainers = [f"{c['name']} {'higher' if c['ks_sign']=='+' else 'lower'} than cohort -> {'Significant' if c['ks_score']>= 0.7 else 'Moderate'}" for c in sorted_continuous_explainers]
+    
+    top_cat_explainers = list(filter(lambda e: e['hypergeometric_p_values'][0] <= 0.05, comp['categorical_explainers']))
+    sorted_cat_explainers = sorted(top_cat_explainers, key=lambda d: ['hypergeometric_p_values'][0])
+    sorted_cat_explainers = [f"{c['name']} -> {c['percent_in_group'][0]*100: 0.1f}%, {c['percent_in_group'][1]*100: 0.1f}% in cohort" for c in sorted_cat_explainers]
+    
+    _exp['explains'] = sorted_continuous_explainers + sorted_cat_explainers
+    _exp['explains'] =   _exp['explains'][0:10]
 
     _explainers.append(_exp)
   return _explainers
@@ -42,15 +48,12 @@ def get_compares(src, network_name):
 class ExplainService(MethodView):
   # @blp.response(200, ExplainerSchema(many=True))
   def get(self):
-    print("In Explain")
-
     '''Gets Top explainers for all groups in default netowrk'''
     try:
       src = user['connection'].get_source(name=user['source_name'])
       #TODO: Must use final network name for VA source
       #Place holder is OAA_1 here
       network_name = "OAA 1"
-      print(network_name)
       return jsonify(get_compares(src, network_name))
 
     except:
