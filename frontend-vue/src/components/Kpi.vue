@@ -1,6 +1,6 @@
 <template>
   <span>
-    <h4>Clinical Dashboard <i class="spinner-border spinner-border-sm mb-1" v-if="isBusy"></i></h4>
+    <i class="spinner-border spinner-border-sm mb-1" v-if="isBusy"></i>
     <div class="card-deck">
       <div class="card mb-4 mt-2 text-white bg-danger">
         <div class="card-body">
