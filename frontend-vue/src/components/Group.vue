@@ -1,25 +1,26 @@
 <template>
   <span>
-    <h5>Groups:</h5>
-    <div class="card-deck mb-3">
-      <div class="card">
-        <div class="card-header">
-          <h5 class="d-flex justify-content-between align-items-center">
-            S1
-            <button type="button" class="btn btn-sm" @click="toggleCard">
-              <i v-if="!showCard" class="cil-chevron-bottom btn-icon"></i>
-              <i v-if="showCard" class="cil-chevron-top btn-icon"></i>
-            </button>
-          </h5>
-          <span class="bg-light text-dark">
-            <span class="font-weight-bold">Patients:</span> 56 | <span class="font-weight-bold">Explainers:</span> 2
-          </span>
-        </div>
-        <div class="card-body" v-if="showCard">
-          <div class="card-text">
-            Top Explainers:
-            <li>53.27% higher concentration of "visit type = virtual"</li>
-            <li>Higher values of relative weight = Medium</li>
+    <h5>Groups: <i class="spinner-border spinner-border-sm mr-1" v-if="isBusy"></i></h5>
+    <div class="row row-cols-1 row-cols-md-3">
+      <div class="col" v-for="(group, index) in groups" v-bind:key="group.id">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="d-flex justify-content-between align-items-center">
+              {{ group.id }}
+              <button type="button" class="btn btn-sm" @click="toggleExplain(index)">
+                <i v-if="!group.visible" class="cil-chevron-bottom btn-icon"></i>
+                <i v-if="group.visible" class="cil-chevron-top btn-icon"></i>
+              </button>
+            </h5>
+            <span class="bg-light text-dark">
+              <span class="font-weight-bold">Patients:</span> {{group.group_size}} | <span class="font-weight-bold">Explainers:</span> {{group.explains.length}}
+            </span>
+          </div>
+          <div class="card-body" v-if="group.visible">
+            <div class="card-text">
+              Top Explainers:
+              <li v-for="(explain, index) in group.explains" v-bind:key="index">{{explain}}</li>
+            </div>
           </div>
         </div>
       </div>
@@ -29,18 +30,46 @@
 </template>
 
 <script>
+import axios from 'axios'
+import msgMixin from '..//mixins/msg-mixin';
 
 export default {
   name: 'AppGroup',
+  mixins: [msgMixin],
   data() {
     return {
-      showCard: false
+      isBusy: false,
+      groups: []
     }
   },
   methods: {
-    toggleCard() {
-      this.showCard = !this.showCard
+    getExplain() {
+      this.isBusy = true
+      const url = '/api/explain'
+      axios
+        .get(url)
+        .then((res) => {
+          this.groups = res.data
+          this.groups.forEach(group => {
+            group.visible = false
+          });
+        })
+        .catch((err) => {
+          console.error(err)
+          this.errorMsg(err.message)
+        })
+        .finally(() => {
+          this.isBusy = false
+        })
+    },
+    toggleExplain(index) {
+      let group = this.groups[index]
+      group.visible = !group.visible
+      this.$set(this.groups, index, group)
     }
+  },
+  created() {
+    this.getExplain()
   }
 }
 </script>
