@@ -10,11 +10,16 @@
     </span>
     <div class="row row-cols-1 row-cols-md-4">
       <div class="col" v-for="(explain, index) in groupExplains.explains" :key="index">
-        <div class="card" v-if="groupId > 0">
-          <div class="card-body">
-            <li v-for="(value, propertyName, propIndex) in explain" :key="propIndex">
-              {{ propertyName }}: {{ value }}
-            </li>
+        <div class="card">
+          <div class="card-body" v-if="explain.type == 'categorical'">
+            Name: {{ explain.name }}
+            <b-progress show-progress :value="explain.primary_group_percent" variant="primary"></b-progress>
+            <b-progress show-progress :value="explain.secondary_group_percent" variant="secondary"></b-progress>
+          </div>
+          <div class="card-body" v-if="explain.type == 'continuous'">
+            Name: {{ explain.name }}
+            <b-form-input v-model="explain.primary_group_mean" type="range" min="0" max="1" step="0.0005" readonly></b-form-input>
+            <b-form-input v-model="explain.secondary_group_mean" type="range" min="0" max="1" step="0.0005" readonly></b-form-input>
           </div>
         </div>
       </div>
