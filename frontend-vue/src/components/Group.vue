@@ -1,8 +1,8 @@
 <template>
   <span>
-    <h5>Groups: <i class="spinner-border spinner-border-sm mr-1" v-if="isBusy"></i></h5>
+    <h5>Groups: <i class="spinner-border spinner-border-sm mb-1" v-if="isBusy"></i></h5>
     <div class="row row-cols-1 row-cols-md-3">
-      <div class="col" v-for="(group, index) in groups" v-bind:key="group.id">
+      <div class="col" v-for="(group, index) in groups" :key="index">
         <div class="card">
           <div class="card-header">
             <h5 class="d-flex justify-content-between align-items-center">
@@ -21,7 +21,7 @@
             <div class="card-text">
               <div class="d-flex justify-content-between align-items-center">
                 <b>Top Explainers:</b>
-                <button class="btn btn-primary mt-2" @click="getGroupDetails(group.id, index)">
+                <button class="btn btn-primary mt-2 mb-2" @click="getGroupDetails(group.id, index)">
                   <i class="cil-list-rich btn-icon mr-1"></i>All Explainers
                 </button>
               </div>
@@ -37,7 +37,7 @@
 
 <script>
 import axios from 'axios'
-import msgMixin from '..//mixins/msg-mixin';
+import msgMixin from '../mixins/msg-mixin';
 
 export default {
   name: 'AppGroup',
@@ -74,7 +74,7 @@ export default {
       this.$set(this.groups, index, group)
     },
     getGroupDetails(id, index) {
-      console.log('Getting group details', id)
+      this.$store.commit('setGroup', id)
       this.toggleExplain(index)
     }
   },
