@@ -13,13 +13,19 @@
               </button>
             </h5>
             <span class="bg-light text-dark">
-              <span class="font-weight-bold">Patients:</span> {{group.group_size}} | <span class="font-weight-bold">Explainers:</span> {{group.explains.length}}
+              <span class="font-weight-bold">Patients:</span> {{ group.group_size }} | <span class="font-weight-bold">Top
+                Explainers:</span> {{ group.explains.length }}
             </span>
           </div>
           <div class="card-body" v-if="group.visible">
             <div class="card-text">
-              Top Explainers:
-              <li v-for="(explain, index) in group.explains" v-bind:key="index">{{explain}}</li>
+              <div class="d-flex justify-content-between align-items-center">
+                <b>Top Explainers:</b>
+                <button class="btn btn-primary mt-2" @click="getGroupDetails(group.id, index)">
+                  <i class="cil-list-rich btn-icon mr-1"></i>All Explainers
+                </button>
+              </div>
+              <li v-for="(explain, index) in group.explains" v-bind:key="index">{{ explain }}</li>
             </div>
           </div>
         </div>
@@ -66,6 +72,10 @@ export default {
       let group = this.groups[index]
       group.visible = !group.visible
       this.$set(this.groups, index, group)
+    },
+    getGroupDetails(id, index) {
+      console.log('Getting group details', id)
+      this.toggleExplain(index)
     }
   },
   created() {
