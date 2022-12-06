@@ -1,7 +1,6 @@
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from flask import jsonify
 from schemas import ExplainerSchema
 
 from globals import user
@@ -9,7 +8,6 @@ from globals import user
 
 blp = Blueprint("explain", __name__, description="Operations on explains")
 
-#TODO: Add schema
 def get_compares(src, network_name):
   _explainers = []
 
