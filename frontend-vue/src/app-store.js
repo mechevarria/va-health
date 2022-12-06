@@ -7,7 +7,8 @@ const store = new Vuex.Store({
     state: {
         isSidebarMin: false,
         isSidebarShown: true,
-        messages: []
+        messages: [],
+        groupId: 0
     },
     mutations: {
         toggleSidebarMin(state) {
@@ -32,7 +33,13 @@ const store = new Vuex.Store({
             state.messages.push(msg)
         },
         clearMessages(state) {
-            state.messages = [];
+            state.messages = []
+        },
+        setGroup(state, id) {
+            state.groupId = id
+        },
+        clearGroup(state) {
+            state.groupId = 0
         }
     }
 })
