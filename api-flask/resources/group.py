@@ -34,7 +34,8 @@ def get_group_details(src, group_id):
 
   for e in comp['continuous_explainers']:
     if e['name'] in cols:
-      _ = {"type": "continuous", 'name': e['name'], 'primary_group_mean': e['primary_group_mean'], 'secondary_group_mean': e['secondary_group_mean']}
+      _ = {"type": "continuous", 'name': e['name'], 'primary_group_mean': e['primary_group_mean'], "primary_group_quartiles": e['quartiles'][0],
+      'secondary_group_mean': e['secondary_group_mean'], "secondary_group_quartiles": e['quartiles'][1]}
       _explainers.append(_)
 
   #search cat_explainers
