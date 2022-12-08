@@ -1,6 +1,5 @@
 <template>
   <span>
-    <highcharts class="hc" :options="chartOptions" :highcharts="hcInstance"></highcharts>
     <i class="spinner-border spinner-border-sm mb-1 ml-1" v-if="isBusy"></i>
     <span class="d-flex justify-content-between align-items-center mb-2" v-if="groupId > 0 && !isBusy">
       <h5>Group {{ groupId }} Explains:
@@ -9,21 +8,45 @@
         <span class="cil-x-circle icon mr-1"></span>Clear
       </button>
     </span>
-    <div class="row row-cols-1 row-cols-md-4">
-      <div class="col" v-for="(explain, index) in groupExplains.explains" :key="index">
-        <div class="card">
-          <div class="card-body" v-if="explain.type == 'categorical'">
-            Name: {{ explain.name }}
-            <b-progress show-progress :value="explain.primary_group_percent" variant="primary"></b-progress>
-          </div>
-          <div class="card-body" v-if="explain.type == 'continuous'">
-            Name: {{ explain.name }}
-            <b-form-input v-model="explain.primary_group_mean" type="range" min="0" max="1" step="0.0005"
-              readonly></b-form-input>
-          </div>
+    <div class="card-deck mb-2" v-if="groupId > 0">
+      <div class="card">
+        <div class="card-header">
+          Continuous Explains
+        </div>
+        <div class="card-body">
+          <table class="table table-sm">
+            <tbody>
+              <tr v-for="(explain, index) in contExplains" :key="index">
+                <td class="app-explain">
+                  {{ explain.name }}
+                </td>
+                <td>
+                  <highcharts class="hc" :options="explain.chartOptions"></highcharts>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          Categorial Explains
+        </div>
+        <div class="card-body">
+          <table class="table table-sm">
+            <tr v-for="(explain, index) in catExplains" :key="index">
+              <td class="app-explain">
+                {{ explain.name }}
+              </td>
+              <td>
+                <b-progress show-progress :value="explain.primary_group_percent" variant="primary"></b-progress>
+              </td>
+            </tr>
+          </table>
         </div>
       </div>
     </div>
+
     <router-view></router-view>
   </span>
 </template>
@@ -47,49 +70,9 @@ export default {
   computed: mapState(['groupId']),
   data() {
     return {
-      hcInstance: Highcharts,
       isBusy: false,
-      groupExplains: {
-        explains: []
-      },
-      chartOptions: {
-        credits: {
-            enabled: false
-        },
-        chart: {
-          type: 'boxplot',
-          inverted: true,
-          backgroundColor: null,
-          height: '80',
-          width: '200'
-        },
-        legend: {
-          enabled: false
-        },
-        xAxis: {
-          visible: false
-        },
-        yAxis: {
-          visible: false
-        },
-        plotOptions: {
-          boxplot: {
-            fillColor: '#1EACFC',
-            stemColor: '#1EACFC',
-            whiskerColor: '#1EACFC',
-            medianColor: '#ffffff'
-          }
-        },
-        title: {
-          text: null
-        },
-        series: [{
-          name: '',
-          data: [
-            [760, 801, 848, 895, 965]
-          ]
-        }]
-      }
+      catExplains: [],
+      contExplains: []
     }
   },
   watch: {
@@ -100,8 +83,58 @@ export default {
         axios
           .get(url)
           .then((res) => {
-            this.groupExplains = res.data
-            this.infoMsg(`Group ${newValue} has ${this.groupExplains.explains.length} explains`)
+            res.data.explains.forEach(explain => {
+              if (explain.type == 'categorical') {
+                this.catExplains.push(explain)
+              } else {
+                explain.chartOptions = {
+                  credits: {
+                    enabled: false
+                  },
+                  chart: {
+                    type: 'boxplot',
+                    inverted: true,
+                    backgroundColor: null,
+                    height: '40',
+                    spacingleft: 0,
+                    spacingBottom: 0,
+                    spacingTop: 0,
+                    spacingRight: 0
+                  },
+                  tooltip: {
+                    outside: true
+                  },
+                  legend: {
+                    enabled: false
+                  },
+                  xAxis: {
+                    visible: false
+                  },
+                  yAxis: {
+                    visible: false
+                  },
+                  plotOptions: {
+                    boxplot: {
+                      fillColor: '#1EACFC',
+                      stemColor: '#1EACFC',
+                      whiskerColor: '#1EACFC',
+                      medianColor: '#ffffff',
+                      series: {
+                        animation: false
+                      }
+                    }
+                  },
+                  title: {
+                    text: null
+                  },
+                  series: [{
+                    name: explain.name,
+                    data: [explain.primary_group_quartiles]
+                  }]
+                }
+                this.contExplains.push(explain)
+              }
+            })
           })
           .catch((err) => {
             console.error(err)
@@ -115,11 +148,15 @@ export default {
   },
   methods: {
     clearGroup() {
-      this.groupExplains.explains = []
+      this.contExplains = []
+      this.catExplains = []
       this.$store.commit('clearGroup')
     }
   }
 }
 </script>
 <style>
+.app-explain {
+  width: 50%
+}
 </style>
