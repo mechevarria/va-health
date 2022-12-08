@@ -23,15 +23,18 @@ def get_simplied_group_network(src, name, color_name):
     node_groups = nw.get_node_groups()
 
     groups = {}
+    sizes = []
     for g in node_groups:
         grp = src.get_group(id=g['id'])
-        g['rows'] = set(grp['row_indices'])
-        groups[g['id']] = g
+        groups[g['id']] = grp
+        sizes.append(grp['row_count'])
       
     combs = list(combinations(groups.keys(), 2))
-
     data = []
     nodes = []
+
+    min_size = min(sizes)
+    max_size = max(sizes)
 
     #create nodes with edges to self to ensure all groups make it into the graph
     #for instance a connected component that is one group would only show up here
@@ -39,12 +42,13 @@ def get_simplied_group_network(src, name, color_name):
     group_colors = get_group_coloring(src, node_groups, color_name)
 
     for k in groups.keys():
+      size = (groups[k]['row_count'] - min_size) / (max_size - min_size) * (30-10) + 10   #Mike requested the radius scale between 30 and 10
       data.append([k, k])
-      nodes.append({'id': k, 'colorIndex': group_colors[int(k)]})
+      nodes.append({'id': k, 'colorIndex': group_colors[int(k)], "radius": size})
 
     #Create Nodes with edges
     for f, t in combs:
-      if not groups[f]['rows'].isdisjoint(groups[t]['rows']): data.append([f, t])
+      if not set(groups[f]['row_indices']).isdisjoint(set(groups[t]['row_indices'])): data.append([f, t])
     
     return data, nodes
 
