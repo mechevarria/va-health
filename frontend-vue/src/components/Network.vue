@@ -64,13 +64,9 @@ export default {
           this.chartOptions.series[0].data = res.data.data
           this.chartOptions.series[0].nodes = res.data.nodes
           this.chartOptions.series[0].nodes.forEach(node => {
-            let max = 30
-            let min = 10
-            let radius = Math.random() * (max - min) + min;
-            let marker = {
-              radius : radius
+            node.marker = {
+              radius : node.radius
             }
-            node.marker = marker
           });
         })
         .catch((err) => {
