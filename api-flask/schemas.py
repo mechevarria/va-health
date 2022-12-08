@@ -31,6 +31,7 @@ class GraphDataSchema(Schema):
 class GraphNodeSchema(Schema):
     id = fields.Str(Required=True)
     colorIndex = fields.Float(Required=True)
+    radius = fields.Float(Required=True)
 
 class NetworkSchema(Schema):
     filter_id=fields.Str(required=False)
