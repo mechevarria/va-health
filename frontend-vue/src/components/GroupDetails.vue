@@ -1,8 +1,9 @@
 <template>
   <span>
+    <highcharts class="hc" :options="chartOptions" :highcharts="hcInstance"></highcharts>
     <i class="spinner-border spinner-border-sm mb-1 ml-1" v-if="isBusy"></i>
     <span class="d-flex justify-content-between align-items-center mb-2" v-if="groupId > 0 && !isBusy">
-      <h5>Group {{groupId}} Explains:
+      <h5>Group {{ groupId }} Explains:
       </h5>
       <button type="button" class="btn btn-primary" @click="clearGroup()">
         <span class="cil-x-circle icon mr-1"></span>Clear
@@ -14,17 +15,15 @@
           <div class="card-body" v-if="explain.type == 'categorical'">
             Name: {{ explain.name }}
             <b-progress show-progress :value="explain.primary_group_percent" variant="primary"></b-progress>
-            <b-progress show-progress :value="explain.secondary_group_percent" variant="secondary"></b-progress>
           </div>
           <div class="card-body" v-if="explain.type == 'continuous'">
             Name: {{ explain.name }}
-            <b-form-input v-model="explain.primary_group_mean" type="range" min="0" max="1" step="0.0005" readonly></b-form-input>
-            <b-form-input v-model="explain.secondary_group_mean" type="range" min="0" max="1" step="0.0005" readonly></b-form-input>
+            <b-form-input v-model="explain.primary_group_mean" type="range" min="0" max="1" step="0.0005"
+              readonly></b-form-input>
           </div>
         </div>
       </div>
     </div>
-    <!-- <pre>{{groupExplains}}</pre> -->
     <router-view></router-view>
   </span>
 </template>
@@ -32,17 +31,64 @@
 <script>
 import { mapState } from 'vuex'
 import axios from 'axios'
+import { Chart } from 'highcharts-vue'
+import Highcharts from 'highcharts'
+import highchartsMore from 'highcharts/highcharts-more'
 import msgMixin from '../mixins/msg-mixin';
+
+highchartsMore(Highcharts)
 
 export default {
   name: 'AppGroupDetail',
+  components: {
+    highcharts: Chart
+  },
   mixins: [msgMixin],
   computed: mapState(['groupId']),
   data() {
     return {
+      hcInstance: Highcharts,
       isBusy: false,
       groupExplains: {
         explains: []
+      },
+      chartOptions: {
+        credits: {
+            enabled: false
+        },
+        chart: {
+          type: 'boxplot',
+          inverted: true,
+          backgroundColor: null,
+          height: '80',
+          width: '200'
+        },
+        legend: {
+          enabled: false
+        },
+        xAxis: {
+          visible: false
+        },
+        yAxis: {
+          visible: false
+        },
+        plotOptions: {
+          boxplot: {
+            fillColor: '#1EACFC',
+            stemColor: '#1EACFC',
+            whiskerColor: '#1EACFC',
+            medianColor: '#ffffff'
+          }
+        },
+        title: {
+          text: null
+        },
+        series: [{
+          name: '',
+          data: [
+            [760, 801, 848, 895, 965]
+          ]
+        }]
       }
     }
   },
@@ -75,3 +121,5 @@ export default {
   }
 }
 </script>
+<style>
+</style>
