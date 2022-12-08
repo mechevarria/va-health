@@ -32,6 +32,9 @@ export default {
       data: [],
       isBusy: false,
       chartOptions: {
+        credits: {
+          enabled: false
+        },
         chart: {
           type: 'networkgraph',
           height: '300px'
