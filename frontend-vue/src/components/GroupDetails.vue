@@ -1,6 +1,5 @@
 <template>
   <span>
-    <i class="spinner-border spinner-border-sm mb-1 ml-1" v-if="isBusy"></i>
     <span class="d-flex justify-content-between align-items-center mb-2" v-if="groupId > 0 && !isBusy">
       <h5>Group {{ groupId }} Explains:
       </h5>
@@ -12,6 +11,7 @@
       <div class="card">
         <div class="card-header">
           Continuous Explains
+          <i class="spinner-border spinner-border-sm mb-1 ml-1" v-if="isBusy"></i>
         </div>
         <div class="card-body">
           <table class="table table-sm">
@@ -31,6 +31,7 @@
       <div class="card">
         <div class="card-header">
           Categorial Explains
+          <i class="spinner-border spinner-border-sm mb-1 ml-1" v-if="isBusy"></i>
         </div>
         <div class="card-body">
           <table class="table table-sm">
