@@ -1,7 +1,7 @@
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from schemas import FilterSchema, AppliedFilter
+from schemas import AppliedFilter
 
 from globals import user, get_all_group_id
 
@@ -43,16 +43,56 @@ class FilterService(MethodView):
 
     return _fds
 
+  def compute_cohort_analysis(self, src, group):
+    '''
+     Generates network, autogroups and explains for a new filter
+
+    paramaters 
+    filter_id: the id for the filter/group 
+    '''
+    #create the network
+    #TODO - OAA with Target?  Or using metric and lense from base network
+    #Discussion with Amy recommended using the same metric and lense that she used in her analysis
+    #check to see if network exists
+    nw = src.get_network(group['name'])
+    if type(nw) == dict: 
+      network = src.create_network(group['name'],{
+                    'row_group_id': group['id'],
+                    'column_set_id': src.get_column_set(name='features')['id'],  #TODO - get column set from correct base network
+                    'metric': {'id': 'Angle'},
+                    'lenses': [{'resolution': 30, 'id': 'Metric PCA coord 1',
+                                'equalize': True, 'gain': 3.0},
+                              {'resolution': 30, 'id': 'Metric PCA coord 2',
+                                'equalize': True, 'gain': 3.0}]
+                      }
+                    )
+      
+      #TODO - Change from hard coded target to env or passed as param
+      coloring_values = network.get_coloring_values(name='SpeciesColor')
+
+      autogroups = network.autogroup_create(algorithm='AHCL', 
+                                          coloring_values=coloring_values,
+                                          cutoff_strength=0.75, 
+                                          min_node_count=3,
+                                          name=group['id'])
+
+      #create comparisons vs rest
+      for g in autogroups.groups:
+        src.compare_groups(group_1_name=g['name'],group_2_name="Rest", async_=False)
+
+    return
+    
+
   @blp.response(200, AppliedFilter)
   def get(self):
     '''Returns the ID for the default group / no filters applied'''
     return get_all_group_id()
 
-  @blp.arguments(FilterSchema(many=True))
+  @blp.arguments(AppliedFilter())
   @blp.response(200, AppliedFilter)
   def post(self, filter_data):
     #check each filter to make sure categorical and numeric formatted correctly
-    for filter in filter_data:
+    for filter in filter_data['filters']:
       if filter['categorical']:
         if not('value' in filter.keys() and 'is_equal' in filter.keys()):
           abort(400, message=f"Filter {filter['name']} is missing either value of is_equal fields -> {filter}")
@@ -61,7 +101,7 @@ class FilterService(MethodView):
           abort(400, message=f"Filter {filter['name']} is missing either min or max fields -> {filter}")
 
     try:
-      name = self.generate_filter_name(filter_data)
+      name = self.generate_filter_name(filter_data['filters'])
       #check to see if filter has already been applied
       src = user['connection'].get_source(name=user['source_name'])
       grp = src.get_group(name=name)
@@ -70,62 +110,15 @@ class FilterService(MethodView):
       #if found it returns the group dict
       if "id" not in grp.keys():
         #create a filter set
-        fs = src.create_filter_set(self.generate_filter_dict(filter_data))
+        fs = src.create_filter_set(self.generate_filter_dict(filter_data['filters']))
         #Create the groups from the filters
         grp = src.create_group(name=name, filter_set=fs)
 
       applied_filter = {"id": grp['id'], "name": name}
 
+      if filter_data['cohort']:  self.compute_cohort_analysis(src, grp)
+
       return applied_filter
     except:
       abort(404, message="Error creating filter on server")
-    
-
-@blp.route("/filter/<string:filter_id>/cohort-analysis")
-class CohortAnalysisService(MethodView):
-  '''performs analysis for the cohort.  This anlysis includes
-    creating a network
-    performing autogrouping
-    creating comparisons
-  '''
-  def get(self, filter_id):
-    src = user['connection'].get_source(name=user['source_name'])
-    grp = src.get_group(id=filter_id)
-
-    # note: is group not found returns {'msg': 'Group with given parameter does not exist'}
-    # if found it returns the group dict
-    if "id" not in grp.keys():
-      abort(404, message=f"Unable to find filter {filter_id} on platform")
-    else:
-      #create the network
-      #TODO - OAA with Target?  Or using metric and lense from base network
-      #Discussion with Amy recommended using the same metric and lense that she used in her analysis
-      #check to see if network exists
-      nw = src.get_network(grp['name'])
-      if type(nw) == dict: 
-        network = src.create_network(grp['name'],{
-                      'row_group_id': grp['id'],
-                      'column_set_id': src.get_column_set(name='features')['id'],  #TODO - get column set from correct base network
-                      'metric': {'id': 'Angle'},
-                      'lenses': [{'resolution': 30, 'id': 'Metric PCA coord 1',
-                                  'equalize': True, 'gain': 3.0},
-                                {'resolution': 30, 'id': 'Metric PCA coord 2',
-                                  'equalize': True, 'gain': 3.0}]
-                        }
-                      )
-        
-        #TODO - Change from hard coded target to env or passed as param
-        coloring_values = network.get_coloring_values(name='SpeciesColor')
-
-        autogroups = network.autogroup_create(algorithm='AHCL', 
-                                            coloring_values=coloring_values,
-                                            cutoff_strength=0.75, 
-                                            min_node_count=3,
-                                            name=grp['id'])
-
-        #create comparisons vs rest
-        for g in autogroups.groups:
-          src.compare_groups(group_1_name=g['name'],group_2_name="Rest", async_=False)
-
-    return {"message": "cohort analysis complete"}
-    
+  

@@ -21,8 +21,10 @@ class FilterSchema(Schema):
     max=fields.Float(required=False)
 
 class AppliedFilter(Schema):
-    id=fields.Str(required=True)
-    name=fields.Str(required=True)
+    id=fields.Str(dump_only=True)
+    name=fields.Str(dump_only=True)
+    filters=fields.Nested(FilterSchema, required=False, many=True)
+    cohort=fields.Bool(required=False)
 
 class GraphDataSchema(Schema):
     # from = fields.Str(Required=True)
