@@ -60,27 +60,49 @@ class FilterService(MethodView):
         if not('min' in filter.keys() and 'max' in filter.keys()):
           abort(400, message=f"Filter {filter['name']} is missing either min or max fields -> {filter}")
 
-    name = self.generate_filter_name(filter_data)
-    #check to see if filter has already been applied
-    src = user['connection'].get_source(name=user['source_name'])
-    grp = src.get_group(name=name)
+    try:
+      name = self.generate_filter_name(filter_data)
+      #check to see if filter has already been applied
+      src = user['connection'].get_source(name=user['source_name'])
+      grp = src.get_group(name=name)
 
-    #note: is group not found returns {'msg': 'Group with given parameter does not exist'}
-    #if found it returns the group dict
-    if "id" in grp.keys():
-      #group had been created before, just return id and name
+      #note: is group not found returns {'msg': 'Group with given parameter does not exist'}
+      #if found it returns the group dict
+      if "id" not in grp.keys():
+        #create a filter set
+        fs = src.create_filter_set(self.generate_filter_dict(filter_data))
+        #Create the groups from the filters
+        grp = src.create_group(name=name, filter_set=fs)
+
       applied_filter = {"id": grp['id'], "name": name}
-    else:
-      #create a filter set
-      fs = src.create_filter_set(self.generate_filter_dict(filter_data))
-      #Create the groups from the filters
-      grp = src.create_group(name=name, filter_set=fs)
 
+      return applied_filter
+    except:
+      abort(404, message="Error creating filter on server")
+    
+    
+@blp.route("/filter/<string:filter_id>/cohort-analysis")
+class CohortAnalysisService(MethodView):
+  '''performs analysis for the cohort.  This anlysis includes
+    creating a network
+    performing autogrouping
+    creating comparisons
+  '''
+  def get(self, filter_id):
+    src = user['connection'].get_source(name=user['source_name'])
+    grp = src.get_group(id=filter_id)
+
+    # note: is group not found returns {'msg': 'Group with given parameter does not exist'}
+    # if found it returns the group dict
+    if "id" not in grp.keys():
+      abort(404, message=f"Unable to find filter {filter_id} on platform")
+    else:
       #create the network
       #TODO - OAA with Target?  Or using metric and lense from base network
-      network = src.create_network(name,{
+      #Discussion with Amy recommended using the same metric and lense that she used in her analysis
+      network = src.create_network(grp['name'],{
                     'row_group_id': grp['id'],
-                    'column_set_id': src.get_column_set(name='features')['id'],
+                    'column_set_id': src.get_column_set(name='features')['id'],  #TODO - get column set from correct base network
                     'metric': {'id': 'Angle'},
                     'lenses': [{'resolution': 30, 'id': 'Metric PCA coord 1',
                                 'equalize': True, 'gain': 3.0},
@@ -102,8 +124,5 @@ class FilterService(MethodView):
       for g in autogroups.groups:
         src.compare_groups(group_1_name=g['name'],group_2_name="Rest", async_=False)
 
-      applied_filter = {"id": grp['id'], "name": name}
-
-    return applied_filter
+    return {"message": "cohort analysis complete"}
     
-
