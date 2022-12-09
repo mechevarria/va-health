@@ -38,21 +38,31 @@
         <div class="form-row">
           <div class="form-group col-md-6">
             <label>Age Min</label>
-            <b-form-spinbutton v-model="filters[1].min" min="0" max="100"></b-form-spinbutton>
+            <b-form-spinbutton v-model="filters[1].min" min="25" max="90"></b-form-spinbutton>
           </div>
           <div class="form-group col-md-6">
             <label>Age Max</label>
-            <b-form-spinbutton v-model="filters[1].max" min="0" max="100"></b-form-spinbutton>
+            <b-form-spinbutton v-model="filters[1].max" min="25" max="90"></b-form-spinbutton>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
             <label>A1C Min</label>
-            <b-form-spinbutton v-model="filters[2].min" min="0" max="20"></b-form-spinbutton>
+            <b-form-spinbutton v-model="filters[2].min" min="5" max="15"></b-form-spinbutton>
           </div>
           <div class="form-group col-md-6">
             <label>A1C Max</label>
-            <b-form-spinbutton v-model="filters[2].max" min="0" max="20"></b-form-spinbutton>
+            <b-form-spinbutton v-model="filters[2].max" min="5" max="15"></b-form-spinbutton>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label>Vaccination Status Min</label>
+            <b-form-spinbutton v-model="filters[3].min" min="0" max="3"></b-form-spinbutton>
+          </div>
+          <div class="form-group col-md-6">
+            <label>Vaccination Status Max</label>
+            <b-form-spinbutton v-model="filters[3].max" min="0" max="3"></b-form-spinbutton>
           </div>
         </div>
       </form>
@@ -83,15 +93,11 @@ export default {
   data() {
     return {
       raceOptions: [{
-        value: 'Race_White', text: 'White'
+        value: 'White', text: 'White'
       }, {
         value: 'African American', text: 'African American'
       }, {
-        value: 'Ethnicity_HISPANIC OR LATINO', text: 'Hispanic or Latino'
-      }, {
-        value: 'Race_Asian', text: 'Asian'
-      }, {
-        value: 'Race_American Indian or Alaska Native', text: 'American Indian or Alaska Native'
+        value: 'Asian', text: 'Asian'
       }],
       boolOptions: [{
         value: true, text: 'Yes'
