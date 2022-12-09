@@ -8,7 +8,28 @@ const store = new Vuex.Store({
         isSidebarMin: false,
         isSidebarShown: true,
         messages: [],
-        groupId: 0
+        groupId: 0,
+        filterId: 0,
+        filters: [
+            {
+                name: 'race',
+                categorical: true,
+                value: 'African American',
+                is_equal: false
+            },
+            {
+                name: 'AgeAtIndexDate',
+                categorical: false,
+                min: 0,
+                max: 55
+            },
+            {
+                name: 'A1C_last_period4_2021-03-01_2022-03-01',
+                categorical: false,
+                min: 7,
+                max: 12
+            }
+        ]
     },
     mutations: {
         toggleSidebarMin(state) {
@@ -40,6 +61,15 @@ const store = new Vuex.Store({
         },
         clearGroup(state) {
             state.groupId = 0
+        },
+        setFilterId(state, id) {
+            state.filterId = id
+        },
+        setFilters(state, filters) {
+            state.filters = filters
+        },
+        clearFilter(state) {
+            state.filterId = 0
         }
     }
 })
