@@ -80,7 +80,7 @@ class FilterService(MethodView):
     except:
       abort(404, message="Error creating filter on server")
     
-    
+
 @blp.route("/filter/<string:filter_id>/cohort-analysis")
 class CohortAnalysisService(MethodView):
   '''performs analysis for the cohort.  This anlysis includes
@@ -100,29 +100,32 @@ class CohortAnalysisService(MethodView):
       #create the network
       #TODO - OAA with Target?  Or using metric and lense from base network
       #Discussion with Amy recommended using the same metric and lense that she used in her analysis
-      network = src.create_network(grp['name'],{
-                    'row_group_id': grp['id'],
-                    'column_set_id': src.get_column_set(name='features')['id'],  #TODO - get column set from correct base network
-                    'metric': {'id': 'Angle'},
-                    'lenses': [{'resolution': 30, 'id': 'Metric PCA coord 1',
-                                'equalize': True, 'gain': 3.0},
-                              {'resolution': 30, 'id': 'Metric PCA coord 2',
-                                'equalize': True, 'gain': 3.0}]
-                      }
-                    )
-      
-      #TODO - Change from hard coded target to env or passed as param
-      coloring_values = network.get_coloring_values(name='SpeciesColor')
+      #check to see if network exists
+      nw = src.get_network(grp['name'])
+      if type(nw) == dict: 
+        network = src.create_network(grp['name'],{
+                      'row_group_id': grp['id'],
+                      'column_set_id': src.get_column_set(name='features')['id'],  #TODO - get column set from correct base network
+                      'metric': {'id': 'Angle'},
+                      'lenses': [{'resolution': 30, 'id': 'Metric PCA coord 1',
+                                  'equalize': True, 'gain': 3.0},
+                                {'resolution': 30, 'id': 'Metric PCA coord 2',
+                                  'equalize': True, 'gain': 3.0}]
+                        }
+                      )
+        
+        #TODO - Change from hard coded target to env or passed as param
+        coloring_values = network.get_coloring_values(name='SpeciesColor')
 
-      autogroups = network.autogroup_create(algorithm='AHCL', 
-                                          coloring_values=coloring_values,
-                                          cutoff_strength=0.75, 
-                                          min_node_count=3,
-                                          name=grp['id'])
+        autogroups = network.autogroup_create(algorithm='AHCL', 
+                                            coloring_values=coloring_values,
+                                            cutoff_strength=0.75, 
+                                            min_node_count=3,
+                                            name=grp['id'])
 
-      #create comparisons vs rest
-      for g in autogroups.groups:
-        src.compare_groups(group_1_name=g['name'],group_2_name="Rest", async_=False)
+        #create comparisons vs rest
+        for g in autogroups.groups:
+          src.compare_groups(group_1_name=g['name'],group_2_name="Rest", async_=False)
 
     return {"message": "cohort analysis complete"}
     
