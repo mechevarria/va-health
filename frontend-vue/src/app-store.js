@@ -10,26 +10,27 @@ const store = new Vuex.Store({
         messages: [],
         groupId: 0,
         filterId: 0,
-        filters: [
-            {
-                name: 'race',
-                categorical: true,
-                value: 'African American',
-                is_equal: false
-            },
-            {
-                name: 'AgeAtIndexDate',
-                categorical: false,
-                min: 0,
-                max: 55
-            },
-            {
-                name: 'A1C_last_period4_2021-03-01_2022-03-01',
-                categorical: false,
-                min: 7,
-                max: 12
-            }
-        ]
+        filters: [{
+            name: 'race',
+            categorical: true,
+            value: 'African American',
+            is_equal: false
+        }, {
+            name: 'AgeAtIndexDate',
+            categorical: false,
+            min: 25,
+            max: 55
+        }, {
+            name: 'A1C_last_period4_2021-03-01_2022-03-01',
+            categorical: false,
+            min: 7,
+            max: 12
+        }, {
+            name: 'TotalSeriesCount',
+            categorical: false,
+            min: 0,
+            max: 3
+        }]
     },
     mutations: {
         toggleSidebarMin(state) {
