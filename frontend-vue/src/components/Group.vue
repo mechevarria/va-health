@@ -25,7 +25,9 @@
                   <i class="cil-list-rich btn-icon mr-1"></i>All Explainers
                 </button>
               </div>
-              <li v-for="(explain, index) in group.explains" v-bind:key="index">{{ explain }}</li>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item" v-for="(explain, index) in group.explains" v-bind:key="index">{{ explain }}</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -36,12 +38,14 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import axios from 'axios'
 import msgMixin from '../mixins/msg-mixin';
 
 export default {
   name: 'AppGroup',
   mixins: [msgMixin],
+  computed: mapState(['filterId']),
   data() {
     return {
       isBusy: false,
@@ -51,7 +55,11 @@ export default {
   methods: {
     getExplain() {
       this.isBusy = true
-      const url = '/api/explain'
+      this.groups = []
+      let url = '/api/explain'
+      if(this.filterId > 0) {
+        url = url + `/${this.filterId}`
+      }
       axios
         .get(url)
         .then((res) => {
@@ -76,6 +84,11 @@ export default {
     getGroupDetails(id, index) {
       this.$store.commit('setGroup', id)
       this.toggleExplain(index)
+    }
+  },
+  watch: {
+    filterId() {
+      this.getExplain()
     }
   },
   created() {
