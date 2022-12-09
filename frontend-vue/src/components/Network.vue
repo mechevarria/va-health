@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { Chart } from 'highcharts-vue'
 import Highcharts from 'highcharts'
 import Networkgraph from 'highcharts/modules/networkgraph'
@@ -25,6 +26,7 @@ export default {
   components: {
     highcharts: Chart
   },
+  computed: mapState(['filterId']),
   mixins: [msgMixin],
   data() {
     return {
@@ -55,17 +57,21 @@ export default {
     getGraph() {
       this.isBusy = true
       const url = '/api/graph'
+      const body = {
+        color_name: 'species_color'
+      }
+      if (this.filterId > 0) {
+        body.filter_id = this.filterId
+      }
+
       axios
-        .post(url, {
-          //filter_id: 18310991,
-          color_name: 'species_color'
-        })
+        .post(url, body)
         .then((res) => {
           this.chartOptions.series[0].data = res.data.data
           this.chartOptions.series[0].nodes = res.data.nodes
           this.chartOptions.series[0].nodes.forEach(node => {
             node.marker = {
-              radius : node.radius
+              radius: node.radius
             }
           });
         })
@@ -76,6 +82,11 @@ export default {
         .finally(() => {
           this.isBusy = false
         })
+    }
+  },
+  watch: {
+    filterId() {
+      this.getGraph()
     }
   },
   created() {
