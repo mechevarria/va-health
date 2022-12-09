@@ -3,11 +3,18 @@
     <h4 class="d-flex justify-content-between align-items-center">Clinical Dashboard
       <button class="btn btn-primary" v-b-modal.filter-modal><i class="cil-filter btn-icon mr-1"></i>Filter</button>
     </h4>
-    <div class="d-flex justify-content-between align-items-center" v-if="isFiltered">
-      <ul class="list-group list-group-horizontal bg-white mb-1 mt-1">
-        <li class="list-group-item">{{ filters[0].name }}: {{ filters[0].value }}, is equal: {{ filters[0].is_equal }}</li>
-        <li class="list-group-item">{{ filters[1].name }}, min: {{ filters[1].min }}, max: {{ filters[1].max }}</li>
-        <li class="list-group-item">{{ filters[2].name }}, min: {{ filters[2].min }}, max: {{ filters[2].max }}</li>
+    <div class="d-flex justify-content-between align-items-center border-bottom border-top" v-if="filterId > 0">
+      <ul class="list-group list-group-horizontal list-group-accent">
+        <li class="list-group-item list-group-item-accent-primary">{{ filters[0].name }}: {{ filters[0].value }}, is
+          equal: {{ filters[0].is_equal }}</li>
+      </ul>
+      <ul class="list-group list-group-horizontal list-group-accent">
+        <li class="list-group-item list-group-item-accent-info">{{ filters[1].name }}, min: {{ filters[1].min }}, max:
+          {{ filters[1].max }}</li>
+      </ul>
+      <ul class="list-group list-group-horizontal list-group-accent">
+        <li class="list-group-item list-group-item-accent-success">{{ filters[2].name }}, min: {{ filters[2].min }},
+          max: {{ filters[2].max }}</li>
       </ul>
       <button class="btn btn-danger ml-2" @click="doClear()"><i class="cil-x-circle btn-icon mr-1"></i>Clear</button>
     </div>
@@ -55,6 +62,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import axios from 'axios'
 import AppKpi from './Kpi.vue'
 import AppNetwork from './Network.vue'
 import AppGroup from './Group.vue'
@@ -70,15 +79,13 @@ export default {
     AppGroupDetails
   },
   mixins: [msgMixin],
+  computed: mapState(['filters', 'filterId']),
   data() {
     return {
-      isFiltered: false,
       raceOptions: [{
-        value: null, text: 'No Filter'
-      }, {
         value: 'Race_White', text: 'White'
       }, {
-        value: 'Race_Black or African American', text: 'African American'
+        value: 'African American', text: 'African American'
       }, {
         value: 'Ethnicity_HISPANIC OR LATINO', text: 'Hispanic or Latino'
       }, {
@@ -90,43 +97,31 @@ export default {
         value: true, text: 'Yes'
       }, {
         value: false, text: 'No'
-      }],
-      filters: [
-        {
-          name: 'race',
-          categorical: true,
-          value: null,
-          is_equal: true
-        },
-        {
-          name: 'AgeAtIndexDate',
-          categorical: false,
-          min: 0,
-          max: 55
-        },
-        {
-          name: 'A1C_last_period4_2021-03-01_2022-03-01',
-          categorical: false,
-          min: 0,
-          max: 20
-        }
-      ]
+      }]
     }
   },
   methods: {
     doFilter() {
+      const url = '/api/filter'
       this.$bvModal.hide('filter-modal')
-      this.isFiltered = true
-      console.log(this.filters)
+      this.$store.commit('setFilters', this.filters)
+      this.infoMsg('Creating Dashboard Filter')
+      axios
+        .post(url, this.filters)
+        .then((res) => {
+          this.successMsg(`Updating Dashboard with Filter ${res.data.id}`)
+          this.$store.commit('setFilterId', res.data.id)
+        })
+        .catch((err) => {
+          console.error(err)
+          this.errorMsg(err.message)
+        })
+        .finally(() => {
+          this.$bvModal.hide('filter-modal')
+        })
     },
     doClear() {
-      this.isFiltered = false
-      this.filters[0].value = null
-      this.filters[0].is_equal = true
-      this.filters[1].min = 0
-      this.filters[1].max = 100
-      this.filters[2].min = 0
-      this.filters[2].max = 20
+      this.$store.commit('clearFilter')
     }
   }
 }
