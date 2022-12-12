@@ -58,7 +58,7 @@ export default {
       this.isBusy = true
       const url = '/api/graph'
       const body = {
-        color_name: 'species_color'
+        color_name: 'A1Clast_period2_to_4_change'
       }
       if (this.filterId > 0) {
         body.filter_id = this.filterId
