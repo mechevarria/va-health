@@ -109,11 +109,15 @@ export default {
   methods: {
     doFilter() {
       const url = '/api/filter'
+      const body = {
+        filters: this.filters,
+        cohort: true
+      }
       this.$bvModal.hide('filter-modal')
       this.$store.commit('setFilters', this.filters)
       this.infoMsg('Creating Dashboard Filter')
       axios
-        .post(url, this.filters)
+        .post(url, body)
         .then((res) => {
           this.successMsg(`Updating Dashboard with Filter ${res.data.id}`)
           this.$store.commit('setFilterId', res.data.id)
