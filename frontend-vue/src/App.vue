@@ -40,11 +40,12 @@ export default {
 <style lang="scss">
 //Just in case we want to change up theme colors
 $theme-colors: (
-  primary: #671aa0,
-  info: #1EACFC,
-  danger: #fa089e,
-  warn: #FFB600,
-  success: #00bb9c
+  primary: #6f42c1,
+  secondary: #ea39b8,
+  success: #3cf281,
+  info: #1ba2f6,
+  warning: #ffc107,
+  danger: #e44c55,
 );
 
 @import '~perfect-scrollbar/css/perfect-scrollbar.css';
