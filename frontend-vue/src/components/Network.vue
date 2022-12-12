@@ -1,7 +1,15 @@
 <template>
   <div class="card">
-    <div class="card-header">
-      Patient Segments <i class="spinner-border spinner-border-sm mr-1" v-if="isBusy"></i>
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <span>Patient Segments <i class="spinner-border spinner-border-sm mr-1" v-if="isBusy"></i></span>
+      <b-dropdown id="color-dropdown">
+        <template #button-content>
+          <i class="cil-contrast mr-2 mb-1"></i>Change Color
+        </template>
+        <b-dropdown-item-button v-for="(option, index) in colorOptions" :key="index" @click="changeColor(option)">
+          {{ option.text }}
+        </b-dropdown-item-button>
+      </b-dropdown>
     </div>
     <div class="card-body">
       <div class="card-text">
@@ -36,7 +44,7 @@ export default {
       colorOptions: [{
         value: 'A1Clast_period2_to_4_change',
         text: 'Change in A1C'
-      },{
+      }, {
         value: 'visits_count_permonth_period2_to_4_change',
         text: 'Change in Engagement'
       }, {
@@ -46,6 +54,7 @@ export default {
         value: 'Is_decrease_visits_count_permonth_period2_to_4_change',
         text: 'Predicted Change in Engagement'
       }],
+      selectedColor: '',
       chartOptions: {
         credits: {
           enabled: false
@@ -67,11 +76,16 @@ export default {
     }
   },
   methods: {
+    changeColor(option) {
+      this.selectedColor = option.value
+      this.infoMsg(`Coloring graph by ${option.text}`)
+      this.getGraph()
+    },
     getGraph() {
       this.isBusy = true
       const url = '/api/graph'
       const body = {
-        color_name: this.colorOptions[0].value
+        color_name: this.selectedColor
       }
       if (this.filterId > 0) {
         body.filter_id = this.filterId
@@ -103,6 +117,7 @@ export default {
     }
   },
   created() {
+    this.selectedColor = this.colorOptions[0].value
     this.getGraph()
   }
 }
