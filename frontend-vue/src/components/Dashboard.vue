@@ -115,7 +115,7 @@ export default {
       }
       this.$bvModal.hide('filter-modal')
       this.$store.commit('setFilters', this.filters)
-      this.infoMsg('Creating Dashboard Filter')
+      this.infoMsg('Creating dashboard filter, please wait')
       axios
         .post(url, body)
         .then((res) => {
