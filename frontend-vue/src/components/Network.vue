@@ -33,6 +33,19 @@ export default {
       hcInstance: Highcharts,
       data: [],
       isBusy: false,
+      colorOptions: [{
+        value: 'A1Clast_period2_to_4_change',
+        text: 'Change in A1C'
+      },{
+        value: 'visits_count_permonth_period2_to_4_change',
+        text: 'Change in Engagement'
+      }, {
+        value: 'Is_increase_A1Clast_period2_to_4_change',
+        text: 'Predicted A1C Increase'
+      }, {
+        value: 'Is_decrease_visits_count_permonth_period2_to_4_change',
+        text: 'Predicted Change in Engagement'
+      }],
       chartOptions: {
         credits: {
           enabled: false
@@ -58,7 +71,7 @@ export default {
       this.isBusy = true
       const url = '/api/graph'
       const body = {
-        color_name: 'A1Clast_period2_to_4_change'
+        color_name: this.colorOptions[0].value
       }
       if (this.filterId > 0) {
         body.filter_id = this.filterId
