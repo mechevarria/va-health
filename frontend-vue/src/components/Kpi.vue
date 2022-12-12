@@ -1,7 +1,7 @@
 <template>
   <span>
     <div class="card-deck">
-      <div class="card mb-4 mt-2 text-white bg-danger">
+      <div class="card mb-4 mt-2 text-white bg-secondary">
         <div class="card-body">
           <i class="spinner-border spinner-border-sm mb-1 ml-1 mt-1" v-if="isBusy"></i>
           <span v-if=data[0]>
@@ -10,7 +10,7 @@
           </span>
         </div>
       </div>
-      <div class="card mb-4 mt-2 text-white bg-warning">
+      <div class="card mb-4 mt-2 text-white bg-primary">
         <div class="card-body">
           <i class="spinner-border spinner-border-sm mb-1 ml-1 mt-1" v-if="isBusy"></i>
           <span v-if=data[1]>
@@ -19,7 +19,7 @@
           </span>
         </div>
       </div>
-      <div class="card mb-4 mt-2 text-white bg-primary">
+      <div class="card mb-4 mt-2 text-white bg-warning">
         <div class="card-body">
           <i class="spinner-border spinner-border-sm mb-1 ml-1 mt-1" v-if="isBusy"></i>
           <span v-if=data[2]>
