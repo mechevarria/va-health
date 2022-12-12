@@ -3,7 +3,7 @@
     <span class="d-flex justify-content-between align-items-center mb-2" v-if="groupId > 0 && !isBusy">
       <h5>Group {{ groupId }} Explains:
       </h5>
-      <button type="button" class="btn btn-primary" @click="clearGroup()">
+      <button type="button" class="btn btn-secondary" @click="clearGroup()">
         <span class="cil-x-circle icon mr-1"></span>Clear
       </button>
     </span>
