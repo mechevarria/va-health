@@ -17,6 +17,19 @@ const store = new Vuex.Store({
         }, {
             value: 'Asian', text: 'Asian'
         }],
+        colorOptions: [{
+            value: 'A1Clast_period2_to_4_change',
+            text: 'Change in A1C'
+        }, {
+            value: 'visits_count_permonth_period2_to_4_change',
+            text: 'Change in Engagement'
+        }, {
+            value: 'Is_increase_A1Clast_period2_to_4_change',
+            text: 'Predicted A1C Increase'
+        }, {
+            value: 'Is_decrease_visits_count_permonth_period2_to_4_change',
+            text: 'Predicted Change in Engagement'
+        }],
         boolOptions: [{
             value: true, text: 'Yes'
         }, {
