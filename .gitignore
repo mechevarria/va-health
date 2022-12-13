@@ -5,3 +5,6 @@ api-flask/.env
 # node ignore
 frontend-vue/node_modules
 frontend-vue/dist
+
+#stearmlit files
+streamlit/
