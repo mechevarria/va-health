@@ -34,26 +34,13 @@ export default {
   components: {
     highcharts: Chart
   },
-  computed: mapState(['filterId']),
+  computed: mapState(['filterId','colorOptions']),
   mixins: [msgMixin],
   data() {
     return {
       hcInstance: Highcharts,
       data: [],
       isBusy: false,
-      colorOptions: [{
-        value: 'A1Clast_period2_to_4_change',
-        text: 'Change in A1C'
-      }, {
-        value: 'visits_count_permonth_period2_to_4_change',
-        text: 'Change in Engagement'
-      }, {
-        value: 'Is_increase_A1Clast_period2_to_4_change',
-        text: 'Predicted A1C Increase'
-      }, {
-        value: 'Is_decrease_visits_count_permonth_period2_to_4_change',
-        text: 'Predicted Change in Engagement'
-      }],
       selectedColor: '',
       chartOptions: {
         credits: {
