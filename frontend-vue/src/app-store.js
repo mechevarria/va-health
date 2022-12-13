@@ -10,22 +10,38 @@ const store = new Vuex.Store({
         messages: [],
         groupId: 0,
         filterId: 0,
+        raceOptions: [{
+            value: 'White', text: 'White'
+        }, {
+            value: 'African American', text: 'African American'
+        }, {
+            value: 'Asian', text: 'Asian'
+        }],
+        boolOptions: [{
+            value: true, text: 'Yes'
+        }, {
+            value: false, text: 'No'
+        }],
         filters: [{
             name: 'race',
+            label: 'Race',
             categorical: true,
             value: 'African American',
             is_equal: false
         }, {
             name: 'AgeAtIndexDate',
+            label: 'Age',
             categorical: false,
             min: 25,
             max: 55
         }, {
             name: 'A1C_last_period4_2021-03-01_2022-03-01',
+            label: 'A1C',
             categorical: false,
             min: 7,
             max: 12
         }, {
+            label: 'Vaccination Status',
             name: 'TotalSeriesCount',
             categorical: false,
             min: 0,
