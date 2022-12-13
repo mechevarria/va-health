@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import { NavPlugin, DropdownPlugin, ToastPlugin, TablePlugin, PaginationPlugin, FormSelectPlugin, ModalPlugin, ProgressPlugin , FormInputPlugin, FormSpinbuttonPlugin } from 'bootstrap-vue'
+import { NavPlugin, DropdownPlugin, ToastPlugin, TablePlugin, PaginationPlugin, FormSelectPlugin, ModalPlugin, ProgressPlugin, FormInputPlugin, FormSpinbuttonPlugin, FormCheckboxPlugin } from 'bootstrap-vue'
 import VueMobileDetection from 'vue-mobile-detection'
 import 'perfect-scrollbar/dist/perfect-scrollbar'
 import '@popperjs/core/dist/esm/popper'
@@ -20,6 +20,7 @@ Vue.use(ModalPlugin)
 Vue.use(ProgressPlugin)
 Vue.use(FormInputPlugin)
 Vue.use(FormSpinbuttonPlugin)
+Vue.use(FormCheckboxPlugin)
 Vue.use(VueMobileDetection)
 Vue.use(HighchartsVue)
 
