@@ -17,6 +17,7 @@
 export default {
   name: 'AppHome',
   data() {
+    return {}
   }
 }
 </script>
