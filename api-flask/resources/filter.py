@@ -68,7 +68,7 @@ class FilterService(MethodView):
                     )
       
       #TODO - Change from hard coded target to env or passed as param
-      coloring_values = network.get_coloring_values(name='SpeciesColor')
+      coloring_values = network.get_coloring_values(name='A1Clast_period2_to_4_change')
 
       autogroups = network.autogroup_create(algorithm='AHCL', 
                                           coloring_values=coloring_values,
