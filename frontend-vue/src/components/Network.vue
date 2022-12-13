@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">
       <span>Patient Segments <i class="spinner-border spinner-border-sm mr-1" v-if="isBusy"></i></span>
-      <b-dropdown id="color-dropdown">
+      <b-dropdown id="color-dropdown" right text="Right align">
         <template #button-content>
           <i class="cil-contrast mr-2 mb-1"></i>Change Color
         </template>
