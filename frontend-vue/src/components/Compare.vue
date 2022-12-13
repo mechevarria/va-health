@@ -14,12 +14,12 @@
         <div class="card-body">
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label>{{filters[0].label}}</label>
-              <b-form-select v-model="filters[0].value" :options="raceOptions"></b-form-select>
+              <label>{{first[0].label}}</label>
+              <b-form-select v-model="first[0].value" :options="first[0].valueOptions"></b-form-select>
             </div>
             <div class="form-group col-md-6">
               <label>Is Equal</label>
-              <b-form-select v-model="filters[0].is_equal" :options="boolOptions"></b-form-select>
+              <b-form-select v-model="first[0].is_equal" :options="first[0].boolOptions"></b-form-select>
             </div>
             <!-- <div class="form-group col-md-2">
             <button type="button" alt="Remove filter" class="btn btn-lg mt-4 pb-0"><i class="cil-x-circle btn-icon mr-1"></i></button>
@@ -27,32 +27,32 @@
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label>{{filters[1].label}} Min</label>
-              <b-form-spinbutton v-model="first[1].min" min="25" max="90"></b-form-spinbutton>
+              <label>{{first[1].label}} Min</label>
+              <b-form-spinbutton v-model="first[1].min" :min="first[1].inputMin" :max="first[1].inputMax"></b-form-spinbutton>
             </div>
             <div class="form-group col-md-6">
-              <label>{{filters[1].label}} Max</label>
-              <b-form-spinbutton v-model="first[1].max" min="25" max="90"></b-form-spinbutton>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-6">
-              <label>{{filters[2].label}} Min</label>
-              <b-form-spinbutton v-model="first[2].min" min="5" max="15"></b-form-spinbutton>
-            </div>
-            <div class="form-group col-md-6">
-              <label>{{filters[2].label}} Max</label>
-              <b-form-spinbutton v-model="first[2].max" min="5" max="15"></b-form-spinbutton>
+              <label>{{first[1].label}} Max</label>
+              <b-form-spinbutton v-model="first[1].max" :min="first[1].inputMin" :max="first[1].inputMax"></b-form-spinbutton>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label>{{filters[3].label}} Min</label>
-              <b-form-spinbutton v-model="first[3].min" min="0" max="3"></b-form-spinbutton>
+              <label>{{first[2].label}} Min</label>
+              <b-form-spinbutton v-model="first[2].min" :min="first[2].inputMin" :max="first[2].inputMax"></b-form-spinbutton>
             </div>
             <div class="form-group col-md-6">
-              <label>{{filters[3].label}} Max</label>
-              <b-form-spinbutton v-model="first[3].max" min="0" max="3"></b-form-spinbutton>
+              <label>{{first[2].label}} Max</label>
+              <b-form-spinbutton v-model="first[2].max" :min="first[2].inputMin" :max="first[2].inputMax"></b-form-spinbutton>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label>{{first[3].label}} Min</label>
+              <b-form-spinbutton v-model="first[3].min" :min="first[3].inputMin" :max="first[3].inputMax"></b-form-spinbutton>
+            </div>
+            <div class="form-group col-md-6">
+              <label>{{first[3].label}} Max</label>
+              <b-form-spinbutton v-model="first[3].max" :min="first[3].inputMin" :max="first[3].inputMax"></b-form-spinbutton>
             </div>
           </div>
         </div>
@@ -71,12 +71,12 @@
           </div>
           <div class="form-row" v-if="!compareRest">
             <div class="form-group col-md-6">
-              <label>{{filters[0].label}}</label>
-              <b-form-select v-model="second[0].value" :options="raceOptions"></b-form-select>
+              <label>{{second[0].label}}</label>
+              <b-form-select v-model="second[0].value" :options="second[0].valueOptions"></b-form-select>
             </div>
             <div class="form-group col-md-6">
               <label>Is Equal</label>
-              <b-form-select v-model="second[0].is_equal" :options="boolOptions"></b-form-select>
+              <b-form-select v-model="second[0].is_equal" :options="second[0].boolOptions"></b-form-select>
             </div>
             <!-- <div class="form-group col-md-2">
             <button type="button" alt="Remove filter" class="btn btn-lg mt-4 pb-0"><i class="cil-x-circle btn-icon mr-1"></i></button>
@@ -84,32 +84,32 @@
           </div>
           <div class="form-row" v-if="!compareRest">
             <div class="form-group col-md-6">
-              <label>{{filters[1].label}} Min</label>
-              <b-form-spinbutton v-model="second[1].min" min="25" max="90"></b-form-spinbutton>
+              <label>{{second[1].label}} Min</label>
+              <b-form-spinbutton v-model="second[1].min" :min="second[1].inputMin" :max="second[1].inputMax"></b-form-spinbutton>
             </div>
             <div class="form-group col-md-6">
-              <label>{{filters[1].label}} Max</label>
-              <b-form-spinbutton v-model="second[1].max" min="25" max="90"></b-form-spinbutton>
-            </div>
-          </div>
-          <div class="form-row" v-if="!compareRest">
-            <div class="form-group col-md-6">
-              <label>{{filters[2].label}} Min</label>
-              <b-form-spinbutton v-model="second[2].min" min="5" max="15"></b-form-spinbutton>
-            </div>
-            <div class="form-group col-md-6">
-              <label>{{filters[2].label}} Max</label>
-              <b-form-spinbutton v-model="second[2].max" min="5" max="15"></b-form-spinbutton>
+              <label>{{second[1].label}} Max</label>
+              <b-form-spinbutton v-model="second[1].max" :min="second[1].inputMin" :max="second[1].inputMax"></b-form-spinbutton>
             </div>
           </div>
           <div class="form-row" v-if="!compareRest">
             <div class="form-group col-md-6">
-              <label>{{filters[3].label}} Min</label>
-              <b-form-spinbutton v-model="second[3].min" min="0" max="3"></b-form-spinbutton>
+              <label>{{second[2].label}} Min</label>
+              <b-form-spinbutton v-model="second[2].min" :min="second[2].inputMin" :max="second[2].inputMax"></b-form-spinbutton>
             </div>
             <div class="form-group col-md-6">
-              <label>{{filters[3].label}} Max</label>
-              <b-form-spinbutton v-model="second[3].max" min="0" max="3"></b-form-spinbutton>
+              <label>{{second[2].label}} Max</label>
+              <b-form-spinbutton v-model="second[2].max" :min="second[2].inputMin" :max="second[2].inputMax"></b-form-spinbutton>
+            </div>
+          </div>
+          <div class="form-row" v-if="!compareRest">
+            <div class="form-group col-md-6">
+              <label>{{second[3].label}} Min</label>
+              <b-form-spinbutton v-model="second[3].min" :min="second[3].inputMin" :max="second[3].inputMax"></b-form-spinbutton>
+            </div>
+            <div class="form-group col-md-6">
+              <label>{{second[3].label}} Max</label>
+              <b-form-spinbutton v-model="second[3].max" :min="second[3].inputMin" :max="second[3].inputMax"></b-form-spinbutton>
             </div>
           </div>
         </div>
@@ -125,7 +125,7 @@ import msgMixin from '../mixins/msg-mixin'
 export default {
   name: 'AppCompare',
   mixins: [msgMixin],
-  computed: mapState(['filters', 'raceOptions', 'boolOptions']),
+  computed: mapState(['filters']),
   data() {
     return {
       isBusy: false,
