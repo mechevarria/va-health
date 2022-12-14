@@ -33,7 +33,8 @@ def get_group_details(src, group_1_id, group_2_id="Rest"):
     comp = src.get_comparison(name=f"{grp['name']} vs. Rest on All columns")
 
     if "msg" in comp:
-      comp = src.compare_groups(group_1_name=g['name'],group_2_name="Rest", async_=False)
+      print("msg in comp")
+      comp = src.compare_groups(group_1_name=grp['name'],group_2_name="Rest", async_=False)
   else:
     grp1 = src.get_group(id=group_1_id)
     grp2 = src.get_group(id=group_2_id)
@@ -41,8 +42,9 @@ def get_group_details(src, group_1_id, group_2_id="Rest"):
 
     comp = src.get_comparison(name=f"{grp1['name']} vs. {grp2['name']} on All columns")
     if "msg" in comp:
-      comp = src.compare_groups(group_1_name=grp2['name'],group_2_name=grp2['name'], async_=False)
+      comp = src.compare_groups(group_1_name=grp1['name'],group_2_name=grp2['name'], async_=False)
 
+    print( comp['id'])
     _exp['id'] = comp['id']
 
   #search continuous_explainers
@@ -80,11 +82,14 @@ class GroupDetailService(MethodView):
       src = user['connection'].get_source(name=user['source_name'])
 
       if "-" in group_id:
+        print('found -')
+
         _ = group_id.split("-")
         g1 = _[0]
         g2 = _[1]
 
       else:
+        print('else')
         g1 = group_id
         g2 = "Rest"
       

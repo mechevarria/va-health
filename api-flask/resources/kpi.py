@@ -21,7 +21,7 @@ def compute_kpis(src, group_id):
 
   #Get number of vaccinated
   vac_values = group_stat(src, grp, 'TotalSeriesCount')
-  vac_percent = sum(vac_values) / len(vac_values) 
+  vac_percent = sum([i>0 for i in vac_values]) / len(vac_values) 
   kpis.append({"name": "Vaccination Precentage", "value": vac_percent})
   
   #Get Hospitilization rate

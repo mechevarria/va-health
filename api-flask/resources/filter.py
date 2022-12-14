@@ -55,6 +55,8 @@ class FilterService(MethodView):
     #Discussion with Amy recommended using the same metric and lense that she used in her analysis
     #check to see if network exists
     nw = src.get_network(group['name'])
+    print(f"nw type: {type(nw)}")
+
     if type(nw) == dict: 
       network = src.create_network(group['name'],{
                     'row_group_id': group['id'],
@@ -68,6 +70,7 @@ class FilterService(MethodView):
                     )
       
       #TODO - Change from hard coded target to env or passed as param
+      new_coloring = src.create_coloring(name='A1Clast_period2_to_4_change', column_name='A1Clast_period2_to_4_change')
       coloring_values = network.get_coloring_values(name='A1Clast_period2_to_4_change')
 
       autogroups = network.autogroup_create(algorithm='AHCL', 
@@ -77,8 +80,13 @@ class FilterService(MethodView):
                                           name=group['id'])
 
       #create comparisons vs rest
+      jobs = []
       for g in autogroups.groups:
-        src.compare_groups(group_1_name=g['name'],group_2_name="Rest", async_=False)
+        jobs.append(src.compare_groups(group_1_name=g['name'],group_2_name="Rest", async_=True))
+
+      for e, job in enumerate(jobs):
+          print(e, job)
+          job.sync()
 
     return
     

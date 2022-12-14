@@ -1,11 +1,617 @@
 {
 	"info": {
-		"_postman_id": "e18bfb93-00a7-4186-a961-24e0de0845e5",
+		"_postman_id": "49dff964-0c5b-4665-8fac-630048a5e3ec",
 		"name": "VA-Health",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "1420797"
+		"_exporter_id": "24705840"
 	},
 	"item": [
+		{
+			"name": "default / no filter",
+			"item": [
+				{
+					"name": "/kpi Get kpi for defait cohort",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test('kpi array has at least one entry', () => {\r",
+									"    pm.expect(jsonData.length).to.be.equal(5)\r",
+									"});\r",
+									"\r",
+									"pm.test('Total patient count correct', () => {\r",
+									"    pm.expect(jsonData[0]['name']).to.be.equal('Total Patients')\r",
+									"    pm.expect(jsonData[0]['value']).to.be.equal(499.0)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/kpi",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"kpi"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/filter Get filter for defait cohort",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test('filter has name equal to all rows in json response', () => {\r",
+									"    pm.response.to.have.jsonBody(\"name\")\r",
+									"    pm.expect(jsonData['name']).to.be.equal('all_rows')\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/filter",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"filter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/graph. Return network for default graph",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test('graph has color_name key', () => {\r",
+									"    pm.response.to.have.jsonBody(\"color_name\")\r",
+									"});\r",
+									"\r",
+									"pm.test('graph has data key', () => {\r",
+									"    pm.response.to.have.jsonBody(\"data\")\r",
+									"    pm.expect(jsonData['data'].length).to.be.greaterThan(0)\r",
+									"});\r",
+									"\r",
+									"pm.test('graph has nodes key', () => {\r",
+									"    pm.response.to.have.jsonBody(\"nodes\")\r",
+									"});\r",
+									"\r",
+									"pm.test('graph data length count >= nodes count', () => {\r",
+									"    pm.expect(jsonData['data'].length).to.be.greaterThanOrEqual(jsonData['nodes'].length)\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"color_name\": \"A1Clast_period2_to_4_change\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/graph",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"graph"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/explain Get explains for default cohort",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"const firstItem = jsonData[0];\r",
+									"\r",
+									"pm.test('response has list of items or certeain types', () => {\r",
+									"    pm.expect(jsonData.length).to.be.greaterThan(0)\r",
+									"    pm.expect(firstItem).to.be.an(\"object\");\r",
+									"    pm.expect(firstItem.explains).to.be.a(\"array\");\r",
+									"    pm.expect(firstItem.group_size).to.be.a(\"number\");\r",
+									"    pm.expect(firstItem.id).to.be.a(\"string\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/explain",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"explain"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "filtered",
+			"item": [
+				{
+					"name": "/filter Create Filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test('response has id', () => {\r",
+									"    pm.response.to.have.jsonBody(\"id\")\r",
+									"    pm.environment.set(\"filter_id\", jsonData['id'])\r",
+									"});\r",
+									"\r",
+									"pm.test('response has name and correct value', () => {\r",
+									"    pm.response.to.have.jsonBody(\"name\")\r",
+									"    pm.expect(jsonData['name']).to.be.equal('race_isNOT_African American; AgeAtIndexDate_25.0_to_90.0; A1C_last_period4_2021-03-01_2022-03-01_5.0_to_12.5; TotalSeriesCount_0.0_to_3.0')\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"filters\": [\n    {\n      \"name\": \"race\",\n      \"categorical\": true,\n      \"value\": \"African American\",\n      \"is_equal\": false\n    },\n    {\n      \"name\": \"AgeAtIndexDate\",\n      \"categorical\": false,\n      \"min\": 25,\n      \"max\": 90\n    },\n    {\n      \"name\": \"A1C_last_period4_2021-03-01_2022-03-01\",\n      \"categorical\": false,\n      \"min\": 5,\n      \"max\": 12.5\n    },\n    {\n      \"name\": \"TotalSeriesCount\",\n      \"categorical\": false,\n      \"min\": 0,\n      \"max\": 3\n    }\n  ],\n  \"cohort\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/filter",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"filter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/kpi/filter_id. KPI for filtered cohort",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test('kpi array has at least one entry', () => {\r",
+									"    pm.expect(jsonData.length).to.be.equal(5)\r",
+									"});\r",
+									"\r",
+									"pm.test('Total patient count correct', () => {\r",
+									"    pm.expect(jsonData[0]['name']).to.be.equal('Total Patients')\r",
+									"    pm.expect(jsonData[0]['value']).to.be.equal(434.0)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/kpi/{{filter_id}}",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"kpi",
+								"{{filter_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/graph/filter_id.   Return network for filtered cohort",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test('graph has color_name key', () => {\r",
+									"    pm.response.to.have.jsonBody(\"color_name\")\r",
+									"});\r",
+									"\r",
+									"pm.test('graph has data key', () => {\r",
+									"    pm.response.to.have.jsonBody(\"data\")\r",
+									"    pm.expect(jsonData['data'].length).to.be.greaterThan(0)\r",
+									"});\r",
+									"\r",
+									"pm.test('graph has nodes key', () => {\r",
+									"    pm.response.to.have.jsonBody(\"nodes\")\r",
+									"});\r",
+									"\r",
+									"pm.test('graph data length count >= nodes count', () => {\r",
+									"    pm.expect(jsonData['data'].length).to.be.greaterThanOrEqual(jsonData['nodes'].length)\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"color_name\": \"A1Clast_period2_to_4_change\",\n    \"filter_id\": \"{{filter_id}}\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/graph",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"graph"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/explain/filter_id. Explains for filtered cohort",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"const firstItem = jsonData[0];\r",
+									"\r",
+									"pm.test('response array has at least one entry', () => {\r",
+									"    pm.expect(jsonData.length).to.be.greaterThan(0)\r",
+									"});\r",
+									"\r",
+									"pm.test('Has all required fields', () => {\r",
+									"    pm.expect(firstItem.group_size).to.eql(79)\r",
+									"    pm.expect(firstItem.explains).to.be.a(\"array\");\r",
+									"    pm.environment.set(\"group_id\", firstItem['id'])\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/explain/{{filter_id}}",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"explain",
+								"{{filter_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/group/group_id  Detailed group info",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"const firstItem = jsonData[0];\r",
+									"\r",
+									"pm.test('response body has explains', () => {\r",
+									"    pm.response.to.have.jsonBody(\"explains\")\r",
+									"});\r",
+									"\r",
+									"pm.test('response body has primary fields', () => {\r",
+									"    pm.response.to.have.jsonBody(\"primary_name\")\r",
+									"    pm.response.to.have.jsonBody(\"primary_size\")\r",
+									"});\r",
+									"\r",
+									"pm.test('response body has secondary fields', () => {\r",
+									"    pm.response.to.have.jsonBody(\"secondary_name\")\r",
+									"    pm.response.to.have.jsonBody(\"secondary_size\")\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/group/{{group_id}}",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"group",
+								"{{group_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "compares_page",
+			"item": [
+				{
+					"name": "/filter Create Black/Young/Vaxxed Filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test('response has id', () => {\r",
+									"    pm.response.to.have.jsonBody(\"id\")\r",
+									"    pm.environment.set(\"group1_id\", jsonData['id'])\r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test('response has name and correct value', () => {\r",
+									"    pm.response.to.have.jsonBody(\"name\")\r",
+									"    pm.expect(jsonData['name']).to.be.equal('race_isNOT_African American; AgeAtIndexDate_25.0_to_45.0; A1C_last_period4_2021-03-01_2022-03-01_5.0_to_10.0; TotalSeriesCount_1.0_to_3.0')\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"filters\": [\n    {\n      \"name\": \"race\",\n      \"categorical\": true,\n      \"value\": \"African American\",\n      \"is_equal\": false\n    },\n    {\n      \"name\": \"AgeAtIndexDate\",\n      \"categorical\": false,\n      \"min\": 25,\n      \"max\": 45\n    },\n    {\n      \"name\": \"A1C_last_period4_2021-03-01_2022-03-01\",\n      \"categorical\": false,\n      \"min\": 5,\n      \"max\": 10\n    },\n    {\n      \"name\": \"TotalSeriesCount\",\n      \"categorical\": false,\n      \"min\": 1,\n      \"max\": 3\n    }\n  ],\n  \"cohort\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/filter",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"filter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/filter Create Black/Young/UnVaxxed Filter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test('response has id', () => {\r",
+									"    pm.response.to.have.jsonBody(\"id\")\r",
+									"    pm.environment.set(\"group2_id\", jsonData['id'])\r",
+									"\r",
+									"});\r",
+									"\r",
+									"pm.test('response has name and correct value', () => {\r",
+									"    pm.response.to.have.jsonBody(\"name\")\r",
+									"    pm.expect(jsonData['name']).to.be.equal('race_isNOT_African American; AgeAtIndexDate_25.0_to_90.0; A1C_last_period4_2021-03-01_2022-03-01_5.0_to_12.5; TotalSeriesCount_0.0_to_0.0')\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"filters\": [\n    {\n      \"name\": \"race\",\n      \"categorical\": true,\n      \"value\": \"African American\",\n      \"is_equal\": false\n    },\n    {\n      \"name\": \"AgeAtIndexDate\",\n      \"categorical\": false,\n      \"min\": 25,\n      \"max\": 90\n    },\n    {\n      \"name\": \"A1C_last_period4_2021-03-01_2022-03-01\",\n      \"categorical\": false,\n      \"min\": 5,\n      \"max\": 12.5\n    },\n    {\n      \"name\": \"TotalSeriesCount\",\n      \"categorical\": false,\n      \"min\": 0,\n      \"max\": 0\n    }\n  ],\n  \"cohort\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/filter",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"filter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/group/group_id-group2  Group 1 vs Group 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test('response body has explains', () => {\r",
+									"    pm.response.to.have.jsonBody(\"explains\")\r",
+									"});\r",
+									"\r",
+									"pm.test('response body has primary fields', () => {\r",
+									"    pm.response.to.have.jsonBody(\"primary_name\")\r",
+									"    pm.expect(jsonData.primary_name).to.eql(\"race_isNOT_African American; AgeAtIndexDate_25.0_to_45.0; A1C_last_period4_2021-03-01_2022-03-01_5.0_to_10.0; TotalSeriesCount_1.0_to_3.0\")\r",
+									"\r",
+									"    pm.response.to.have.jsonBody(\"primary_size\")\r",
+									"    pm.expect(jsonData.primary_size).to.eql(98)\r",
+									"});\r",
+									"\r",
+									"pm.test('response body has secondary fields', () => {\r",
+									"    pm.response.to.have.jsonBody(\"secondary_name\")\r",
+									"        pm.expect(jsonData.secondary_name).to.eql(\"race_isNOT_African American; AgeAtIndexDate_25.0_to_90.0; A1C_last_period4_2021-03-01_2022-03-01_5.0_to_12.5; TotalSeriesCount_0.0_to_0.0\")\r",
+									"\r",
+									"    pm.response.to.have.jsonBody(\"secondary_size\")\r",
+									"    pm.expect(jsonData.secondary_size).to.eql(141)\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/group/{{group1_id}}-{{group2_id}}",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"group",
+								"{{group1_id}}-{{group2_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/group/group_id-group2  Group 1 vs Rest",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test('response body has explains', () => {\r",
+									"    pm.response.to.have.jsonBody(\"explains\")\r",
+									"});\r",
+									"\r",
+									"pm.test('response body has primary fields', () => {\r",
+									"    pm.response.to.have.jsonBody(\"primary_name\")\r",
+									"    pm.expect(jsonData.primary_name).to.eql(\"race_isNOT_African American; AgeAtIndexDate_25.0_to_45.0; A1C_last_period4_2021-03-01_2022-03-01_5.0_to_10.0; TotalSeriesCount_1.0_to_3.0\")\r",
+									"\r",
+									"    pm.response.to.have.jsonBody(\"primary_size\")\r",
+									"    pm.expect(jsonData.primary_size).to.eql(98)\r",
+									"});\r",
+									"\r",
+									"pm.test('response body has secondary fields', () => {\r",
+									"    pm.response.to.have.jsonBody(\"secondary_name\")\r",
+									"        pm.expect(jsonData.secondary_name).to.eql(\"Rest\")\r",
+									"\r",
+									"    pm.response.to.have.jsonBody(\"secondary_size\")\r",
+									"    pm.expect(jsonData.secondary_size).to.eql(401)\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api}}/group/{{group1_id}}",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"group",
+								"{{group1_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "test",
 			"event": [
@@ -65,70 +671,6 @@
 					],
 					"path": [
 						"status"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "kpi",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"const jsonData = pm.response.json();\r",
-							"\r",
-							"pm.test('kpi array has at least one entry', () => {\r",
-							"    pm.expect(jsonData.length).to.be.greaterThan(0)\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{api}}/kpi",
-					"host": [
-						"{{api}}"
-					],
-					"path": [
-						"kpi"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "graph",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"const jsonData = pm.response.json();\r",
-							"\r",
-							"pm.test('graph array has at least one entry', () => {\r",
-							"    pm.expect(jsonData.length).to.be.greaterThan(0)\r",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{api}}/graph",
-					"host": [
-						"{{api}}"
-					],
-					"path": [
-						"graph"
 					]
 				}
 			},
