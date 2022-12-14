@@ -2,7 +2,7 @@
   <span>
     <div class="d-flex justify-content-between align-items-center mb-2">
       <h4>Group Comparison <i class="spinner-border spinner-border-sm mb-1 ml-1 mt-1" v-if="isBusy"></i></h4>
-      <button type="button" class="btn btn-primary float-right" @click="doCompare()">
+      <button type="button" class="btn btn-primary float-right" @click="doCompare()" :disabled="isBusy">
         <i class="cil-blur-linear btn-icon mr-1"></i>Compare
       </button>
     </div>
@@ -107,6 +107,7 @@ export default {
   },
   methods: {
     doCompare() {
+      this.isBusy = true
       if (this.compareRest) {
         this.infoMsg('Comparing first group against the rest of the data')
       }
@@ -182,7 +183,7 @@ export default {
           this.errorMsg(err.message)
         })
         .finally(() => {
-          this.$bvModal.hide('filter-modal')
+          this.isBusy = false
         })
     },
     setFilters() {
