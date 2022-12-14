@@ -40,7 +40,8 @@ const store = new Vuex.Store({
             }, {
                 value: false, text: 'No'
             }],
-            is_equal: false
+            is_equal: false,
+            enabled: true
         }, {
             name: 'AgeAtIndexDate',
             label: 'Age',
@@ -48,7 +49,8 @@ const store = new Vuex.Store({
             min: 25,
             inputMin: 25,
             max: 55,
-            inputMax: 90
+            inputMax: 90,
+            enabled: true
         }, {
             name: 'A1C_last_period4_2021-03-01_2022-03-01',
             label: 'A1C',
@@ -56,7 +58,8 @@ const store = new Vuex.Store({
             min: 7,
             inputMin: 5,
             max: 12,
-            inputMax: 15
+            inputMax: 15,
+            enabled: true
         }, {
             label: 'Vaccination Status',
             name: 'TotalSeriesCount',
@@ -64,7 +67,8 @@ const store = new Vuex.Store({
             min: 0,
             inputMin: 0,
             max: 3,
-            inputMax: 3
+            inputMax: 3,
+            enabled: true
         }]
     },
     mutations: {
