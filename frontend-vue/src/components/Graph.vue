@@ -1,8 +1,9 @@
 <template>
   <div class="card">
-    <div class="card-header d-flex justify-content-between align-items-center">
+    <div class="card-header">
       <span>Patient Segments <i class="spinner-border spinner-border-sm mr-1" v-if="isBusy"></i></span>
-      <b-dropdown id="color-dropdown" right text="Right align">
+      
+      <b-dropdown class="float-right" id="color-dropdown" right text="Right align">
         <template #button-content>
           <i class="cil-contrast mr-2 mb-1"></i>Change Color
         </template>
@@ -10,6 +11,7 @@
           {{ option.text }}
         </b-dropdown-item-button>
       </b-dropdown>
+      <b-form-checkbox class="float-right mr-3 mt-2" id="simplified" v-model="simplified">Simplifiied View</b-form-checkbox>
     </div>
     <div class="card-body">
       <div class="card-text">
@@ -34,13 +36,14 @@ export default {
   components: {
     highcharts: Chart
   },
-  computed: mapState(['filterId','colorOptions']),
+  computed: mapState(['filterId', 'colorOptions']),
   mixins: [msgMixin],
   data() {
     return {
       hcInstance: Highcharts,
       data: [],
       isBusy: false,
+      simplified: true,
       selectedColor: '',
       chartOptions: {
         credits: {
@@ -72,7 +75,8 @@ export default {
       this.isBusy = true
       const url = '/api/graph'
       const body = {
-        color_name: this.selectedColor
+        color_name: this.selectedColor,
+        simplified: this.simplified
       }
       if (this.filterId > 0) {
         body.filter_id = this.filterId
