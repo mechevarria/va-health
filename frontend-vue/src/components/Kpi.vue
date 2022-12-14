@@ -1,6 +1,6 @@
 <template>
   <span>
-    <div class="container mb-2" v-if="isBusy">
+    <div class="ml-1 mb-2" v-if="isBusy">
       <i class="spinner-border spinner-border-sm mb-1 ml-1 mt-1"></i>
     </div>
     <div class="card-deck">
@@ -69,7 +69,6 @@ export default {
           style = 'bg-info'
           break;
       }
-      console.log(`style is ${style}`)
       return style
     }
   },
