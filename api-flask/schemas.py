@@ -23,6 +23,7 @@ class FilterSchema(Schema):
 class AppliedFilter(Schema):
     id=fields.Str(dump_only=True)
     name=fields.Str(dump_only=True)
+    msg=fields.Str(dump_only=True, required=False)
     filters=fields.Nested(FilterSchema, required=False, many=True)
     cohort=fields.Bool(required=False)
 

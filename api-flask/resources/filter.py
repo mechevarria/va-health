@@ -119,14 +119,16 @@ class FilterService(MethodView):
         fs = src.create_filter_set(self.generate_filter_dict(filter_data['filters']))
         #Create the groups from the filters
         grp = src.create_group(name=name, filter_set=fs)
+        grp = src.get_group(name=name)
 
       applied_filter = {"id": grp['id'], "name": name}
+
 
 
       if filter_data['cohort']: 
         #check to see if group size big enough.  Must be bigger than 10 rows (platform requires 3 rows, but I am making 10) 
         if grp['row_count'] < 10:
-          applied_filter['msg'] = "Group is too small to perform network analysis"
+          applied_filter['msg'] = f'Group is too small to perform network analysis.  Group has {grp["row_count"]} rows'
         else:
           self.compute_cohort_analysis(src, grp)
 
