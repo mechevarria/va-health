@@ -21,7 +21,8 @@
                   {{ explain.name }}
                 </td>
                 <td>
-                  <highcharts class="hc" :options="explain.chartOptions"></highcharts>
+                  <highcharts class="hc" :options="explain.primaryChart"></highcharts>
+                  <highcharts v-if="showSecondary" class="hc" :options="explain.secondaryChart"></highcharts>
                 </td>
               </tr>
             </tbody>
@@ -41,7 +42,8 @@
               </td>
               <td>
                 <b-progress show-progress :value="explain.primary_group_percent" variant="primary"></b-progress>
-                <b-progress v-if="showSecondary" show-progress :value="explain.secondary_group_percent" variant="secondary"></b-progress>
+                <b-progress v-if="showSecondary" show-progress :value="explain.secondary_group_percent"
+                  variant="secondary"></b-progress>
               </td>
             </tr>
           </table>
@@ -78,7 +80,54 @@ export default {
     return {
       isBusy: false,
       catExplains: [],
-      contExplains: []
+      contExplains: [],
+      primaryColor: '#6f42c1',
+      secondaryColor: '#ea39b8',
+      defaultOptions: {
+        credits: {
+          enabled: false
+        },
+        chart: {
+          type: 'boxplot',
+          inverted: true,
+          backgroundColor: null,
+          height: '40',
+          spacingleft: 0,
+          spacingBottom: 0,
+          spacingTop: 0,
+          spacingRight: 0
+        },
+        tooltip: {
+          outside: true
+        },
+        legend: {
+          enabled: false
+        },
+        xAxis: {
+          visible: false
+        },
+        yAxis: {
+          visible: false
+        },
+        plotOptions: {
+          boxplot: {
+            fillColor: '',
+            stemColor: '',
+            whiskerColor: '',
+            medianColor: '#ffffff',
+            series: {
+              animation: false
+            }
+          }
+        },
+        title: {
+          text: null
+        },
+        series: [{
+          name: '',
+          data: []
+        }]
+      }
     }
   },
   watch: {
@@ -93,51 +142,22 @@ export default {
               if (explain.type == 'categorical') {
                 this.catExplains.push(explain)
               } else {
-                explain.chartOptions = {
-                  credits: {
-                    enabled: false
-                  },
-                  chart: {
-                    type: 'boxplot',
-                    inverted: true,
-                    backgroundColor: null,
-                    height: '40',
-                    spacingleft: 0,
-                    spacingBottom: 0,
-                    spacingTop: 0,
-                    spacingRight: 0
-                  },
-                  tooltip: {
-                    outside: true
-                  },
-                  legend: {
-                    enabled: false
-                  },
-                  xAxis: {
-                    visible: false
-                  },
-                  yAxis: {
-                    visible: false
-                  },
-                  plotOptions: {
-                    boxplot: {
-                      fillColor: '#6f42c1',
-                      stemColor: '#6f42c1',
-                      whiskerColor: '#6f42c1',
-                      medianColor: '#ffffff',
-                      series: {
-                        animation: false
-                      }
-                    }
-                  },
-                  title: {
-                    text: null
-                  },
-                  series: [{
-                    name: explain.name,
-                    data: [explain.primary_group_quartiles]
-                  }]
+                explain.primaryChart = JSON.parse(JSON.stringify(this.defaultOptions))
+                explain.primaryChart.series[0].name = explain.name
+                explain.primaryChart.series[0].data = [explain.primary_group_quartiles]
+                explain.primaryChart.plotOptions.boxplot.fillColor = this.primaryColor
+                explain.primaryChart.plotOptions.boxplot.stemColor = this.primaryColor
+                explain.primaryChart.plotOptions.boxplot.whiskerColor = this.primaryColor
+
+                if (this.showSecondary) {
+                  explain.secondaryChart = JSON.parse(JSON.stringify(this.defaultOptions))
+                  explain.secondaryChart.series[0].name = explain.name
+                  explain.secondaryChart.series[0].data = [explain.secondary_group_quartiles]
+                  explain.secondaryChart.plotOptions.boxplot.fillColor = this.secondaryColor
+                  explain.secondaryChart.plotOptions.boxplot.stemColor = this.secondaryColor
+                  explain.secondaryChart.plotOptions.boxplot.whiskerColor = this.secondaryColor
                 }
+
                 this.contExplains.push(explain)
               }
             })
@@ -160,9 +180,7 @@ export default {
     }
   },
   created() {
-    if (this.clearOnCreate) {
-      this.clearGroup()
-    }
+    this.clearGroup()
   }
 }
 </script>
