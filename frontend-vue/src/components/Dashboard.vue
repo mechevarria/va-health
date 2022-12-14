@@ -18,7 +18,7 @@
     <AppKpi />
     <AppGraph />
     <AppExplain />
-    <AppExplainDetail show-secondary="false" />
+    <AppExplainDetail :show-secondary="false" />
     <b-modal id="filter-modal" title="Dashboard Filter" @ok="doFilter" :ok-only=true ok-title="Filter">
       <span v-for="(filter, index) in filters" :key="index">
         <div class="form-row" v-if="filter.categorical">
@@ -102,7 +102,9 @@ export default {
         .post(url, body)
         .then((res) => {
           this.successMsg(`Updating Dashboard with Filter ${res.data.id}`)
-          this.$store.commit('setFilterId', res.data.id)
+          if (!res.data.msg) {
+            this.$store.commit('setFilterId', res.data.id)
+          }
         })
         .catch((err) => {
           console.error(err)
