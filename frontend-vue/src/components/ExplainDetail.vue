@@ -1,13 +1,13 @@
 <template>
   <span>
-    <span class="d-flex justify-content-between align-items-center mb-2" v-if="groupId > 0 && !isBusy">
+    <span class="d-flex justify-content-between align-items-center mb-2" v-if="groupId.length > 1 && !isBusy">
       <h5>Group {{ groupId }} Explains:
       </h5>
       <button type="button" class="btn btn-secondary" @click="clearGroup()">
         <span class="cil-x-circle icon mr-1"></span>Clear
       </button>
     </span>
-    <div class="card-deck mb-2" v-if="groupId > 0">
+    <div class="card-deck mb-2" v-if="groupId.length > 1">
       <div class="card">
         <div class="card-header">
           Continuous Explains
@@ -41,6 +41,7 @@
               </td>
               <td>
                 <b-progress show-progress :value="explain.primary_group_percent" variant="primary"></b-progress>
+                <b-progress v-if="showSecondary" show-progress :value="explain.secondary_group_percent" variant="secondary"></b-progress>
               </td>
             </tr>
           </table>
@@ -63,12 +64,16 @@ import msgMixin from '../mixins/msg-mixin';
 highchartsMore(Highcharts)
 
 export default {
-  name: 'AppGroupDetail',
+  name: 'AppExplainDetail',
   components: {
     highcharts: Chart
   },
   mixins: [msgMixin],
   computed: mapState(['groupId']),
+  props: {
+    showSecondary: Boolean,
+    clearOnCreate: Boolean,
+  },
   data() {
     return {
       isBusy: false,
@@ -78,7 +83,7 @@ export default {
   },
   watch: {
     groupId(newValue) {
-      if (newValue > 0) {
+      if (newValue.length > 1) {
         this.isBusy = true
         const url = `/api/group/${newValue}`
         axios
@@ -116,9 +121,9 @@ export default {
                   },
                   plotOptions: {
                     boxplot: {
-                      fillColor: '#1EACFC',
-                      stemColor: '#1EACFC',
-                      whiskerColor: '#1EACFC',
+                      fillColor: '#6f42c1',
+                      stemColor: '#6f42c1',
+                      whiskerColor: '#6f42c1',
                       medianColor: '#ffffff',
                       series: {
                         animation: false
@@ -152,6 +157,11 @@ export default {
       this.contExplains = []
       this.catExplains = []
       this.$store.commit('clearGroup')
+    }
+  },
+  created() {
+    if (this.clearOnCreate) {
+      this.clearGroup()
     }
   }
 }
