@@ -78,3 +78,19 @@ TODO
 
 * Import the environment
 * Import the collection
+
+## Items 
+### Frontend
+* Round numbers in KPI cards to 2 decimals
+* Implement color change in graph
+* provide user friendly name for groups (g1, g2, etc).  This is only in UI so users can discuss easily and to improve look
+* Individual Group Explains
+    * Add scale values to boxplot
+    * Question - Combine zero / one binary categorical explains into one? (note this should be done on backend)
+    * Question - Sort explains by stastical importance? (note this should be done on backend)
+* Add additional filter columns based on clinician feedback
+### API
+* Handle when cohort analysis fails
+* Add color change endpoint that just gets colors?  Note: May be difficult without regen graph 
+* Combine zero / one binary categorical explains into one
+* Handle when filter results in zero or Really small number of rows
