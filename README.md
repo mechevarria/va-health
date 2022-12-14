@@ -78,3 +78,12 @@ TODO
 
 * Import the environment
 * Import the collection
+
+## Items 
+### Frontend
+* Round numbers in KPI cards to 2 decimals
+* Implement color change in graph
+* provide user friendly name for groups (g1, g2, etc).  This is only in UI so users can discuss easily and to improve look
+### API
+* Add color change endpoint that just gets colors?  Note: May be difficult without regen graph 
+* 
