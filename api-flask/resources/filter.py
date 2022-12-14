@@ -55,8 +55,6 @@ class FilterService(MethodView):
     #Discussion with Amy recommended using the same metric and lense that she used in her analysis
     #check to see if network exists
     nw = src.get_network(group['name'])
-    print(f"nw type: {type(nw)}")
-
     if type(nw) == dict: 
       network = src.create_network(group['name'],{
                     'row_group_id': group['id'],
@@ -124,7 +122,13 @@ class FilterService(MethodView):
 
       applied_filter = {"id": grp['id'], "name": name}
 
-      if filter_data['cohort']:  self.compute_cohort_analysis(src, grp)
+
+      if filter_data['cohort']: 
+        #check to see if group size big enough.  Must be bigger than 10 rows (platform requires 3 rows, but I am making 10) 
+        if grp['row_count'] < 10:
+          applied_filter['msg'] = "Group is too small to perform network analysis"
+        else:
+          self.compute_cohort_analysis(src, grp)
 
       return applied_filter
     except:
