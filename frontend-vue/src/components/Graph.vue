@@ -30,7 +30,7 @@ import msgMixin from '../mixins/msg-mixin'
 Networkgraph(Highcharts)
 
 export default {
-  name: 'AppNetwork',
+  name: 'AppGraph',
   components: {
     highcharts: Chart
   },
@@ -48,7 +48,7 @@ export default {
         },
         chart: {
           type: 'networkgraph',
-          height: '300px'
+          height: '300'
         },
         title: {
           text: ''
