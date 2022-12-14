@@ -1,6 +1,9 @@
 <template>
   <span>
-    <h5>Groups: <i class="spinner-border spinner-border-sm mb-1" v-if="isBusy"></i></h5>
+    <h5>Groups:</h5>
+    <div class="ml-1 mb-2" v-if="isBusy">
+      <i class="spinner-border spinner-border-sm mb-1 ml-1 mt-1"></i>
+    </div>
     <div class="row row-cols-1 row-cols-md-3">
       <div class="col" v-for="(group, index) in groups" :key="index">
         <div class="card">
@@ -43,7 +46,7 @@ import axios from 'axios'
 import msgMixin from '../mixins/msg-mixin';
 
 export default {
-  name: 'AppGroup',
+  name: 'AppExplain',
   mixins: [msgMixin],
   computed: mapState(['filterId']),
   data() {
