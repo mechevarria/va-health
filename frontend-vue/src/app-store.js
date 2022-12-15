@@ -24,42 +24,117 @@ const store = new Vuex.Store({
             text: 'Predicted Change in Engagement'
         }],
         filters: [{
-            name: 'race',
+            name: 'Race',
             label: 'Race',
             categorical: true,
-            value: 'African American',
+            value: 'American Indian or Alaska Native',
             valueOptions: [{
-                value: 'White', text: 'White'
-            }, {
-                value: 'African American', text: 'African American'
+                value: 'American Indian or Alaska Native', text: 'American Indian/Alaska Native'
             }, {
                 value: 'Asian', text: 'Asian'
+            }, {
+                value: 'Black or African American', text: 'African American'
+            }, {
+                value: 'Native Hawaiian or Pacific Islander', text: 'Native Hawaiian/Pacific Islander'
+            }, {
+                value: 'White', text: 'White'
+            }, {
+                value: 'Unknown', text: 'Asian'
             }],
             boolOptions: [{
                 value: true, text: 'Yes'
             }, {
                 value: false, text: 'No'
             }],
-            is_equal: false,
-            enabled: true
+            is_equal: true,
+            enabled: false
+        }, {
+            name: 'Ethnicity',
+            label: 'Ethnicity',
+            categorical: true,
+            value: 'HISPANIC OR LATINO',
+            valueOptions: [{
+                value: 'HISPANIC OR LATINO', text: 'Hispanic or Latino'
+            }, {
+                value: 'NOT HISPANIC OR LATINO', text: 'NOT Hispanic or Latino'
+            }, {
+                value: 'Unknown', text: 'Unknown'
+            }],
+            boolOptions: [{
+                value: true, text: 'Yes'
+            }, {
+                value: false, text: 'No'
+            }],
+            is_equal: true,
+            enabled: false
+        }, {
+            name: 'MaritialStatus',
+            label: 'Maritial Status',
+            categorical: true,
+            value: 'SINGLE',
+            valueOptions: [{
+                value: 'DIVORCED', text: 'Divorced'
+            }, {
+                value: 'MARRIED', text: 'Married'
+            },{
+                value: 'NEVER MARRIED', text: 'Never Married'
+            },{
+                value: 'SEPERATED', text: 'Seperated'
+            },{
+                value: 'SINGLE', text: 'Single'
+            }, {
+                value: 'UNKNOWN', text: 'Unknown'
+            }, {
+                value: 'WIDOW/WIDOWER', text: 'Widow/Widower'
+            },{
+                value: 'WIDOWED', text: 'Widowed'
+            },{
+                value: '"Missing"', text: 'Missing'
+            }],
+            boolOptions: [{
+                value: true, text: 'Yes'
+            }, {
+                value: false, text: 'No'
+            }],
+            is_equal: true,
+            enabled: false
+        }, {
+            name: 'Rurality',
+            label: 'Rurality',
+            categorical: true,
+            value: 'Urban',
+            valueOptions: [{
+                value: 'CityTown', text: 'City Town'
+            }, {
+                value: 'SmallTownRural', text: 'Small Town Rural'
+            }, {
+                value: 'Urban', text: 'Urban'
+            }],
+            boolOptions: [{
+                value: true, text: 'Yes'
+            }, {
+                value: false, text: 'No'
+            }],
+            is_equal: true,
+            enabled: false
         }, {
             name: 'AgeAtIndexDate',
             label: 'Age',
             categorical: false,
-            min: 25,
+            min: 20,
             inputMin: 25,
-            max: 55,
+            max: 120,
             inputMax: 90,
-            enabled: true
+            enabled: false
         }, {
             name: 'A1C_last_period4_2021-03-01_2022-03-01',
             label: 'A1C',
             categorical: false,
-            min: 7,
+            min: 4,
             inputMin: 5,
-            max: 12,
+            max: 22,
             inputMax: 15,
-            enabled: true
+            enabled: false
         }, {
             label: 'Vaccination Status',
             name: 'TotalSeriesCount',
@@ -68,7 +143,29 @@ const store = new Vuex.Store({
             inputMin: 0,
             max: 3,
             inputMax: 3,
-            enabled: true
+            enabled: false
+        },{
+            name: 'Hospitalization60d',
+            label: 'Hospitalizations',
+            categorical: true,
+            value: '0',
+            valueOptions: [{
+                value: '0', text: 'False'
+            }, {
+                value: '1', text: 'True'
+            }],
+            is_equal: true,
+            enabled: false
+        },{
+            label: 'In-Person Visit %',
+            name: 'visits_count_proportion_Presumed In Person_period4_2021-03-01_2022-03-01',
+            categorical: false,
+            min: 0,
+            inputMin: 0,
+            max: 100,
+            inputMax: 100,
+            enabled: false,
+            percentage: true
         }]
     },
     mutations: {
