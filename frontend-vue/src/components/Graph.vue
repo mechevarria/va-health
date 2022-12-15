@@ -2,7 +2,7 @@
   <div class="card">
     <div class="card-header">
       <span>Patient Segments <i class="spinner-border spinner-border-sm mr-1" v-if="isBusy"></i></span>
-      
+
       <b-dropdown class="float-right" id="color-dropdown" right text="Right align">
         <template #button-content>
           <i class="cil-contrast mr-2 mb-1"></i>Change Color
@@ -11,7 +11,8 @@
           {{ option.text }}
         </b-dropdown-item-button>
       </b-dropdown>
-      <b-form-checkbox class="float-right mr-3 mt-2" id="simplified" v-model="simplified">Simplifiied View</b-form-checkbox>
+      <b-form-checkbox class="float-right mr-3 mt-2" id="simplified" v-model="simplified">Simplifiied
+        View</b-form-checkbox>
     </div>
     <div class="card-body">
       <div class="card-text">
@@ -53,11 +54,15 @@ export default {
           type: 'networkgraph',
           height: '300'
         },
+        boost: {
+          useGPUTranslations: true
+        },
         title: {
           text: ''
         },
         series: [{
           colorByPoint: true,
+          boostThreshold: 1,
           name: 'networkgraph',
           data: [],
           nodes: []
@@ -92,6 +97,29 @@ export default {
               radius: node.radius
             }
           });
+          if (!this.simplified) {
+            this.chartOptions.series[0].layoutAlgorithm = {
+              enableSimulation: false,
+              maxIterations: 1,
+              initialPositions: () => {
+                console.log(`Network has ${this.chartOptions.series[0].nodes.length} nodes`)
+                this.chartOptions.series[0].nodes.forEach(node => {
+                  if (node.initX === undefined) {
+                    
+                    node.plotX = Math.round(Math.random() * 900);
+                    console.log(`x: ${node.plotX}`)
+                    node.plotY = Math.round(Math.random() * 280);
+                    console.log(`y: ${node.plotY}`)
+                  } else {
+                    node.plotX = node.initX;
+                    node.plotY = node.initY;
+                  }
+                })
+              }
+            }
+          }
+          this.chartOptions.series[0].data = res.data.data
+          this.chartOptions.series[0].nodes = res.data.nodes
         })
         .catch((err) => {
           console.error(err)
