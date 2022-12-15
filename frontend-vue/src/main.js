@@ -4,7 +4,9 @@ import { NavPlugin, DropdownPlugin, ToastPlugin, TablePlugin, PaginationPlugin, 
 import VueMobileDetection from 'vue-mobile-detection'
 import 'perfect-scrollbar/dist/perfect-scrollbar'
 import '@popperjs/core/dist/esm/popper'
+import Highcharts from 'highcharts'
 import HighchartsVue from 'highcharts-vue'
+import boost from 'highcharts/modules/boost'
 import router from './app-router'
 import store from './app-store'
 
@@ -23,6 +25,7 @@ Vue.use(FormSpinbuttonPlugin)
 Vue.use(FormCheckboxPlugin)
 Vue.use(VueMobileDetection)
 Vue.use(HighchartsVue)
+boost(Highcharts)
 
 new Vue({
   render: h => h(App),
