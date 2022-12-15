@@ -62,6 +62,10 @@ export default {
         },
         series: [{
           colorByPoint: true,
+          layoutAlgorithm: {
+            enableSimulation: false,
+            initialPositions: 'circle'
+          },
           boostThreshold: 1,
           name: 'networkgraph',
           data: [],
@@ -78,6 +82,8 @@ export default {
     },
     getGraph() {
       this.isBusy = true
+      this.chartOptions.series[0].data = []
+      this.chartOptions.series[0].nodes = []
       const url = '/api/graph'
       const body = {
         color_name: this.selectedColor,
@@ -90,36 +96,31 @@ export default {
       axios
         .post(url, body)
         .then((res) => {
-          this.chartOptions.series[0].data = res.data.data
-          this.chartOptions.series[0].nodes = res.data.nodes
-          this.chartOptions.series[0].nodes.forEach(node => {
+          let data = res.data.data
+          let nodes = res.data.nodes
+          nodes.forEach(node => {
             node.marker = {
               radius: node.radius
             }
-          });
+          })
+          this.chartOptions.series[0].nodes = nodes
+          this.chartOptions.series[0].data = data
           if (!this.simplified) {
-            this.chartOptions.series[0].layoutAlgorithm = {
-              enableSimulation: false,
-              maxIterations: 1,
-              initialPositions: () => {
-                console.log(`Network has ${this.chartOptions.series[0].nodes.length} nodes`)
-                this.chartOptions.series[0].nodes.forEach(node => {
-                  if (node.initX === undefined) {
-                    
-                    node.plotX = Math.round(Math.random() * 900);
-                    console.log(`x: ${node.plotX}`)
-                    node.plotY = Math.round(Math.random() * 280);
-                    console.log(`y: ${node.plotY}`)
-                  } else {
-                    node.plotX = node.initX;
-                    node.plotY = node.initY;
-                  }
-                })
-              }
-            }
+            this.chartOptions.series[0].layoutAlgorithm.maxIterations = 20
+            // this.chartOptions.series[0].layoutAlgorithm.initialPositions = () => {
+            //   this.chartOptions.series[0].nodes.forEach(node => {
+            //     if (node.plotX === undefined) {
+            //       node.plotX = Math.random() * 900
+            //     }
+            //     if (node.plotY === undefined) {
+            //       node.plotY = Math.random() * 300
+            //     }
+            //   })
+            // }
+          } else {
+            this.chartOptions.series[0].layoutAlgorithm.maxIterations = 1000
+            this.chartOptions.series[0].layoutAlgorithm.initialPositions = 'circle'
           }
-          this.chartOptions.series[0].data = res.data.data
-          this.chartOptions.series[0].nodes = res.data.nodes
         })
         .catch((err) => {
           console.error(err)
@@ -132,6 +133,9 @@ export default {
   },
   watch: {
     filterId() {
+      this.getGraph()
+    },
+    simplified() {
       this.getGraph()
     }
   },
