@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "49dff964-0c5b-4665-8fac-630048a5e3ec",
+		"_postman_id": "a2ddd372-8557-4536-9c37-f009d5f0e367",
 		"name": "VA-Health",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "24705840"
+		"_exporter_id": "1420797"
 	},
 	"item": [
 		{
@@ -115,7 +115,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"color_name\": \"A1Clast_period2_to_4_change\"\n}",
+							"raw": "{\n\t\"color_name\": \"A1Clast_period2_to_4_change\",\n    \"simplified\": false\n}",
 							"options": {
 								"raw": {
 									"language": "json"
