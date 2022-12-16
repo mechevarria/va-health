@@ -16,7 +16,7 @@
     </div>
     <div class="card-body">
       <div class="card-text">
-        <highcharts class="hc" v-if="!isBusy" :options="chartOptions" :highcharts="hcInstance"></highcharts>
+        <highcharts class="hc" v-if="!isBusy" :options="chartOptions" ref="chart"></highcharts>
       </div>
     </div>
   </div>
@@ -24,7 +24,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import { Chart } from 'highcharts-vue'
 import Highcharts from 'highcharts'
 import Networkgraph from 'highcharts/modules/networkgraph'
 import axios from 'axios'
@@ -34,14 +33,10 @@ Networkgraph(Highcharts)
 
 export default {
   name: 'AppGraph',
-  components: {
-    highcharts: Chart
-  },
   computed: mapState(['filterId', 'colorOptions']),
   mixins: [msgMixin],
   data() {
     return {
-      hcInstance: Highcharts,
       data: [],
       isBusy: false,
       simplified: true,
@@ -54,19 +49,19 @@ export default {
           type: 'networkgraph',
           height: '300'
         },
-        boost: {
-          useGPUTranslations: true
-        },
         title: {
           text: ''
         },
         series: [{
           colorByPoint: true,
+          enableMouseTracking: false,
           layoutAlgorithm: {
-            enableSimulation: false,
+            enableSimulation: true,
             initialPositions: 'circle'
           },
-          boostThreshold: 1,
+          dataLabels: {
+            enabled: false
+          },
           name: 'networkgraph',
           data: [],
           nodes: []
@@ -97,6 +92,11 @@ export default {
         .post(url, body)
         .then((res) => {
           let data = res.data.data
+          // fix for ids coming back as ints
+          data.forEach(point => {
+            point[0] = point[0].toString()
+            point[1] = point[1].toString()
+          })
           let nodes = res.data.nodes
           nodes.forEach(node => {
             node.marker = {
@@ -105,22 +105,6 @@ export default {
           })
           this.chartOptions.series[0].nodes = nodes
           this.chartOptions.series[0].data = data
-          if (!this.simplified) {
-            this.chartOptions.series[0].layoutAlgorithm.maxIterations = 20
-            // this.chartOptions.series[0].layoutAlgorithm.initialPositions = () => {
-            //   this.chartOptions.series[0].nodes.forEach(node => {
-            //     if (node.plotX === undefined) {
-            //       node.plotX = Math.random() * 900
-            //     }
-            //     if (node.plotY === undefined) {
-            //       node.plotY = Math.random() * 300
-            //     }
-            //   })
-            // }
-          } else {
-            this.chartOptions.series[0].layoutAlgorithm.maxIterations = 1000
-            this.chartOptions.series[0].layoutAlgorithm.initialPositions = 'circle'
-          }
         })
         .catch((err) => {
           console.error(err)
