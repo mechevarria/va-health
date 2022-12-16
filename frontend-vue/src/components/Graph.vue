@@ -54,7 +54,7 @@ export default {
         },
         series: [{
           colorByPoint: true,
-          enableMouseTracking: false,
+          enableMouseTracking: true,
           layoutAlgorithm: {
             enableSimulation: true,
             initialPositions: 'circle'
@@ -91,19 +91,17 @@ export default {
       axios
         .post(url, body)
         .then((res) => {
-          let data = res.data.data
-          // fix for ids coming back as ints
-          data.forEach(point => {
-            point[0] = point[0].toString()
-            point[1] = point[1].toString()
-          })
-          let nodes = res.data.nodes
-          nodes.forEach(node => {
-            node.marker = {
-              radius: node.radius
+          // do not use links to self
+          let data = []
+          res.data.data.forEach(edge => {
+            if(edge[0] != edge[1]) {
+              data.push(edge)
+            } else {
+              // do not draw edges for nodes to themselves
+              // console.log(`Not adding [${edge[0]}, ${edge[1]}]`)
             }
           })
-          this.chartOptions.series[0].nodes = nodes
+          this.chartOptions.series[0].nodes = res.data.nodes
           this.chartOptions.series[0].data = data
         })
         .catch((err) => {
