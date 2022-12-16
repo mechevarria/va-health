@@ -43,7 +43,7 @@ def get_simplied_group_network(src, name, color_name):
 
     for k in groups.keys():
       size = (groups[k]['row_count'] - min_size) / (max_size - min_size) * (30-10) + 10   #Mike requested the radius scale between 30 and 10
-      data.append([k, k])
+      data.append([str(k), str(k)])
       nodes.append({'id': k, 'colorIndex': group_colors[int(k)], "radius": size})
 
     #Create Nodes with edges
@@ -59,13 +59,13 @@ def get_normal_network(src, name, color_name):
   '''
   data = [[0,0], [1,1], ..., [nw.node_count -1, nw.node_count-1]]
   '''
-  data=[[i,i] for i in range(nw.node_count)] 
+  data=[[str(i),str(i)] for i in range(nw.node_count)] 
 
   #adds in all links
   '''
   data = data + [[0,11], [0,14], ..., [33, 62],...]
   '''
-  data += [[d['from'], d['to']] for d in nw.links]
+  data += [[ str(d['from']), str(d['to']) ] for d in nw.links]
     
   #get min / max sizes
   sizes = [d['row_count'] for d in nw.nodes]
@@ -84,7 +84,7 @@ def get_normal_network(src, name, color_name):
 
   # get node dict
   #scale radius between 10 and 2
-  nodes = [{'id': d['id'], 'radius': (d['row_count'] - min_size) / delta_size * (10-2) + 2, 'colorIndex':  coloring_values[e]} for e, d in enumerate(nw.nodes)]
+  nodes = [{'id': d['id'], 'marker': { 'radius': (d['row_count'] - min_size) / delta_size * (10-2) + 2 }, 'colorScale':  coloring_values[e]} for e, d in enumerate(nw.nodes)]
 
   return data, nodes
 
