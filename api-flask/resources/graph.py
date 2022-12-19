@@ -44,7 +44,7 @@ def get_simplied_group_network(src, name, color_name):
     for k in groups.keys():
       size = (groups[k]['row_count'] - min_size) / (max_size - min_size) * (30-10) + 10   #Mike requested the radius scale between 30 and 10
       data.append([str(k), str(k)])
-      nodes.append({'id': k, 'colorIndex': group_colors[int(k)], "marker": { "radius": size}})
+      nodes.append({'id': k, 'colorScale': group_colors[int(k)], "marker": { "radius": size}})
 
     #Create Nodes with edges
     for f, t in combs:
@@ -108,11 +108,11 @@ class GraphService(MethodView):
         ],
         nodes = [{
                       id: 'A',
-                      colorIndex: 4.1,
+                      colorScale: 4.1,
                       readius: 21
                   }, {
                       id: 'B',
-                      colorIndex: 2.4,
+                      colorScale: 2.4,
                       radius: 11.8
         }]   
     """
