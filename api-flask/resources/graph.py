@@ -65,7 +65,7 @@ def get_normal_network(src, name, color_name):
   '''
   data = data + [[0,11], [0,14], ..., [33, 62],...]
   '''
-  data += [[ str(d['from']), str(d['to']) ] for d in nw.links]
+  data = [[ str(d['from']), str(d['to']) ] for d in nw.links]
     
   #get min / max sizes
   sizes = [d['row_count'] for d in nw.nodes]
