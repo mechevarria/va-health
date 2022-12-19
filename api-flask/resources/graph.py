@@ -53,7 +53,7 @@ def get_simplied_group_network(src, name, color_name):
   scaled_group_colors = dict(zip(group_colors_keys, scaled_group_colors))
  
   for e, k in enumerate(groups.keys()):
-    nodes.append({'id': k, 'colorScale': scaled_group_colors[int(k)], "marker": { "radius": sizes[e]}})
+    nodes.append({'id': k, 'colorScale': scaled_group_colors[int(k)], "marker": { "radius": scaled_sizes[e]}})
 
   #Create Nodes with edges
   for f, t in combs:
