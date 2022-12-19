@@ -71,7 +71,7 @@ export default {
     highcharts: Chart
   },
   mixins: [msgMixin],
-  computed: mapState(['groupId']),
+  computed: mapState(['groupId','colors']),
   props: {
     showSecondary: Boolean,
     clearOnCreate: Boolean,
@@ -81,8 +81,6 @@ export default {
       isBusy: false,
       catExplains: [],
       contExplains: [],
-      primaryColor: '#6f42c1',
-      secondaryColor: '#ea39b8',
       defaultOptions: {
         credits: {
           enabled: false
@@ -145,17 +143,17 @@ export default {
                 explain.primaryChart = JSON.parse(JSON.stringify(this.defaultOptions))
                 explain.primaryChart.series[0].name = explain.name
                 explain.primaryChart.series[0].data = [explain.primary_group_quartiles]
-                explain.primaryChart.plotOptions.boxplot.fillColor = this.primaryColor
-                explain.primaryChart.plotOptions.boxplot.stemColor = this.primaryColor
-                explain.primaryChart.plotOptions.boxplot.whiskerColor = this.primaryColor
+                explain.primaryChart.plotOptions.boxplot.fillColor = this.colors.primary
+                explain.primaryChart.plotOptions.boxplot.stemColor = this.colors.primary
+                explain.primaryChart.plotOptions.boxplot.whiskerColor = this.colors.primary
 
                 if (this.showSecondary) {
                   explain.secondaryChart = JSON.parse(JSON.stringify(this.defaultOptions))
                   explain.secondaryChart.series[0].name = explain.name
                   explain.secondaryChart.series[0].data = [explain.secondary_group_quartiles]
-                  explain.secondaryChart.plotOptions.boxplot.fillColor = this.secondaryColor
-                  explain.secondaryChart.plotOptions.boxplot.stemColor = this.secondaryColor
-                  explain.secondaryChart.plotOptions.boxplot.whiskerColor = this.secondaryColor
+                  explain.secondaryChart.plotOptions.boxplot.fillColor = this.colors.secondary
+                  explain.secondaryChart.plotOptions.boxplot.stemColor = this.colors.secondary
+                  explain.secondaryChart.plotOptions.boxplot.whiskerColor = this.colors.secondary
                 }
 
                 this.contExplains.push(explain)
