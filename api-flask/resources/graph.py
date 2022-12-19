@@ -51,7 +51,7 @@ def get_simplied_group_network(src, name, color_name):
   for k in groups.keys():
     size = (groups[k]['row_count'] - min_size) / (max_size - min_size) * (30-10) + 10   #Mike requested the radius scale between 30 and 10
     # data.append([str(k), str(k)])
-    nodes.append({'id': k, 'colorScale': group_colors[int(k)], "marker": { "radius": size}})
+    nodes.append({'id': k, 'colorScale': scaled_group_colors[int(k)], "marker": { "radius": size}})
 
   #Create Nodes with edges
   for f, t in combs:
@@ -78,6 +78,8 @@ def get_normal_network(src, name, color_name):
   #scale coloring between zero and 1
   norm_coloring_values = norm_list(coloring_values)
 
+  #Get plotX and plotY values
+  x = []
   # get node dict
   #scale radius between 10 and 2
   nodes = [{'id': d['id'], 'marker': { 'radius': norm_sizes[e] }, 'colorScale':  norm_coloring_values[e]} for e, d in enumerate(nw.nodes)]
