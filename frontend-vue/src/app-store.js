@@ -10,6 +10,10 @@ const store = new Vuex.Store({
         messages: [],
         groupId: 0,
         filterId: 0,
+        colors: {
+            primary: '#6f42c1',
+            secondary: '#ea39b8'
+        },
         colorOptions: [{
             value: 'A1Clast_period2_to_4_change',
             text: 'Change in A1C'
@@ -47,7 +51,7 @@ const store = new Vuex.Store({
                 value: false, text: 'No'
             }],
             is_equal: true,
-            enabled: false
+            enabled: true
         }, {
             name: 'Ethnicity',
             label: 'Ethnicity',
@@ -66,7 +70,7 @@ const store = new Vuex.Store({
                 value: false, text: 'No'
             }],
             is_equal: true,
-            enabled: false
+            enabled: true
         }, {
             name: 'MaritialStatus',
             label: 'Maritial Status',
@@ -97,7 +101,7 @@ const store = new Vuex.Store({
                 value: false, text: 'No'
             }],
             is_equal: true,
-            enabled: false
+            enabled: true
         }, {
             name: 'Rurality',
             label: 'Rurality',
@@ -116,7 +120,7 @@ const store = new Vuex.Store({
                 value: false, text: 'No'
             }],
             is_equal: true,
-            enabled: false
+            enabled: true
         }, {
             name: 'AgeAtIndexDate',
             label: 'Age',
@@ -125,7 +129,7 @@ const store = new Vuex.Store({
             inputMin: 25,
             max: 120,
             inputMax: 90,
-            enabled: false
+            enabled: true
         }, {
             name: 'A1C_last_period4_2021-03-01_2022-03-01',
             label: 'A1C',
@@ -134,7 +138,7 @@ const store = new Vuex.Store({
             inputMin: 5,
             max: 22,
             inputMax: 15,
-            enabled: false
+            enabled: true
         }, {
             label: 'Vaccination Status',
             name: 'TotalSeriesCount',
@@ -143,7 +147,7 @@ const store = new Vuex.Store({
             inputMin: 0,
             max: 3,
             inputMax: 3,
-            enabled: false
+            enabled: true
         },{
             name: 'Hospitalization60d',
             label: 'Hospitalizations',
@@ -155,7 +159,7 @@ const store = new Vuex.Store({
                 value: '1', text: 'True'
             }],
             is_equal: true,
-            enabled: false
+            enabled: true
         },{
             label: 'In-Person Visit %',
             name: 'visits_count_proportion_Presumed In Person_period4_2021-03-01_2022-03-01',
@@ -164,7 +168,7 @@ const store = new Vuex.Store({
             inputMin: 0,
             max: 100,
             inputMax: 100,
-            enabled: false,
+            enabled: true,
             percentage: true
         }]
     },
