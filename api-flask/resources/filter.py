@@ -118,7 +118,12 @@ class FilterService(MethodView):
         #create a filter set
         fs = src.create_filter_set(self.generate_filter_dict(filter_data['filters']))
         #Create the groups from the filters
-        grp = src.create_group(name=name, filter_set=fs)
+        try:
+          grp = src.create_group(name=name, filter_set=fs)
+        except:
+          applied_filter = {"id": None, "name": name, 'msg': "Error: Filter results in empty set"}
+          return applied_filter
+          
         grp = src.get_group(name=name)
 
       applied_filter = {"id": grp['id'], "name": name}

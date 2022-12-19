@@ -340,6 +340,58 @@
 					"response": []
 				},
 				{
+					"name": "/filter Filter Returns empty set",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test('response has id', () => {\r",
+									"    pm.response.to.have.jsonBody(\"id\")\r",
+									"    pm.expect(jsonData['is']).to.be.null\r",
+									"});\r",
+									"\r",
+									"pm.test('response has name and correct value', () => {\r",
+									"    pm.response.to.have.jsonBody(\"name\")\r",
+									"    pm.expect(jsonData['name']).to.be.equal('Race_IS_Asian; AgeAtIndexDate_0.0_to_10.0')\r",
+									"});\r",
+									"\r",
+									"pm.test('response has message', () => {\r",
+									"    pm.response.to.have.jsonBody(\"msg\")\r",
+									"    pm.expect(jsonData['msg']).to.be.equal('Error: Filter results in empty set')\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"filters\": [\n    {\n      \"name\": \"Race\",\n      \"categorical\": true,\n      \"value\": \"Asian\",\n      \"is_equal\": true\n    },\n    {\n      \"name\": \"AgeAtIndexDate\",\n      \"categorical\": false,\n      \"min\": 0,\n      \"max\": 10\n    }\n  ],\n  \"cohort\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api}}/filter",
+							"host": [
+								"{{api}}"
+							],
+							"path": [
+								"filter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "/kpi/filter_id. KPI for filtered cohort",
 					"event": [
 						{

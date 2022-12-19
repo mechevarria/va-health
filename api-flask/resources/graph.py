@@ -147,3 +147,59 @@ class GraphService(MethodView):
 
     except:
       abort(404, message="Error getting network graph from server")
+
+
+@blp.route("/graph/color")
+class GraphService(MethodView):
+  @blp.arguments(NetworkSchema)
+  # @blp.response(200, NetworkSchema)
+  def post(self, network_data):
+    """Returns nodes in this format for network graph
+        filter_id: 123456,
+        color_field: column_name,
+        data = [
+            ['A', 'C']
+            ['A', 'D'],
+            ['A', 'E'],
+            ['A', 'F'],
+            ['A', 'G'],
+            ['B', 'C'],
+            ['B', 'D']
+        ],
+        nodes = [{
+                      id: 'A',
+                      colorIndex: 4.1,
+                      readius: 21
+                  }, {
+                      id: 'B',
+                      colorIndex: 2.4,
+                      radius: 11.8
+        }]   
+    """
+    try:
+      src = user['connection'].get_source(name=user['source_name'])
+
+      if "filter_id" in network_data:
+        grp = src.get_group(id=network_data['filter_id'])
+        grp_name = grp['name']
+      else:
+        #TODO: Must use final network name for VA source
+        #Place holder is OAA_1 here
+        grp_name = "OAA 1"
+      
+      if network_data['simplified']:
+        print("Simplified")
+      
+        data, nodes = get_simplied_group_network(src, grp_name, network_data['color_name'])
+      else:
+        print("Regular")
+        #get network nodes
+        data, nodes = get_normal_network(src, grp_name, network_data['color_name'])
+
+      network_data['data'] = data
+      network_data['nodes'] = nodes
+
+      return jsonify(network_data)
+
+    except:
+      abort(404, message="Error getting network graph from server")
