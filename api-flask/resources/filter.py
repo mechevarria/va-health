@@ -121,9 +121,9 @@ class FilterService(MethodView):
         try:
           grp = src.create_group(name=name, filter_set=fs)
         except:
-          applied_filter = {"id": None, "name": name, 'msg': "Error: Filter results in empty set"}
+          applied_filter = {"id": None, "name": name, 'msg': "There are no patients in specified filter set"}
           return applied_filter
-          
+
         grp = src.get_group(name=name)
 
       applied_filter = {"id": grp['id'], "name": name}
