@@ -19,38 +19,38 @@ def get_group_coloring(src, groups: list, column_name: str):
 
 
 def get_simplied_group_network(src, name, color_name):
-    nw = src.get_network(name=name)
-    node_groups = nw.get_node_groups()
+  nw = src.get_network(name=name)
+  node_groups = nw.get_node_groups()
 
-    groups = {}
-    sizes = []
-    for g in node_groups:
-        grp = src.get_group(id=g['id'])
-        groups[g['id']] = grp
-        sizes.append(grp['row_count'])
-      
-    combs = list(combinations(groups.keys(), 2))
-    data = []
-    nodes = []
-
-    min_size = min(sizes)
-    max_size = max(sizes)
-
-    #create nodes with edges to self to ensure all groups make it into the graph
-    #for instance a connected component that is one group would only show up here
-    # since it would not have any conenctions to other groups
-    group_colors = get_group_coloring(src, node_groups, color_name)
-
-    for k in groups.keys():
-      size = (groups[k]['row_count'] - min_size) / (max_size - min_size) * (30-10) + 10   #Mike requested the radius scale between 30 and 10
-      data.append([str(k), str(k)])
-      nodes.append({'id': k, 'colorIndex': group_colors[int(k)], "marker": { "radius": size}})
-
-    #Create Nodes with edges
-    for f, t in combs:
-      if not set(groups[f]['row_indices']).isdisjoint(set(groups[t]['row_indices'])): data.append([f, t])
+  groups = {}
+  sizes = []
+  for g in node_groups:
+      grp = src.get_group(id=g['id'])
+      groups[g['id']] = grp
+      sizes.append(grp['row_count'])
     
-    return data, nodes
+  combs = list(combinations(groups.keys(), 2))
+  data = []
+  nodes = []
+
+  min_size = min(sizes)
+  max_size = max(sizes)
+
+  #create nodes with edges to self to ensure all groups make it into the graph
+  #for instance a connected component that is one group would only show up here
+  # since it would not have any conenctions to other groups
+  group_colors = get_group_coloring(src, node_groups, color_name)
+
+  for k in groups.keys():
+    size = (groups[k]['row_count'] - min_size) / (max_size - min_size) * (30-10) + 10   #Mike requested the radius scale between 30 and 10
+    # data.append([str(k), str(k)])
+    nodes.append({'id': k, 'colorScale': group_colors[int(k)], "marker": { "radius": size}})
+
+  #Create Nodes with edges
+  for f, t in combs:
+    if not set(groups[f]['row_indices']).isdisjoint(set(groups[t]['row_indices'])): data.append([f, t])
+  
+  return data, nodes
 
 def get_normal_network(src, name, color_name):
   nw = src.get_network(name=name)
@@ -59,7 +59,7 @@ def get_normal_network(src, name, color_name):
   '''
   data = [[0,0], [1,1], ..., [nw.node_count -1, nw.node_count-1]]
   '''
-  data=[[str(i),str(i)] for i in range(nw.node_count)] 
+  # data=[[str(i),str(i)] for i in range(nw.node_count)] 
 
   #adds in all links
   '''

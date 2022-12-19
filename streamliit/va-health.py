@@ -49,7 +49,7 @@ with st.container():
 
     for e, r in enumerate(kpis):
         with cols[e+1]:
-            st.metric(label=r['name'], value=numerize(r['value']), delta="1.2 °F")
+            st.metric(label=r['name'], value=r['value'], delta="1")
 
 
 #Network Graph Section
@@ -134,25 +134,23 @@ def gen_box_plt(data, label=None):
     return(fig)
 
 #Get the clicked on
-for gid, v in details_chk_boxes.items():
-    if v:
-        details = get_group_details(gid)
-        with st.container():
-            cols = st.columns(2)
-            with cols[1]:
-                sub_cols = st.columns(2)
-
-            for detail in details['explains']:
-                if detail["type"] =="continuous":
-                    with cols[0]:
-                        b = gen_box_plt(detail['primary_group_quartiles'], detail["name"])
-                        st.pyplot(b)
-                else:
-                    with cols[1]:
-                         with sub_cols[1]:
-                            st.write(detail["name"])
-                         with sub_cols[2]:
-                            st.progress(detail['primary_group_percent']/100)
+# for gid, v in details_chk_boxes.items():
+#     if v:
+#         details = get_group_details(gid)
+#         with st.container():
+#             cols = st.columns(2)
+#             with cols[1]:
+#             for detail in details['explains']:
+#                 if detail["type"] =="continuous":
+#                     with cols[0]:
+#                         b = gen_box_plt(detail['primary_group_quartiles'], detail["name"])
+#                         st.pyplot(b)
+#                 else:
+#                     with cols[1]:
+#                          with sub_cols[1]:
+#                             st.write(detail["name"])
+#                          with sub_cols[2]:
+#                             st.progress(detail['primary_group_percent']/100)
 
 for k in details_chk_boxes.keys():
     details_chk_boxes[k] = False
