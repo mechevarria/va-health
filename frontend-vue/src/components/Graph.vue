@@ -127,9 +127,9 @@ export default {
         .post(url, body)
         .then((res) => {
           let nodes = res.data.nodes
-          // // select color for each node
           nodes.forEach((node) => {
             node.color = this.colorScale(node.colorScale).toString()
+            //console.log(`node: ${node.id}, color: ${node.color}, colorScale: ${node.colorScale}`)
           })
           this.chartOptions.series[0].nodes = nodes
           this.chartOptions.series[0].data = res.data.data
@@ -152,7 +152,7 @@ export default {
     }
   },
   created() {
-    this.colorScale = chroma.scale([this.colors.secondary, this.colors.primary])
+    this.colorScale = chroma.scale([this.colors.first, this.colors.second, this.colors.third])
     this.selectedColor = this.colorOptions[0].value
     this.selectedText = this.colorOptions[0].text
     this.getGraph()
