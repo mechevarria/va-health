@@ -11,8 +11,9 @@ const store = new Vuex.Store({
         groupId: 0,
         filterId: 0,
         colors: {
-            primary: '#6f42c1',
-            secondary: '#3cf281'
+            first: '#ea39b8',
+            second: '#ffc107',
+            third: '#1ba2f6'
         },
         colorOptions: [{
             value: 'A1Clast_period2_to_4_change',
