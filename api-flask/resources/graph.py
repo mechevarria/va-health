@@ -10,11 +10,12 @@ from globals import user, get_all_group_id
 
 blp = Blueprint("graph", __name__, description="Operations on graph")
 
-def norm_list(the_list, new_min_value=0, new_max_value=1):
+def norm_list(the_list, new_min_value=0, new_max_value=1, return_int = False):
   min_value = min(the_list)
   max_value = max(the_list)
   delta_value = max_value - min_value
   scaled_values = [ (v - min_value) / delta_value * (new_max_value - new_min_value) + new_min_value for v in  the_list]
+  if return_int: scaled_values = [round(i) for i in scaled_values]
   return scaled_values
 
 def get_group_coloring(src, groups: list, column_name: str):
@@ -35,7 +36,8 @@ def get_simplied_group_network(src, name, color_name):
       grp = src.get_group(id=g['id'])
       groups[g['id']] = grp
       sizes.append(grp['row_count'])
-    
+  scaled_sizes =  norm_list(sizes, 10, 30, True) #Mike requested the radius scale between 30 and 10
+
   combs = list(combinations(groups.keys(), 2))
   data = []
   nodes = []
@@ -44,14 +46,14 @@ def get_simplied_group_network(src, name, color_name):
   #for instance a connected component that is one group would only show up here
   # since it would not have any conenctions to other groups
   group_colors = get_group_coloring(src, node_groups, color_name)
-  scaled_group_colors = norm_list(group_colors, 0, 1)
+  group_colors_keys = [k for k in group_colors.keys()]
 
-  min_size = min(sizes)
-  max_size = max(sizes)
-  for k in groups.keys():
-    size = (groups[k]['row_count'] - min_size) / (max_size - min_size) * (30-10) + 10   #Mike requested the radius scale between 30 and 10
-    # data.append([str(k), str(k)])
-    nodes.append({'id': k, 'colorScale': scaled_group_colors[int(k)], "marker": { "radius": size}})
+  group_colors_values = [group_colors[k] for k in group_colors_keys]
+  scaled_group_colors = norm_list(group_colors_values, 0, 1)
+  scaled_group_colors = dict(zip(group_colors_keys, scaled_group_colors))
+ 
+  for e, k in enumerate(groups.keys()):
+    nodes.append({'id': k, 'colorScale': scaled_group_colors[int(k)], "marker": { "radius": sizes[e]}})
 
   #Create Nodes with edges
   for f, t in combs:
@@ -79,10 +81,14 @@ def get_normal_network(src, name, color_name):
   norm_coloring_values = norm_list(coloring_values)
 
   #Get plotX and plotY values
-  x = []
+  x = [v['x'] for v in nw.nodes]
+  y = [-1*v['y'] for v in nw.nodes]
+  x = norm_list(x, 5, 495, True)
+  y = norm_list(y, 5, 295, True)
+
   # get node dict
   #scale radius between 10 and 2
-  nodes = [{'id': d['id'], 'marker': { 'radius': norm_sizes[e] }, 'colorScale':  norm_coloring_values[e]} for e, d in enumerate(nw.nodes)]
+  nodes = [{'id': d['id'], 'marker': { 'radius': norm_sizes[e] }, 'colorScale':  norm_coloring_values[e], "plotX": x[e], "plotY": y[e]} for e, d in enumerate(nw.nodes)]
 
   return data, nodes
 
