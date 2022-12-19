@@ -2,7 +2,7 @@ from marshmallow import Schema, fields
 
 class KpiCardSchema(Schema):
     name=fields.Str(required=True)
-    value=fields.Float(required=True)
+    value=fields.Str(required=True)
 
 class ExplainerSchema(Schema):
     id=fields.Str(required=True)
