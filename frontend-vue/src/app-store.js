@@ -12,7 +12,7 @@ const store = new Vuex.Store({
         filterId: 0,
         colors: {
             primary: '#6f42c1',
-            secondary: '#ea39b8'
+            secondary: '#3cf281'
         },
         colorOptions: [{
             value: 'A1Clast_period2_to_4_change',
@@ -72,8 +72,8 @@ const store = new Vuex.Store({
             is_equal: true,
             enabled: true
         }, {
-            name: 'MaritialStatus',
-            label: 'Maritial Status',
+            name: 'MaritalStatus',
+            label: 'Marital Status',
             categorical: true,
             value: 'SINGLE',
             valueOptions: [{
