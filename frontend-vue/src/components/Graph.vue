@@ -3,7 +3,7 @@
     <div class="card-header">
       <span>Patient Segments <i class="spinner-border spinner-border-sm mr-1" v-if="isBusy"></i></span>
 
-      <b-dropdown class="float-right" id="color-dropdown" right text="Right align">
+      <b-dropdown class="float-right" id="color-dropdown" right text="Right align" :disabled="isBusy">
         <template #button-content>
           <i class="cil-contrast mr-2 mb-1"></i>Change Color
         </template>
@@ -11,7 +11,7 @@
           {{ option.text }}
         </b-dropdown-item-button>
       </b-dropdown>
-      <b-form-checkbox class="float-right mr-3 mt-2" id="simplified" v-model="simplified">Simplifiied
+      <b-form-checkbox class="float-right mr-3 mt-2" id="simplified" v-model="simplified" :disabled="isBusy">Simplifiied
         View</b-form-checkbox>
     </div>
     <div class="card-body">
@@ -27,13 +27,14 @@ import { mapState } from 'vuex'
 import Highcharts from 'highcharts'
 import Networkgraph from 'highcharts/modules/networkgraph'
 import axios from 'axios'
+import chroma from 'chroma-js'
 import msgMixin from '../mixins/msg-mixin'
 
 Networkgraph(Highcharts)
 
 export default {
   name: 'AppGraph',
-  computed: mapState(['filterId', 'colorOptions']),
+  computed: mapState(['filterId', 'colorOptions','colors']),
   mixins: [msgMixin],
   data() {
     return {
@@ -41,6 +42,7 @@ export default {
       isBusy: false,
       simplified: true,
       selectedColor: '',
+      colorScale: null,
       chartOptions: {
         credits: {
           enabled: false
@@ -53,7 +55,6 @@ export default {
           text: ''
         },
         series: [{
-          colorByPoint: true,
           enableMouseTracking: true,
           layoutAlgorithm: {
             enableSimulation: true,
@@ -91,18 +92,13 @@ export default {
       axios
         .post(url, body)
         .then((res) => {
-          // do not use links to self
-          let data = []
-          res.data.data.forEach(edge => {
-            if(edge[0] != edge[1]) {
-              data.push(edge)
-            } else {
-              // do not draw edges for nodes to themselves
-              // console.log(`Not adding [${edge[0]}, ${edge[1]}]`)
-            }
+          let nodes = res.data.nodes
+          // // select color for each node
+          nodes.forEach(node => {
+            node.color = this.colorScale(node.colorScale).toString()
           })
-          this.chartOptions.series[0].nodes = res.data.nodes
-          this.chartOptions.series[0].data = data
+          this.chartOptions.series[0].nodes = nodes
+          this.chartOptions.series[0].data = res.data.data
         })
         .catch((err) => {
           console.error(err)
@@ -122,6 +118,7 @@ export default {
     }
   },
   created() {
+    this.colorScale = chroma.scale([this.colors.secondary, this.colors.primary])
     this.selectedColor = this.colorOptions[0].value
     this.getGraph()
   }
