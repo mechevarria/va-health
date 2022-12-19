@@ -82,13 +82,20 @@ export default {
           {
             enableMouseTracking: true,
             layoutAlgorithm: {
-              enableSimulation: true,
+              enableSimulation: false,
               initialPositions: 'circle'
             },
             dataLabels: {
               enabled: false
             },
             name: 'networkgraph',
+            point: {
+              events: {
+                click: (e) => {
+                  this.$store.commit('setGroup', e.point.id)
+                }
+              }
+            },
             data: [],
             nodes: []
           }
@@ -100,15 +107,13 @@ export default {
     changeColor(option) {
       this.selectedColor = option.value
       this.selectedText = option.text
-      this.getGraph(true)
+      this.getGraph()
     },
-    getGraph(colorOnly = false) {
+    getGraph() {
       this.isBusy = true
-      // trying to find a better way to update the nodes, work in progress
       this.chartOptions.series[0].nodes = []
-      if (!colorOnly) {
-        this.chartOptions.series[0].data = []
-      }
+      this.chartOptions.series[0].data = []
+
       const url = '/api/graph'
       const body = {
         color_name: this.selectedColor,
@@ -127,9 +132,7 @@ export default {
             node.color = this.colorScale(node.colorScale).toString()
           })
           this.chartOptions.series[0].nodes = nodes
-          if(!colorOnly) {
-            this.chartOptions.series[0].data = res.data.data
-          }
+          this.chartOptions.series[0].data = res.data.data
         })
         .catch((err) => {
           console.error(err)
