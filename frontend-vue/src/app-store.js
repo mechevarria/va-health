@@ -126,19 +126,19 @@ const store = new Vuex.Store({
             name: 'AgeAtIndexDate',
             label: 'Age',
             categorical: false,
-            min: 20,
-            inputMin: 25,
-            max: 120,
-            inputMax: 90,
+            min: 25,
+            inputMin: 20,
+            max: 90,
+            inputMax: 120,
             enabled: true
         }, {
             name: 'A1C_last_period4_2021-03-01_2022-03-01',
             label: 'A1C',
             categorical: false,
-            min: 4,
-            inputMin: 5,
-            max: 22,
-            inputMax: 15,
+            min: 5,
+            inputMin: 4,
+            max: 15,
+            inputMax: 22,
             enabled: true
         }, {
             label: 'Vaccination Status',
