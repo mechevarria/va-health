@@ -41,9 +41,9 @@
                 {{ explain.name }}
               </td>
               <td>
-                <b-progress show-progress :value="explain.primary_group_percent" variant="primary"></b-progress>
+                <b-progress show-progress :value="explain.primary_group_percent" variant="secondary"></b-progress>
                 <b-progress v-if="showSecondary" show-progress :value="explain.secondary_group_percent"
-                  variant="secondary"></b-progress>
+                  variant="info"></b-progress>
               </td>
             </tr>
           </table>
@@ -132,6 +132,8 @@ export default {
     groupId(newValue) {
       if (newValue.length > 1) {
         this.isBusy = true
+        this.catExplains = []
+        this.contExplains = []
         const url = `/api/group/${newValue}`
         axios
           .get(url)
