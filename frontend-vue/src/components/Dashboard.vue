@@ -1,44 +1,104 @@
 <template>
   <span>
-    <h4 class="d-flex justify-content-between align-items-center">Clinical Dashboard
-      <button class="btn btn-primary" v-b-modal.filter-modal><i class="cil-filter btn-icon mr-1"></i>Filter</button>
+    <h4 class="d-flex justify-content-between align-items-center">
+      Clinical Dashboard
+      <button class="btn btn-primary" v-b-modal.filter-modal>
+        <i class="cil-filter btn-icon mr-1"></i>Filter
+      </button>
     </h4>
-    <div class="d-flex justify-content-between align-items-center border-bottom border-top mb-3" v-if="filterId > 0">
-      <ul class="list-group list-group-horizontal list-group-accent" v-for="(filter, index) in filters" :key="index">
-        <li class="list-group-item list-group-item-accent-primary" v-if="filter.categorical">
-          {{ filter.label }}: {{ filter.value }}, is equal: {{ filter.is_equal }}
+    <div
+      class="d-flex justify-content-between align-items-center border-bottom border-top mb-3"
+      v-if="filterId > 0"
+    >
+      <ul
+        class="list-group list-group-horizontal list-group-accent"
+        v-for="(filter, index) in filters"
+        :key="index"
+      >
+        <li
+          class="list-group-item list-group-item-accent-primary"
+          v-if="filter.categorical && filter.enabled"
+        >
+          {{ filter.label }}: {{ filter.value }}, is equal:
+          {{ filter.is_equal }}
         </li>
-        <li class="list-group-item list-group-item-accent-info" v-else>
+        <li
+          class="list-group-item list-group-item-accent-info"
+          v-else-if="!filter.categorical && filter.enabled"
+        >
           {{ filter.label }}, min: {{ filter.min }}, max: {{ filter.max }}
         </li>
       </ul>
-      <button class="btn btn-danger ml-2" @click="doClear()"><i class="cil-x-circle btn-icon mr-1"></i>Clear</button>
+      <button class="btn btn-danger ml-2" @click="doClear()">
+        <i class="cil-x-circle btn-icon mr-1"></i>Clear
+      </button>
     </div>
 
     <AppKpi />
     <AppGraph />
     <AppExplain />
     <AppExplainDetail :show-secondary="false" />
-    <b-modal id="filter-modal" title="Dashboard Filter" @ok="doFilter" :ok-only=true ok-title="Filter">
+    <b-modal
+      id="filter-modal"
+      title="Dashboard Filter"
+      @ok="doFilter"
+      :ok-only="true"
+      ok-title="Filter"
+    >
       <span v-for="(filter, index) in filters" :key="index">
         <div class="form-row" v-if="filter.categorical">
-          <div class="form-group col-md-6">
+          <div class="form-group col-md-5">
             <label>{{ filter.label }}</label>
-            <b-form-select v-model="filter.value" :options="filter.valueOptions"></b-form-select>
+            <b-form-select
+              v-model="filter.value"
+              :options="filter.valueOptions"
+              :disabled="!filter.enabled"
+            ></b-form-select>
           </div>
-          <div class="form-group col-md-6">
-            <label>Is Equal</label>
-            <b-form-select v-model="filter.is_equal" :options="filter.boolOptions"></b-form-select>
+          <div class="form-group col-md-5">
+            <label v-if="filter.boolOptions">Is Equal</label>
+            <b-form-select
+              v-if="filter.boolOptions"
+              v-model="filter.is_equal"
+              :options="filter.boolOptions"
+              :disabled="!filter.enabled"
+            ></b-form-select>
+          </div>
+          <div class="form-group col-md-2">
+            <label v-if="index == 0">Enabled</label>
+            <label v-else>&nbsp;</label>
+            <b-form-checkbox
+              :id="`filter-enabled-${index}`"
+              v-model="filter.enabled"
+            ></b-form-checkbox>
           </div>
         </div>
         <div class="form-row" v-else>
-          <div class="form-group col-md-6">
+          <div class="form-group col-md-5">
             <label>{{ filter.label }} Min</label>
-            <b-form-spinbutton v-model="filter.min" :min="filter.inputMin" :max="filter.inputMax"></b-form-spinbutton>
+            <b-form-spinbutton
+              v-model="filter.min"
+              :min="filter.inputMin"
+              :max="filter.inputMax"
+              :disabled="!filter.enabled"
+            ></b-form-spinbutton>
           </div>
-          <div class="form-group col-md-6">
+          <div class="form-group col-md-5">
             <label>{{ filter.label }} Max</label>
-            <b-form-spinbutton v-model="filter.max" :min="filter.inputMin" :max="filter.inputMax"></b-form-spinbutton>
+            <b-form-spinbutton
+              v-model="filter.max"
+              :min="filter.inputMin"
+              :max="filter.inputMax"
+              :disabled="!filter.enabled"
+            ></b-form-spinbutton>
+          </div>
+          <div class="form-group col-md-2">
+            <label v-if="index == 0">Enabled</label>
+            <label v-else>&nbsp;</label>
+            <b-form-checkbox
+              :id="`filter-enabled-${index}`"
+              v-model="filter.enabled"
+            ></b-form-checkbox>
           </div>
         </div>
       </span>
@@ -77,7 +137,7 @@ export default {
 
       const url = '/api/filter'
       const postFilters = []
-      this.filters.forEach(filter => {
+      this.filters.forEach((filter) => {
         if (filter.enabled) {
           let postFilter = {}
           postFilter.name = filter.name
