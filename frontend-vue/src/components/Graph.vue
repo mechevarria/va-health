@@ -82,7 +82,7 @@ export default {
           {
             enableMouseTracking: true,
             layoutAlgorithm: {
-              enableSimulation: false,
+              enableSimulation: true,
               initialPositions: 'circle'
             },
             dataLabels: {
