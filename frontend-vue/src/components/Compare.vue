@@ -50,33 +50,33 @@
               </div>
             </div>
             <div class="form-row" v-else>
-          <div class="form-group col-md-5">
-            <label>{{ filter.label }} Min</label>
-            <b-form-spinbutton
-              v-model="filter.min"
-              :min="filter.inputMin"
-              :max="filter.inputMax"
-              :disabled="!filter.enabled"
-            ></b-form-spinbutton>
-          </div>
-          <div class="form-group col-md-5">
-            <label>{{ filter.label }} Max</label>
-            <b-form-spinbutton
-              v-model="filter.max"
-              :min="filter.inputMin"
-              :max="filter.inputMax"
-              :disabled="!filter.enabled"
-            ></b-form-spinbutton>
-          </div>
-          <div class="form-group col-md-2">
-            <label v-if="index == 0">Enabled</label>
-            <label v-else>&nbsp;</label>
-            <b-form-checkbox
-              :id="`filter-enabled-${index}`"
-              v-model="filter.enabled"
-            ></b-form-checkbox>
-          </div>
-        </div>
+              <div class="form-group col-md-5">
+                <label>{{ filter.label }} Min</label>
+                <b-form-spinbutton
+                  v-model="filter.min"
+                  :min="filter.inputMin"
+                  :max="filter.inputMax"
+                  :disabled="!filter.enabled"
+                ></b-form-spinbutton>
+              </div>
+              <div class="form-group col-md-5">
+                <label>{{ filter.label }} Max</label>
+                <b-form-spinbutton
+                  v-model="filter.max"
+                  :min="filter.inputMin"
+                  :max="filter.inputMax"
+                  :disabled="!filter.enabled"
+                ></b-form-spinbutton>
+              </div>
+              <div class="form-group col-md-2">
+                <label v-if="index == 0">Enabled</label>
+                <label v-else>&nbsp;</label>
+                <b-form-checkbox
+                  :id="`filter-enabled-${index}`"
+                  v-model="filter.enabled"
+                ></b-form-checkbox>
+              </div>
+            </div>
           </span>
         </div>
       </div>
@@ -93,19 +93,30 @@
           <span v-if="!compareRest">
             <span v-for="(filter, index) in second" :key="index">
               <div class="form-row" v-if="filter.categorical">
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-5">
                   <label>{{ filter.label }}</label>
                   <b-form-select
                     v-model="filter.value"
                     :options="filter.valueOptions"
+                    :disabled="!filter.enabled"
                   ></b-form-select>
                 </div>
-                <div class="form-group col-md-6">
-                  <label>Is Equal</label>
+                <div class="form-group col-md-5">
+                  <label v-if="filter.boolOptions">Is Equal</label>
                   <b-form-select
+                    v-if="filter.boolOptions"
                     v-model="filter.is_equal"
                     :options="filter.boolOptions"
+                    :disabled="!filter.enabled"
                   ></b-form-select>
+                </div>
+                <div class="form-group col-md-2">
+                  <label v-if="index == 0">Enabled</label>
+                  <label v-else>&nbsp;</label>
+                  <b-form-checkbox
+                    :id="`filter-enabled-${index}`"
+                    v-model="filter.enabled"
+                  ></b-form-checkbox>
                 </div>
               </div>
               <div class="form-row" v-else>
