@@ -26,17 +26,44 @@ def get_group_coloring(src, groups: list, column_name: str):
     return _colors
 
 
+def compute_group_centroid(node_group: dict, network_nodes: list):
+  center_xs = []
+  center_ys = []
+  for node_id in node_group['node_ids']:
+    center_xs.append(network_nodes[node_id]['x'])
+    center_ys.append(network_nodes[node_id]['y'])
+
+
+  x = round(sum(center_xs) / len(center_xs))
+  y = round(-1 * sum(center_ys) / len(center_ys))
+  
+  return x, y
+
 def get_simplied_group_network(src, name, color_name):
   nw = src.get_network(name=name)
   node_groups = nw.get_node_groups()
 
+  _node_dict = {}
+  for n in nw.nodes:
+    _node_dict[int(n['id'])] = n
+
   groups = {}
   sizes = []
+  centroid_x = []
+  centroid_y = []
+
   for g in node_groups:
       grp = src.get_group(id=g['id'])
       groups[g['id']] = grp
       sizes.append(grp['row_count'])
+
+      _x, _y = compute_group_centroid(g, _node_dict)
+      centroid_x.append(_x)
+      centroid_y.append(_y)
+
   scaled_sizes =  norm_list(sizes, 10, 30, True) #Mike requested the radius scale between 30 and 10
+  centroid_x = norm_list(centroid_x, 5, 495, True)
+  centroid_y = norm_list(centroid_y, 5, 295, True)
 
   combs = list(combinations(groups.keys(), 2))
   data = []
@@ -53,7 +80,7 @@ def get_simplied_group_network(src, name, color_name):
   scaled_group_colors = dict(zip(group_colors_keys, scaled_group_colors))
  
   for e, k in enumerate(groups.keys()):
-    nodes.append({'id': k, 'colorScale': scaled_group_colors[int(k)], "marker": { "radius": scaled_sizes[e]}})
+    nodes.append({'id': k, 'groupId': k, 'colorScale': scaled_group_colors[int(k)], "marker": { "radius": scaled_sizes[e]}, "plotX": centroid_x[e], "plotY": centroid_y[e]})
 
   #Create Nodes with edges
   for f, t in combs:
