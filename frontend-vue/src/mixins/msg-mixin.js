@@ -3,7 +3,6 @@ export default {
     infoMsg(text) {
       const msg = {
         text: text,
-        variant: 'info',
         classes: ['bg-info', 'text-white', '.border-0'],
         iconClass: 'cil-info',
         textClass: 'text-info'
@@ -13,7 +12,6 @@ export default {
     successMsg(text) {
       const msg = {
         text: text,
-        variant: 'success',
         classes: ['bg-success', 'text-white', '.border-0'],
         iconClass: 'cil-check-circle',
         textClass: 'text-success'
@@ -23,7 +21,6 @@ export default {
     warningMsg(text) {
       const msg = {
         text: text,
-        variant: 'warning',
         classes: ['bg-warning', 'text-white', '.border-0'],
         iconClass: 'cil-warning',
         textClass: 'text-warning'
@@ -33,7 +30,6 @@ export default {
     errorMsg(text) {
       const msg = {
         text: text,
-        variant: 'danger',
         classes: ['bg-danger', 'text-white', '.border-0'],
         iconClass: 'cil-x-circle',
         textClass: 'text-danger'
@@ -46,7 +42,6 @@ export default {
         msg.text
       ]
       this.$bvToast.toast(vNodesMsg, {
-        variant: msg.variant,
         solid: true,
         noCloseButton: true,
         toastClass: msg.classes,
