@@ -19,8 +19,20 @@
     </div>
     <div class="card-deck mb-2">
       <div class="card">
-        <div class="card-header">Group 1</div>
-        <div class="card-body">
+        <div
+          class="card-header text-secondary d-flex justify-content-between align-items-center"
+        >
+          Group 1
+          <button
+            type="button"
+            class="btn btn-sm"
+            @click="showFilters = !showFilters"
+          >
+            <i v-if="!showFilters" class="cil-chevron-bottom btn-icon"></i>
+            <i v-if="showFilters" class="cil-chevron-top btn-icon"></i>
+          </button>
+        </div>
+        <div class="card-body" v-if="showFilters">
           <span v-for="(filter, index) in first" :key="index">
             <div class="form-row" v-if="filter.categorical">
               <div class="form-group col-md-5">
@@ -72,7 +84,7 @@
                 <label v-if="index == 0">Enabled</label>
                 <label v-else>&nbsp;</label>
                 <b-form-checkbox
-                  :id="`filter-enabled-${index}`"
+                  :id="`group-1-filter-enabled-${index}`"
                   v-model="filter.enabled"
                 ></b-form-checkbox>
               </div>
@@ -81,8 +93,20 @@
         </div>
       </div>
       <div class="card">
-        <div class="card-header">Group 2</div>
-        <div class="card-body">
+        <div
+          class="card-header text-info d-flex justify-content-between align-items-center"
+        >
+          Group 2
+          <button
+            type="button"
+            class="btn btn-sm"
+            @click="showFilters = !showFilters"
+          >
+            <i v-if="!showFilters" class="cil-chevron-bottom btn-icon"></i>
+            <i v-if="showFilters" class="cil-chevron-top btn-icon"></i>
+          </button>
+        </div>
+        <div class="card-body" v-if="showFilters">
           <div class="form-row">
             <div class="form-group col-md-12">
               <b-form-checkbox id="compare-rest" v-model="compareRest">
@@ -142,7 +166,7 @@
                   <label v-if="index == 0">Enabled</label>
                   <label v-else>&nbsp;</label>
                   <b-form-checkbox
-                    :id="`filter-enabled-${index}`"
+                    :id="`group-2-filter-enabled-${index}`"
                     v-model="filter.enabled"
                   ></b-form-checkbox>
                 </div>
@@ -170,6 +194,7 @@ export default {
   computed: mapState(['filters']),
   data() {
     return {
+      showFilters: true,
       isBusy: false,
       compareRest: false,
       first: null,
@@ -236,19 +261,32 @@ export default {
       axios
         .post(url, firstBody)
         .then((res) => {
-          this.firstId = res.data.id
-          this.successMsg(`First group ID is ${this.firstId}`)
-          if (this.compareRest) {
-            this.$store.commit('setGroup', this.firstId)
+          if (res.data.id > 0) {
+            this.firstId = res.data.id
+            this.successMsg(`First group ID is ${this.firstId}`)
+            if (this.compareRest) {
+              this.$store.commit('setGroup', this.firstId)
+            } else {
+              return axios.post(url, secondBody)
+            }
           } else {
-            return axios.post(url, secondBody)
+            this.warningMsg(`Group 1: ${res.data.msg}`)
           }
         })
         .then((res) => {
           if (!this.compareRest) {
-            this.secondId = res.data.id
-            this.successMsg(`Second group ID is ${this.secondId}`)
-            this.$store.commit('setGroup', `${this.firstId}-${this.secondId}`)
+            if (res) {
+              if (res.data.id > 0) {
+                this.secondId = res.data.id
+                this.successMsg(`Second group ID is ${this.secondId}`)
+                this.$store.commit(
+                  'setGroup',
+                  `${this.firstId}-${this.secondId}`
+                )
+              } else {
+                this.warningMsg(`Group 2: ${res.data.msg}`)
+              }
+            }
           }
         })
         .catch((err) => {
@@ -256,6 +294,7 @@ export default {
           this.errorMsg(err.message)
         })
         .finally(() => {
+          this.showFilters = false
           this.isBusy = false
         })
     },
