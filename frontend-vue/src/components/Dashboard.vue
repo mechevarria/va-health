@@ -161,9 +161,11 @@ export default {
       axios
         .post(url, body)
         .then((res) => {
-          this.successMsg(`Updating Dashboard with Filter ${res.data.id}`)
-          if (!res.data.msg) {
+          if (res.data.id > 0) {
+            this.successMsg(`Updating Dashboard with Filter ${res.data.id}`)
             this.$store.commit('setFilterId', res.data.id)
+          } else {
+            this.warningMsg(res.data.msg)
           }
         })
         .catch((err) => {
