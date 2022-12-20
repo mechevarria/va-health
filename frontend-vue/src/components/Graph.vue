@@ -92,7 +92,11 @@ export default {
             point: {
               events: {
                 click: (e) => {
-                  this.$store.commit('setGroup', e.point.id)
+                  if(e.point.groupId > 0) {
+                    this.$store.commit('setGroup', e.point.groupId)
+                  } else {
+                    console.warn(`node: { id: ${e.point.id} }, { groupId: ${e.point.groupId}}`)
+                  }
                 }
               }
             },
