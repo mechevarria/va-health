@@ -113,9 +113,14 @@ def get_normal_network(src, name, color_name):
   x = norm_list(x, 5, 495, True)
   y = norm_list(y, 5, 295, True)
 
+  nodes_id_to_group_id = {}
+  for g in nw.node_groups:
+      for ni in g['node_ids']:
+          nodes_id_to_group_id[ni] = g['id']
+
   # get node dict
   #scale radius between 10 and 2
-  nodes = [{'id': d['id'], 'marker': { 'radius': norm_sizes[e] }, 'colorScale':  norm_coloring_values[e], "plotX": x[e], "plotY": y[e]} for e, d in enumerate(nw.nodes)]
+  nodes = [{'id': d['id'], 'groupId': nodes_id_to_group_id[int(d['id'])] if int(d['id']) in nodes_id_to_group_id else None, 'marker': { 'radius': norm_sizes[e] }, 'colorScale':  norm_coloring_values[e], "plotX": x[e], "plotY": y[e]} for e, d in enumerate(nw.nodes)]
 
   return data, nodes
 
