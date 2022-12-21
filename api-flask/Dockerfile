@@ -1,4 +1,4 @@
-FROM python:3.7.13
+FROM python:3.7
 EXPOSE 5000
 WORKDIR /app
 COPY ayasdi-sdk-3.0.0.7.tar.gz .
