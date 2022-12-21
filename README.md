@@ -15,7 +15,7 @@ pip install flask-smorest
 ```properties
 EUREKA_USER="firstname.lastname@symphonyai.com"
 EUREKA_PASS="my_password"
-AYASDI_APISERVER="http://platform.ayasdi.com/workbench/"
+AYASDI_APISERVER="https://platform.ayasdi.com/workbench/"
 SOURCE_NAME="iris.csv"
 FLASK_APP="app.py"
 FLASK_DEBUG="1"
