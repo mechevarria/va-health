@@ -72,6 +72,19 @@ docker-frontend-build.sh
 docker-frontend-run.sh
 ```
 
+## Docker Import/Export
+
+* Make sure the api and frontend images are built with the `api-flask/docker-api-build.sh` and `frontend-vue/docker-frontend-build.sh`
+
+* Build the tar files with `docker-save.sh`
+
+* Load the save file with `docker-load.sh`
+
+* Run the containers with `docker-run-all.sh`
+> Make sure there is a .env file with the environment variables for the api conatiner to read
+
+* Stop the container with `docker-stop-all.sh`
+
 ## Testing api-flask in [Postman](https://www.postman.com/downloads/)
 
 TODO
@@ -81,8 +94,6 @@ TODO
 
 ## Items 
 ### Frontend
-* Round numbers in KPI cards to 2 decimals
-* Implement color change in graph
 * provide user friendly name for groups (g1, g2, etc).  This is only in UI so users can discuss easily and to improve look
 * Individual Group Explains
     * Add scale values to boxplot
@@ -93,4 +104,3 @@ TODO
 * Handle when cohort analysis fails
 * Add color change endpoint that just gets colors?  Note: May be difficult without regen graph 
 * Combine zero / one binary categorical explains into one
-* Handle when filter results in zero or Really small number of rows
