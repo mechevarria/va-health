@@ -35,7 +35,25 @@
     </div>
 
     <AppKpi />
-    <AppGraph />
+    <b-form-checkbox id="graph-compare" v-model="compare" class="mb-2 ml-1">
+      Graph Comparison View
+    </b-form-checkbox>
+    <div class="row">
+      <div :class="compare ? 'col-md-6' : 'col-md-12'">
+        <AppGraph />
+      </div>
+      <div class="col-md-6" v-if="compare">
+        two
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6" v-if="compare">
+        three
+      </div>
+      <div class="col-md-6" v-if="compare">
+        four
+      </div>
+    </div>
     <AppExplain />
     <AppExplainDetail :show-secondary="false" />
     <b-modal
@@ -127,7 +145,9 @@ export default {
   mixins: [msgMixin],
   computed: mapState(['filters', 'filterId']),
   data() {
-    return {}
+    return {
+      compare: false
+    }
   },
   methods: {
     doFilter() {
