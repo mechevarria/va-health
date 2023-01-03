@@ -40,18 +40,18 @@
     </b-form-checkbox>
     <div class="row">
       <div :class="compare ? 'col-md-6' : 'col-md-12'">
-        <AppGraph />
+        <AppGraph :label="1"/>
       </div>
       <div class="col-md-6" v-if="compare">
-        two
+        <AppGraph :label="2"/>
       </div>
     </div>
     <div class="row">
       <div class="col-md-6" v-if="compare">
-        three
+        <AppGraph :label="3"/>
       </div>
       <div class="col-md-6" v-if="compare">
-        four
+        <AppGraph :label="4"/>
       </div>
     </div>
     <AppExplain />
