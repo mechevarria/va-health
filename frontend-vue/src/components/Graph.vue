@@ -29,7 +29,7 @@
         id="simplified"
         v-model="simplified"
         :disabled="isBusy"
-        >Simplifiied View</b-form-checkbox
+        >Simplified</b-form-checkbox
       >
     </div>
     <div class="card-body">
