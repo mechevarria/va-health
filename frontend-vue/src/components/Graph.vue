@@ -2,8 +2,8 @@
   <div class="card">
     <div class="card-header">
       <span
-        >Patient Segments
-        <i class="spinner-border spinner-border-sm mr-1" v-if="isBusy"></i
+        >{{ `Graph ${label}` }}
+        <i class="spinner-border spinner-border-sm mr-1 ml-1" v-if="isBusy"></i
       ></span>
 
       <b-dropdown
@@ -26,8 +26,8 @@
       </b-dropdown>
       <b-form-checkbox
         class="float-right mr-3 mt-2"
-        id="simplified"
         v-model="simplified"
+        :id="`simplified-${label}`"
         :disabled="isBusy"
         >Simplified</b-form-checkbox
       >
@@ -59,6 +59,12 @@ export default {
   name: 'AppGraph',
   computed: mapState(['filterId', 'colorOptions', 'colors']),
   mixins: [msgMixin],
+  props: {
+    label: {
+      type: Number,
+      default: 1
+    }
+  },
   data() {
     return {
       data: [],
@@ -156,9 +162,12 @@ export default {
     }
   },
   created() {
+    if(this.label > 1) {
+      this.simplified = false
+    }
     this.colorScale = chroma.scale([this.colors.first, this.colors.second, this.colors.third])
-    this.selectedColor = this.colorOptions[0].value
-    this.selectedText = this.colorOptions[0].text
+    this.selectedColor = this.colorOptions[this.label - 1].value
+    this.selectedText = this.colorOptions[this.label - 1].text
     this.getGraph()
   }
 }
