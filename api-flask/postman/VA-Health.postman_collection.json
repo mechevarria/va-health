@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "49dff964-0c5b-4665-8fac-630048a5e3ec",
+		"_postman_id": "636c0aad-f794-4a3c-b642-62d23c8f4221",
 		"name": "VA-Health",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "24705840"
+		"_exporter_id": "1420797"
 	},
 	"item": [
 		{
@@ -952,6 +952,38 @@
 					],
 					"path": [
 						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "patient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test('patient list is greater than 0', () => {\r",
+							"    pm.expect(jsonData.length).to.be.greaterThan(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{api}}/patient",
+					"host": [
+						"{{api}}"
+					],
+					"path": [
+						"patient"
 					]
 				}
 			},
