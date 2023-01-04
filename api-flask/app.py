@@ -11,6 +11,7 @@ from resources.kpi import blp as KpiBlueprint
 from resources.filter import blp as FilterBlueprint
 from resources.explain import blp as ExplainBlueprint
 from resources.group import blp as GroupBlueprint
+from resources.patient import blp as PatientBlueprint
 
 from globals import user, get_all_group_id
 
@@ -58,6 +59,7 @@ api.register_blueprint(KpiBlueprint)
 api.register_blueprint(FilterBlueprint)
 api.register_blueprint(ExplainBlueprint)
 api.register_blueprint(GroupBlueprint)
+api.register_blueprint(PatientBlueprint)
 
 
 

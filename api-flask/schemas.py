@@ -42,3 +42,13 @@ class NetworkSchema(Schema):
     simplified=fields.Bool(required=True)
     # data=fields.List(dump_only=True)
     # nodes=fields.Nested(GraphNodeSchema(), dump_only=True)
+
+class PatientCardSchema(Schema):
+    ID=fields.Str(required=True)
+    Gender=fields.Str(required=True)
+    Age=fields.Int(required=True)
+    Vaccination_Status=fields.Float(required=True)
+    Race=fields.Str(required=True)
+    Ethnicity=fields.Str(required=True)
+    Marital_Status=fields.Str(required=True)
+    Rurality=fields.Str(required=True)
