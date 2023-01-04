@@ -56,7 +56,7 @@
                 <label v-if="index == 0">Enabled</label>
                 <label v-else>&nbsp;</label>
                 <b-form-checkbox
-                  :id="`filter-enabled-${index}`"
+                  :id="`group-1-filter-enabled-${index}`"
                   v-model="filter.enabled"
                 ></b-form-checkbox>
               </div>
@@ -138,7 +138,7 @@
                   <label v-if="index == 0">Enabled</label>
                   <label v-else>&nbsp;</label>
                   <b-form-checkbox
-                    :id="`filter-enabled-${index}`"
+                    :id="`group-2-filter-enabled-${index}`"
                     v-model="filter.enabled"
                   ></b-form-checkbox>
                 </div>
