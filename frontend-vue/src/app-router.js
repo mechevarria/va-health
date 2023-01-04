@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import AppHome from './components/Home.vue'
-import AppForm from './components/Form.vue'
-import AppTable from './components/Table.vue'
+import AppPatient from './components/Patient.vue'
 import AppDetail from './components/Detail.vue'
 import AppDashboard from './components/Dashboard.vue'
 import AppCompare from './components/Compare.vue'
@@ -14,15 +13,11 @@ const routes = [{
     component: AppHome,
     name: 'home'
 }, {
-    path: '/home/form',
-    component: AppForm,
-    name: 'form'
+    path: '/home/patient',
+    component: AppPatient,
+    name: 'patient'
 }, {
-    path: '/home/table',
-    component: AppTable,
-    name: 'table'
-}, {
-    path: '/home/table/:id',
+    path: '/home/patient/:id',
     component: AppDetail
 }, {
     path: '/home/dashboard',

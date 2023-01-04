@@ -18,16 +18,11 @@
           <i class="c-sidebar-nav-icon cil-blur-linear"></i> Group Compare
         </router-link>
       </li>
-      <!-- <li class="c-sidebar-nav-item">
-        <router-link class="c-sidebar-nav-link" to="/home/form" @click.native="closeOnMobile">
-          <i class="c-sidebar-nav-icon cil-notes"></i> Form
+      <li class="c-sidebar-nav-item">
+        <router-link class="c-sidebar-nav-link" to="/home/patient" @click.native="closeOnMobile">
+          <i class="c-sidebar-nav-icon cil-address-book"></i> Patient
         </router-link>
       </li>
-      <li class="c-sidebar-nav-item">
-        <router-link class="c-sidebar-nav-link" to="/home/table" @click.native="closeOnMobile">
-          <i class="c-sidebar-nav-icon cil-list"></i> Table
-        </router-link>
-      </li> -->
     </ul>
     <button class="c-sidebar-minimizer c-class-toggler" type="button" @click="toggleMin"></button>
   </div>
