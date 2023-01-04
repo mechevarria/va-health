@@ -74,7 +74,7 @@ export default {
         },
         {
           key: 'Ethnicity',
-          label: 'Age',
+          label: 'Ethnicity',
           sortable: true
         },
         {
@@ -92,7 +92,7 @@ export default {
   },
   methods: {
     onRowClick(row) {
-      this.infoMsg(`clicked on ${row.ID}`)
+      this.$router.push(`/home/patient/${row.ID}`)
     },
     getData() {
       this.isBusy = true
