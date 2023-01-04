@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import AppHome from './components/Home.vue'
 import AppPatient from './components/Patient.vue'
-import AppDetail from './components/Detail.vue'
+import AppPatientDetail from './components/PatientDetail.vue'
 import AppDashboard from './components/Dashboard.vue'
 import AppCompare from './components/Compare.vue'
 
@@ -18,7 +18,7 @@ const routes = [{
     name: 'patient'
 }, {
     path: '/home/patient/:id',
-    component: AppDetail
+    component: AppPatientDetail
 }, {
     path: '/home/dashboard',
     component: AppDashboard,
