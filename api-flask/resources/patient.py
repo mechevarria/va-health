@@ -12,6 +12,15 @@ def group_stat(src, grp, column_name):
   _= src.get_group_features(column_name=column_name, group_list=[grp])
   values = [v for v in _[list(_.keys())[0]].values()]
   return values
+def get_bloodtype(dict):
+  bt_dict = {k: dict.get(k, None) for k in dict.keys() if "BloodType_" in k}
+
+  bt = [k for k, v in bt_dict.items() if v]
+  if bt:
+    bt = bt[0].replace("BloodType_", "").replace(" Pos", '+').replace(" Neg", '-')
+    return bt
+  else:
+    return None
 
 @blp.route("/patient")
 class DefaultPatientService(MethodView):
@@ -65,6 +74,8 @@ class DetailedPatientService(MethodView):
   def get(self, patient_id):
     '''Gets all KPI values the source'''
     try:
+      print("In here")
+      return_data = {}
 
       src = user['connection'].get_source(name=user['source_name'])
       fs = src.create_filter_set([{'column_name':"PatientCN", "in_set": [str(patient_id)]}])
@@ -76,8 +87,35 @@ class DetailedPatientService(MethodView):
 
       zipped = zip(keys,values)
       zipdict = dict(zipped)
-      zipdict
-      return zipdict
+
+      #patient physical details
+      return_data['physical'] = {
+          "Age": zipdict["AgeAtIndexDate"],
+          "Over Weight": zipdict["OverweightAtIndex"],
+          "BMI": zipdict["BMIAtIndex"],
+          "Gender": "Male" if zipdict["Gender_M"] == 1 else "Female",
+          "BloodType": get_bloodtype(zipdict)
+          }
+
+      #patient demographic details
+      return_data['demographics'] = {
+          "Race": zipdict["Race"],
+          "Ethnicity": zipdict["Ethnicity"],
+          "Marital Status": zipdict["MaritalStatus"],
+          "Rurality": zipdict["Rurality"],
+          }
+
+      #predictive risk scores
+      return_data['risk_scores'] = {
+          "a1c_increase_risk": zipdict["Risk_score_is_increase_A1Clast_period3_to_4_change"],
+          "engagement_decrease_risk": zipdict["Risk_score_is_decrease_visits_count_permonth_period3_to_4_change"]
+          }
+
+      return_data['comorbidities'] = {k: v for k, v in zipdict.items() if "2yrs" in k and v == 1}
+
+      # return_data['all_data'] = zipdict
+
+      return return_data
     except NameError:
       abort(400, message=f"Patient ({patient_id}) not found!")
 
