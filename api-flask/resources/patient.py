@@ -58,16 +58,28 @@ class DefaultPatientService(MethodView):
       abort(404, message="Error getting Patients from source")
 
 
-# @blp.route("/kpi/<string:filter_id>")
-# class FilteredKPIService(MethodView):
-#   '''Gets all KPI values the specific filter id'''
+@blp.route("/patient/<string:patient_id>")
+class DetailedPatientService(MethodView):
+  '''Gets patient detail values the specific patient id'''
+  @blp.response(200)
+  def get(self, patient_id):
+    '''Gets all KPI values the source'''
+    try:
 
-#   @blp.response(200, KpiCardSchema(many=True))
-#   def get(self, filter_id):
-#     '''Gets all KPI values the source'''
-#     try:
-#       src = user['connection'].get_source(name=user['source_name'])
-#       kpis = compute_kpis(src, filter_id)
-#       return kpis
-#     except:
-#       abort(404, message="Error getting KPI from source")
+      src = user['connection'].get_source(name=user['source_name'])
+      fs = src.create_filter_set([{'column_name':"PatientCN", "in_set": [str(patient_id)]}])
+      export = src.export(filter_set=fs)
+      if len(export['data']) == 0: raise NameError(f"Patient ({patient_id})not found!")
+      
+      keys = [src.id_to_colnames[cid] for cid in export['column_indices']]
+      values = [d[0] for d in export['data']]
+
+      zipped = zip(keys,values)
+      zipdict = dict(zipped)
+      zipdict
+      return zipdict
+    except NameError:
+      abort(400, message=f"Patient ({patient_id}) not found!")
+
+    except:
+      abort(404, message=f"Error getting Patient ({patient_id}) data from source")
