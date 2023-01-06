@@ -41,7 +41,7 @@
                 {{ explain.name }}
               </td>
               <td>
-                <b-progress show-progress :value="explain.primary_group_percent" variant="secondary"></b-progress>
+                <b-progress show-progress :value="explain.primary_group_percent" variant="primary"></b-progress>
                 <b-progress v-if="showSecondary" show-progress :value="explain.secondary_group_percent"
                   variant="info"></b-progress>
               </td>
@@ -145,17 +145,17 @@ export default {
                 explain.primaryChart = JSON.parse(JSON.stringify(this.defaultOptions))
                 explain.primaryChart.series[0].name = explain.name
                 explain.primaryChart.series[0].data = [explain.primary_group_quartiles]
-                explain.primaryChart.plotOptions.boxplot.fillColor = this.colors.first
-                explain.primaryChart.plotOptions.boxplot.stemColor = this.colors.first
-                explain.primaryChart.plotOptions.boxplot.whiskerColor = this.colors.first
+                explain.primaryChart.plotOptions.boxplot.fillColor = this.colors.primary
+                explain.primaryChart.plotOptions.boxplot.stemColor = this.colors.primary
+                explain.primaryChart.plotOptions.boxplot.whiskerColor = this.colors.primary
 
                 if (this.showSecondary) {
                   explain.secondaryChart = JSON.parse(JSON.stringify(this.defaultOptions))
                   explain.secondaryChart.series[0].name = explain.name
                   explain.secondaryChart.series[0].data = [explain.secondary_group_quartiles]
-                  explain.secondaryChart.plotOptions.boxplot.fillColor = this.colors.third
-                  explain.secondaryChart.plotOptions.boxplot.stemColor = this.colors.third
-                  explain.secondaryChart.plotOptions.boxplot.whiskerColor = this.colors.third
+                  explain.secondaryChart.plotOptions.boxplot.fillColor = this.colors.info
+                  explain.secondaryChart.plotOptions.boxplot.stemColor = this.colors.info
+                  explain.secondaryChart.plotOptions.boxplot.whiskerColor = this.colors.info
                 }
 
                 this.contExplains.push(explain)
