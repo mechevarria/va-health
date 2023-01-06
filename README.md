@@ -19,6 +19,7 @@ AYASDI_APISERVER="https://platform.ayasdi.com/workbench/"
 SOURCE_NAME="iris.csv"
 FLASK_APP="app.py"
 FLASK_DEBUG="1"
+SOURCE_NAME_HOLDOUT="va_health_test.csv"
 ```
 
 ## frontend-vue
