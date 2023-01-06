@@ -14,13 +14,18 @@
         @click="doCompare()"
         :disabled="isBusy"
       >
-        <i class="cil-blur-linear btn-icon mr-1"></i>Compare
+        <i class="cil-blur-linear btn-icon mr-1" v-if="!isBusy"></i>
+        <i
+          class="spinner-border spinner-border-sm btn-icon mr-1"
+          v-if="isBusy"
+        ></i
+        >Compare
       </button>
     </div>
     <div class="card-deck mb-2">
       <div class="card">
         <div
-          class="card-header text-secondary d-flex justify-content-between align-items-center"
+          class="card-header text-primary d-flex justify-content-between align-items-center"
         >
           Group 1
           <button
