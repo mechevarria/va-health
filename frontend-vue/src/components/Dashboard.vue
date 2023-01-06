@@ -2,36 +2,45 @@
   <span>
     <h4 class="d-flex justify-content-between align-items-center">
       Clinical Dashboard
-      <button class="btn btn-primary" v-b-modal.filter-modal>
-        <i class="cil-filter btn-icon mr-1"></i>Filter
-      </button>
+      <span>
+        <button
+          class="btn btn-danger mr-2"
+          @click="doClear()"
+          v-if="filterId > 0"
+        >
+          <i class="cil-x-circle btn-icon mr-1"></i>Clear
+        </button>
+        <button
+          class="btn btn-primary"
+          v-b-modal.filter-modal
+          :disabled="isBusy"
+        >
+          <i class="cil-filter btn-icon mr-1" v-if="!isBusy"></i>
+          <i
+            class="spinner-border spinner-border-sm btn-icon mr-1"
+            v-if="isBusy"
+          ></i>
+          Filter
+        </button>
+      </span>
     </h4>
-    <div
-      class="d-flex justify-content-between align-items-center border-bottom border-top mb-3"
-      v-if="filterId > 0"
-    >
-      <ul
-        class="list-group list-group-horizontal list-group-accent"
-        v-for="(filter, index) in filters"
-        :key="index"
-      >
-        <li
-          class="list-group-item list-group-item-accent-primary"
-          v-if="filter.categorical && filter.enabled"
-        >
-          {{ filter.label }}: {{ filter.value }}, is equal:
-          {{ filter.is_equal }}
-        </li>
-        <li
-          class="list-group-item list-group-item-accent-info"
-          v-else-if="!filter.categorical && filter.enabled"
-        >
-          {{ filter.label }}, min: {{ filter.min }}, max: {{ filter.max }}
-        </li>
-      </ul>
-      <button class="btn btn-danger ml-2" @click="doClear()">
-        <i class="cil-x-circle btn-icon mr-1"></i>Clear
-      </button>
+    <div class="card" v-if="filterId > 0">
+      <div class="d-flex flex-row justify-content-center">
+        <span v-for="(filter, index) in filters" :key="index">
+          <div v-if="filter.enabled">
+            <div class="c-callout" :class="getClass(index)">
+              <small class="text-muted">{{ filter.label }}</small
+              ><br />
+              <strong class="h6" v-if="filter.categorical"
+                >{{ filter.value }}, is equal: {{ filter.is_equal }}</strong
+              >
+              <strong class="h6" v-else
+                >{{ filter.label }}, min: {{ filter.min }}, max: {{ filter.max }}</strong
+              >
+            </div>
+          </div>
+        </span>
+      </div>
     </div>
 
     <AppKpi />
@@ -40,18 +49,18 @@
     </b-form-checkbox>
     <div class="row">
       <div :class="compare ? 'col-md-6' : 'col-md-12'">
-        <AppGraph :label="1"/>
+        <AppGraph :label="1" />
       </div>
       <div class="col-md-6" v-if="compare">
-        <AppGraph :label="2"/>
+        <AppGraph :label="2" />
       </div>
     </div>
     <div class="row">
       <div class="col-md-6" v-if="compare">
-        <AppGraph :label="3"/>
+        <AppGraph :label="3" />
       </div>
       <div class="col-md-6" v-if="compare">
-        <AppGraph :label="4"/>
+        <AppGraph :label="4" />
       </div>
     </div>
     <AppExplain />
@@ -146,11 +155,37 @@ export default {
   computed: mapState(['filters', 'filterId']),
   data() {
     return {
-      compare: false
+      compare: false,
+      isBusy: false
     }
   },
   methods: {
+    getClass(index) {
+      let className = ''
+      switch (true) {
+        case index === 0 || index === 6:
+          className = 'c-callout-info'
+          break
+        case index === 1 || index === 7:
+          className = 'c-callout-danger'
+          break
+        case index === 2 || index === 8:
+          className = 'c-callout-warning'
+          break
+        case index === 3 || index === 9:
+          className = 'c-callout-success'
+          break
+        case index === 4 || index === 10:
+          className = 'c-callout-secondary'
+          break
+        case index === 5 || index === 11:
+          className = 'c-callout-primary'
+          break
+      }
+      return className
+    },
     doFilter() {
+      this.isBusy = true
       this.$bvModal.hide('filter-modal')
       this.$store.commit('setFilters', this.filters)
       this.infoMsg('Creating dashboard filter, please wait')
@@ -181,6 +216,7 @@ export default {
       axios
         .post(url, body)
         .then((res) => {
+          this.isBusy = false
           if (res.data.id > 0) {
             this.successMsg(`Updating Dashboard with Filter ${res.data.id}`)
             this.$store.commit('setFilterId', res.data.id)
