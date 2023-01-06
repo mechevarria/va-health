@@ -74,10 +74,9 @@ class DetailedPatientService(MethodView):
   def get(self, patient_id):
     '''Gets all KPI values the source'''
     try:
-      print("In here")
       return_data = {}
 
-      src = user['connection'].get_source(name=user['source_name'])
+      src = user['connection'].get_source(name=user['source_name_holdout'])
       fs = src.create_filter_set([{'column_name':"PatientCN", "in_set": [str(patient_id)]}])
       export = src.export(filter_set=fs)
       if len(export['data']) == 0: raise NameError(f"Patient ({patient_id})not found!")
@@ -110,6 +109,8 @@ class DetailedPatientService(MethodView):
           "a1c_increase_risk": zipdict["Risk_score_is_increase_A1Clast_period3_to_4_change"],
           "engagement_decrease_risk": zipdict["Risk_score_is_decrease_visits_count_permonth_period3_to_4_change"]
           }
+
+      return_data['raw'] = zipdict
 
       return_data['comorbidities'] = {k: v for k, v in zipdict.items() if "2yrs" in k and v == 1}
 

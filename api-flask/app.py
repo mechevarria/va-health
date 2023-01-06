@@ -22,6 +22,7 @@ user['name'] = os.getenv('EUREKA_USER')
 user['password'] = os.getenv('EUREKA_PASS')
 user['api_url'] = os.getenv('AYASDI_APISERVER')
 user['source_name'] = os.getenv('SOURCE_NAME')
+user['source_name_holdout'] = os.getenv('SOURCE_NAME_HOLDOUT')
 
 print(f'{user["name"]} is connecting to {user["api_url"] }')
 # The Ayasdi Api needs to be namespaced to prevent a conflict with the Flask Api

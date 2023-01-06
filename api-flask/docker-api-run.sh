@@ -16,6 +16,7 @@ docker run \
     --env EUREKA_USER=$EUREKA_USER \
     --env EUREKA_PASS=$EUREKA_PASS \
     --env SOURCE_NAME=$SOURCE_NAME \
+    --env SOURCE_NAME_HOLDOUT=$SOURCE_NAME_HOLDOUT \
     --env FLASK_APP=$FLASK_APP \
     --env FLASK_DEBUG=$FLASK_DEBUG \
     quay.io/mechevarria/api-flask
