@@ -1,4 +1,8 @@
 import pandas as pd
+from collections import OrderedDict
+
+import re
+
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
@@ -7,6 +11,11 @@ from schemas import PatientCardSchema
 from globals import user, get_all_group_id
 
 blp = Blueprint("patient", __name__, description="Operations on Patients")
+
+def natural_sort(l): 
+    convert = lambda text: int(text) if text.isdigit() else text.lower() 
+    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)] 
+    return sorted(l, key=alphanum_key)
 
 def group_stat(src, grp, column_name):
   _= src.get_group_features(column_name=column_name, group_list=[grp])
@@ -113,8 +122,9 @@ class DetailedPatientService(MethodView):
       return_data['raw'] = zipdict
 
       return_data['comorbidities'] = {k: v for k, v in zipdict.items() if "2yrs" in k and v == 1}
-
-      # return_data['all_data'] = zipdict
+      
+      carepath_keys = natural_sort([c for c in zipdict.keys() if c.startswith("meds_")] + [c for c in zipdict.keys() if c.startswith("visits_V")])
+      return_data['carepath'] = OrderedDict((k, zipdict[k]) for k  in carepath_keys)
 
       return return_data
     except NameError:
