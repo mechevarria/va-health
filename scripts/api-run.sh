@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
 
 # read in environment
-source ../api-flask/.env
+env_path=../api-flask/.env
+if [[ ! -f $env_path ]]; then
+    env_path=.env
+fi
+
+echo "Setting environment from $env_path"
+source $env_path
+
+docker rm api-flask
 
 docker run \
-    --rm \
     -d \
     -p 5000:5000 \
     --name api-flask \
