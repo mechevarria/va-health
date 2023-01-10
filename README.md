@@ -55,21 +55,7 @@ npm run serve
 npm run build
 ```
 
-## Run as docker container
-
->You can create a public registry with security scanning for free at [Quay.io](https://quay.io)
-
-* Build and push the image with this script. You will have to edit the quay.io registry endpoint for the push command to work
-```bash
-docker-frontend-build.sh
-```
-
-* Run the continer with this script
-```bash
-docker-frontend-run.sh
-```
-
-## Docker Import/Export
+## Docker Container Running, Exporting
 
 * Inside the `scripts` folder are all the bash scripts for building, running and exporting containers
 
