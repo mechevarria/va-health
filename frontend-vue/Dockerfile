@@ -1,10 +1,10 @@
 FROM nginx
 
-COPY ./default.conf /etc/nginx/conf.d/
+COPY ./default.template.conf /tmp/
 
-COPY ./docker-entrypoint.sh /usr/bin/
+COPY ./entrypoint.sh /usr/bin/
 
 COPY ./dist /usr/share/nginx/html
 
-ENTRYPOINT [ "/usr/bin/docker-entrypoint.sh" ]
+ENTRYPOINT [ "/usr/bin/entrypoint.sh" ]
 CMD ["nginx", "-g", "daemon off;"]
