@@ -8,7 +8,10 @@ frontend=quay.io/mechevarria/frontend-vue
 docker rmi $api
 docker rmi $frontend
 
+echo "loading api.tar"
 docker load -i api.tar
+
+echo "loading frontend.tar"
 docker load -i frontend.tar
 
 docker images
