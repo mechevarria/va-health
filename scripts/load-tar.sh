@@ -4,6 +4,10 @@
 api=quay.io/mechevarria/api-flask
 frontend=quay.io/mechevarria/frontend-vue
 
+# remove containers if they exist
+docker rm api-flask
+docker rm frontend-vue
+
 # remove existing images
 docker rmi $api
 docker rmi $frontend
