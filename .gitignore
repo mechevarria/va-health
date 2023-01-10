@@ -1,5 +1,6 @@
 # python ignore
 api-flask/.env
+scripts/.env
 **/*/__pycache__
 *.tar
 
