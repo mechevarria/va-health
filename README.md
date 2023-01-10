@@ -71,16 +71,21 @@ docker-frontend-run.sh
 
 ## Docker Import/Export
 
-* Make sure the api and frontend images are built with the `api-flask/docker-api-build.sh` and `frontend-vue/docker-frontend-build.sh`
+* Inside the `scripts` folder are all the bash scripts for building, running and exporting containers
 
-* Build the tar files with `docker-save.sh`
+* Make sure the api and frontend images are built with `api-build.sh` and `frontend-build.sh`
 
-* Load the save file with `docker-load.sh`
+* Run the containers with `run-all.sh` or individually with `api-run.sh` and `frontend-run.sh`
 
-* Run the containers with `docker-run-all.sh`
-> Make sure there is a .env file with the environment variables for the api conatiner to read
+> Make sure there is a .env file with the environment variables for the api conatiner to read. By default `source ../api-flask/.env` loads the file relative to the scripts directory. Change this `source .env` to load a `.env` file in the same directory as the script
 
-* Stop the container with `docker-stop-all.sh`
+> The frontend container script checks to see if the api container is running and gets the ip address of the container. This address is injected as the environment variable `API_ADDRESS`
+
+* Stop all the containers with `stop-all.sh`
+
+* Build the tar files with `save-tar.sh`
+
+* Load the save file with `load-tar.sh`
 
 ## Testing api-flask in [Postman](https://www.postman.com/downloads/)
 
