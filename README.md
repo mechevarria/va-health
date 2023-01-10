@@ -18,8 +18,11 @@ FLASK_DEBUG="1"
 SOURCE_NAME_HOLDOUT="va_health_test.csv"
 ```
 
+For local development, this script will start up the flask server
+`scripts\api-run.sh`
+
 ## frontend-vue
-Sample web application integrating bootstrap based coreui with [Vue](https://vuejs.org/). Initial scafold done with Vue CLI. The project can be deployed as a [docker](https://docs.docker.com/install/) container or pushed directly with a [buildpack](https://docs.cloudfoundry.org/buildpacks/nginx/index.html) to [Microsoft Azure](https://azure.microsoft.com/en-us/)
+Web application integrating bootstrap based coreui with [Vue](https://vuejs.org/). Initial scafold done with Vue CLI. The project can be deployed as a [docker](https://docs.docker.com/install/) container
 
 ![screenshot](screenshots/screenshot.png)
 
