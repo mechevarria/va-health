@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+docker rm frontend-vue
+
 # get the ip address of the api container
 API_NAME="api-flask"
 API_ID=$(docker ps | grep $API_NAME | cut -d" " -f1)
@@ -18,9 +20,8 @@ KEYCLOAK=false
 KEYCLOAK_URL=http://localhost
 
 docker run \
-    --rm \
     -d \
-    -p 80:80 \
+    -p 8080:80 \
     --name frontend-vue \
     --env API_ADDRESS=$API_ADDRESS \
     --env KEYCLOAK=$KEYCLOAK \
