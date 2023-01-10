@@ -5,11 +5,7 @@ Master application for a REST api to the Eureka SDK and Vue.js based frontend
 * Install required libraries
 ```bash
 cd api-flask
-pip install ayasdi-sdk-3.0.0.7.tar.gz
-conda install python-dotenv
-conda install Flask
-conda install Flask-RESTful
-pip install flask-smorest
+pip install -r requirements.txt
 ```
 * Set necessary environment variables in `api-flask/.env`
 ```properties
