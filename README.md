@@ -66,7 +66,7 @@ npm run build
 
 * Run the containers with `run-all.sh` or individually with `api-run.sh` and `frontend-run.sh`
 
-> Make sure there is a .env file with the environment variables for the api conatiner to read. By default `source ../api-flask/.env` loads the file relative to the scripts directory. Change this `source .env` to load a `.env` file in the same directory as the script
+> Make sure there is a .env file with the environment variables for the api conatiner to read. In `api-run.sh`, by default `source ../api-flask/.env` loads the file relative to the scripts directory. Change this `source .env` to load a `.env` file in the same directory as the script
 
 > The frontend container script checks to see if the api container is running and gets the ip address of the container. This address is injected as the environment variable `API_ADDRESS`
 
