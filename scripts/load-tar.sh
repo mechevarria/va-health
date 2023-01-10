@@ -5,8 +5,8 @@ api=quay.io/mechevarria/api-flask
 frontend=quay.io/mechevarria/frontend-vue
 
 # remove existing images
-docker image rm $api
-docker image rm $frontend
+docker rmi $api
+docker rmi $frontend
 
 docker load -i api.tar
 docker load -i frontend.tar
