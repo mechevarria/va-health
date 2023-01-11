@@ -40,8 +40,8 @@ class DefaultPatientService(MethodView):
       patients = {}
       values = {}
 
-      src = user['connection'].get_source(name=user['source_name'])
-      grp_id = get_all_group_id()['id']
+      src = user['connection'].get_source(name=user['source_name_holdout'])
+      grp_id = get_all_group_id(src)['id']
       grp = src.get_group(id=grp_id)
 
       columns = {

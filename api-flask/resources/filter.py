@@ -92,7 +92,8 @@ class FilterService(MethodView):
   @blp.response(200, AppliedFilter)
   def get(self):
     '''Returns the ID for the default group / no filters applied'''
-    return get_all_group_id()
+    src = user['connection'].get_source(name=user['source_name'])
+    return get_all_group_id(src)
 
   @blp.arguments(AppliedFilter())
   @blp.response(200, AppliedFilter)

@@ -1,4 +1,5 @@
 import os
+import sys  
 
 import ayasdi.core as ac
 from flask import Flask
@@ -13,7 +14,7 @@ from resources.explain import blp as ExplainBlueprint
 from resources.group import blp as GroupBlueprint
 from resources.patient import blp as PatientBlueprint
 
-from globals import user, get_all_group_id
+from globals import user
 
 print(user)
 
@@ -42,17 +43,31 @@ api = Api(app)
 
 @app.before_request 
 def before_request_callback():
-    print('checking login') 
+    print('**** checking login ****') 
     try:
         result = user['connection'].check_platform_version()
+        print("**** user already connected ****")
     except:
-        print("user not logged in, loggin in now")
-        connection = ac.Api(username=user['name'], password=user['password'], url=user['api_url'])
-        print("User Connected:", connection.is_connected)
+        print("**** user not logged in, loggin in now ****")
+        connection = ac.Api(username=user['name'], password=user['password'], url=user['api_url'], ignore_version=True)
+        user['connection'] = connection
+        print("**** User Connected:", connection.is_connected, '****')
 
 @app.get("/test")
 def get_test():
     return {"message": "The test worked!"}
+
+@app.get("/cookies")
+def get_cookie():
+
+    try:
+        user['connection'].session.cookies.clear()
+        user['connection'].check_platform_version()
+        return {"message": "Error reseting cookie !"}
+
+    except:
+        return {"message": "Cookie was reset"}
+
 
 api.register_blueprint(StatusBlueprint)
 api.register_blueprint(GraphBlueprint)

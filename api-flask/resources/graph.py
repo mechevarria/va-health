@@ -6,7 +6,7 @@ from flask_smorest import Blueprint, abort
 from schemas import NetworkSchema
 from flask import jsonify
 
-from globals import user, get_all_group_id
+from globals import user
 
 blp = Blueprint("graph", __name__, description="Operations on graph")
 

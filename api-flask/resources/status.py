@@ -2,7 +2,7 @@ from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 
-from globals import user, get_all_group_id
+from globals import user
 
 blp = Blueprint("status", __name__, description="Operations on status")
 

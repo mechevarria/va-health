@@ -49,7 +49,7 @@ class DefaultKPIService(MethodView):
       kpis = []
 
       src = user['connection'].get_source(name=user['source_name'])
-      grp_id = get_all_group_id()['id']
+      grp_id = get_all_group_id(src)['id']
       kpis = compute_kpis(src, grp_id)
 
       return kpis
