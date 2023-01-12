@@ -21,6 +21,7 @@ def group_stat(src, grp, column_name):
   _= src.get_group_features(column_name=column_name, group_list=[grp])
   values = [v for v in _[list(_.keys())[0]].values()]
   return values
+
 def get_bloodtype(dict):
   bt_dict = {k: dict.get(k, None) for k in dict.keys() if "BloodType_" in k}
 
@@ -45,7 +46,7 @@ class DefaultPatientService(MethodView):
       grp = src.get_group(id=grp_id)
 
       columns = {
-        'ID':'PatientCN',
+        'ID':'PatientICN',
         'Gender': 'Gender_M',
         "Age": "AgeAtIndexDate",
         'Vaccination_Status':'TotalSeriesCount',
@@ -86,7 +87,7 @@ class DetailedPatientService(MethodView):
       return_data = {}
 
       src = user['connection'].get_source(name=user['source_name_holdout'])
-      fs = src.create_filter_set([{'column_name':"PatientCN", "in_set": [str(patient_id)]}])
+      fs = src.create_filter_set([{'column_name':"PatientICN", "in_set": [str(patient_id)]}])
       export = src.export(filter_set=fs)
       if len(export['data']) == 0: raise NameError(f"Patient ({patient_id})not found!")
       
