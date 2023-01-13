@@ -161,7 +161,7 @@ class GraphService(MethodView):
       else:
         #TODO: Must use final network name for VA source
         #Place holder is OAA_1 here
-        grp_name = "OAA 1"
+        grp_name = user['network_name']
       
       if network_data['simplified']:
         print("Simplified")
@@ -217,7 +217,7 @@ class GraphService(MethodView):
       else:
         #TODO: Must use final network name for VA source
         #Place holder is OAA_1 here
-        grp_name = "OAA 1"
+        grp_name = user['network_name']
       
       if network_data['simplified']:
         print("Simplified")

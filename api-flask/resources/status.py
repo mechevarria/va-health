@@ -10,4 +10,7 @@ blp = Blueprint("status", __name__, description="Operations on status")
 class StatusService(MethodView):
   def get(self):
     print('in status')
-    return {'is_connected': user['connection'].is_connected, 'eureka_user': user['name'], 'eureka_url': user['api_url']}
+    return {'is_connected': user['connection'].is_connected,
+               'eureka_user': user['name'],
+               'eureka_url': user['api_url'],
+               'network_name': user['network_name']}

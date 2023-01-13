@@ -56,18 +56,30 @@ class FilterService(MethodView):
     #check to see if network exists
     nw = src.get_network(group['name'])
     if type(nw) == dict: 
-      network = src.create_network(group['name'],{
-                    'row_group_id': group['id'],
-                    'column_set_id': src.get_column_set(name='features')['id'],  #TODO - get column set from correct base network
-                    'metric': {'id': 'Angle'},
-                    'lenses': [{'resolution': 30, 'id': 'Metric PCA coord 1',
-                                'equalize': True, 'gain': 3.0},
-                              {'resolution': 30, 'id': 'Metric PCA coord 2',
-                                'equalize': True, 'gain': 3.0}]
-                      }
-                    )
-      
-      #TODO - Change from hard coded target to env or passed as param
+      # network = src.create_network(group['name'],{
+      #               'row_group_id': group['id'],
+      #               'column_set_id': src.get_column_set(name='features')['id'], 
+      #               'metric': {'id': 'Angle'},
+      #               'lenses': [{'resolution': 30, 'id': 'Metric PCA coord 1',
+      #                           'equalize': True, 'gain': 3.0},
+      #                         {'resolution': 30, 'id': 'Metric PCA coord 2',
+      #                           'equalize': True, 'gain': 3.0}]
+      #                 }
+      #               )
+      col_set_id = src.get_network(user['network_name']).column_set_id
+
+      # TODO: Metric and lense - Either get from env if affine or from nw if NOT affine
+      network = src.create_network(group['name'], {
+              'row_group_id': group['id'],
+              'column_set_id': col_set_id, 
+              'metric': {'id': 'Angle'},
+              'lenses': [{'resolution': 30, 'id': 'Metric PCA coord 1',
+                          'equalize': True, 'gain': 3.0},
+                        {'resolution': 30, 'id': 'Metric PCA coord 2',
+                          'equalize': True, 'gain': 3.0}]
+                }
+              )
+
       new_coloring = src.create_coloring(name='A1Clast_period2_to_4_change', column_name='A1Clast_period2_to_4_change')
       coloring_values = network.get_coloring_values(name='A1Clast_period2_to_4_change')
 
