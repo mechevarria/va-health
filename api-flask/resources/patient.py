@@ -100,7 +100,7 @@ class DetailedPatientService(MethodView):
       #patient physical details
       return_data['physical'] = {
           "Age": zipdict["AgeAtIndexDate"],
-          "Over Weight": zipdict["OverweightAtIndex"],
+          "Over Weight": "Yes" if zipdict["OverweightAtIndex"] == 1 else "No",
           "BMI": zipdict["BMIAtIndex"],
           "Gender": "Male" if zipdict["Gender_M"] == 1 else "Female",
           "BloodType": get_bloodtype(zipdict)
