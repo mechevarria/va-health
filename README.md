@@ -16,6 +16,7 @@ SOURCE_NAME="iris.csv"
 FLASK_APP="app.py"
 FLASK_DEBUG="1"
 SOURCE_NAME_HOLDOUT="va_health_test.csv"
+NETWORK_NAME="OAA 1"
 ```
 
 For local development, this script will start up the flask server
