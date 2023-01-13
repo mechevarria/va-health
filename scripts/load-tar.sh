@@ -13,9 +13,9 @@ docker rmi $api
 docker rmi $frontend
 
 echo "loading api.tar"
-docker load -i api.tar
+docker load -i ../export/api.tar
 
 echo "loading frontend.tar"
-docker load -i frontend.tar
+docker load -i ../export/frontend.tar
 
 docker images
