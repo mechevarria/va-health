@@ -2,6 +2,7 @@
 api-flask/.env
 scripts/.env
 **/*/__pycache__
+*.tar
 
 # node ignore
 frontend-vue/node_modules
