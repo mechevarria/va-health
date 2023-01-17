@@ -32,6 +32,42 @@ def get_bloodtype(dict):
   else:
     return None
 
+def get_carepath(d):
+    _dict = {}
+
+  # carepath_keys = natural_sort([c for c in zipdict.keys() if c.startswith("meds_")] + [c for c in zipdict.keys() if c.startswith("visits_count_V")])
+  # od = OrderedDict((k, zipdict[k]) for k  in carepath_keys if zipdict[k] > 0)
+    med_keys = natural_sort([c for c in d.keys() if c.startswith("meds_")])
+    med_dict = OrderedDict((k, d[k]) for k  in med_keys if d[k] > 0)
+
+    med_prefix = set([k.replace("_period1_2", '').replace("_period3", '') for k in med_dict.keys()])
+    suffix = ["_period1_2","_period3"]
+    
+    _ = {}
+    for kp in med_prefix:
+        #Check if prefix already in dict.  If not, then add
+        if (kp) not in _dict: _[kp]={}
+        for s in suffix: _[kp][s] = med_dict.get(kp+s, 0)
+            
+    _dict['meds'] = _
+    
+    visit_keys = natural_sort([c for c in d.keys() if (c.startswith("visits_count_") and "_proportion_" not in c)])
+    visit_dict = OrderedDict((k, d[k]) for k  in visit_keys if d[k] > 0)
+
+    visit_prefix = set([k.replace("_period1", '').replace("_period2", '').replace("_period3", '') for k in visit_dict.keys()])
+    suffix = ["_period1", "_period2", "_period3"]
+    
+    _ = {}
+    for kp in visit_prefix:
+        #Check if prefix already in dict.  If not, then add
+        if (kp) not in _: _[kp]={}
+        for s in suffix: _[kp][s] = visit_dict.get(kp+s, 0)
+    
+    _dict['visits'] = _
+    
+    return _dict
+
+
 @blp.route("/patient")
 class DefaultPatientService(MethodView):
   @blp.response(200, PatientCardSchema(many=True))
@@ -124,9 +160,7 @@ class DetailedPatientService(MethodView):
 
       return_data['comorbidities'] = {k: v for k, v in zipdict.items() if "2yrs" in k and v == 1}
       
-      carepath_keys = natural_sort([c for c in zipdict.keys() if c.startswith("meds_")] + [c for c in zipdict.keys() if c.startswith("visits_count_V")])
-
-      return_data['carepath'] = OrderedDict((k, zipdict[k]) for k  in carepath_keys if zipdict[k] > 0)
+      return_data['carepath'] = get_carepath(zipdict)
 
       return return_data
     except NameError:
