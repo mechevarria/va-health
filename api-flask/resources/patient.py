@@ -124,8 +124,9 @@ class DetailedPatientService(MethodView):
 
       return_data['comorbidities'] = {k: v for k, v in zipdict.items() if "2yrs" in k and v == 1}
       
-      carepath_keys = natural_sort([c for c in zipdict.keys() if c.startswith("meds_")] + [c for c in zipdict.keys() if c.startswith("visits_V")])
-      return_data['carepath'] = OrderedDict((k, zipdict[k]) for k  in carepath_keys)
+      carepath_keys = natural_sort([c for c in zipdict.keys() if c.startswith("meds_")] + [c for c in zipdict.keys() if c.startswith("visits_count_V")])
+
+      return_data['carepath'] = OrderedDict((k, zipdict[k]) for k  in carepath_keys if zipdict[k] > 0)
 
       return return_data
     except NameError:
