@@ -40,6 +40,7 @@ def compute_group_centroid(node_group: dict, network_nodes: list):
   return x, y
 
 def get_simplied_group_network(src, name, color_name):
+
   nw = src.get_network(name=name)
   node_groups = nw.get_node_groups()
 
@@ -78,7 +79,7 @@ def get_simplied_group_network(src, name, color_name):
   group_colors_values = [group_colors[k] for k in group_colors_keys]
   scaled_group_colors = norm_list(group_colors_values, 0, 1)
   scaled_group_colors = dict(zip(group_colors_keys, scaled_group_colors))
- 
+
   for e, k in enumerate(groups.keys()):
     nodes.append({'id': k, 'groupId': k, 'colorScale': scaled_group_colors[int(k)], "marker": { "radius": scaled_sizes[e]}, "plotX": centroid_x[e], "plotY": centroid_y[e]})
 
@@ -155,6 +156,7 @@ class GraphService(MethodView):
     try:
       src = user['connection'].get_source(name=user['source_name'])
 
+      print("network_data: ", network_data)
       if "filter_id" in network_data:
         grp = src.get_group(id=network_data['filter_id'])
         grp_name = grp['name']
@@ -171,6 +173,7 @@ class GraphService(MethodView):
         print("Regular")
         #get network nodes
         data, nodes = get_normal_network(src, grp_name, network_data['color_name'])
+      print("C")
 
       network_data['data'] = data
       network_data['nodes'] = nodes

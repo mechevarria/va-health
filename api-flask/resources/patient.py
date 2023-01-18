@@ -51,8 +51,18 @@ def get_carepath(d):
             
     _dict['meds'] = _
     
-    visit_keys = natural_sort([c for c in d.keys() if (c.startswith("visits_count_") and "_proportion_" not in c)])
-    visit_dict = OrderedDict((k, d[k]) for k  in visit_keys if d[k] > 0)
+    visit_keys = ['visits_count_Phone_period1', 'visits_count_Phone_period2', 'visits_count_Phone_period3',
+                    'visits_count_Presumed In Person_period1', 'visits_count_Presumed In Person_period2', 'visits_count_Presumed In Person_period3',
+                    'visits_count_VVC_period1', 'visits_count_VVC_period2', 'visits_count_VVC_period3',
+                    'visits_count_comorbiditiescare_period1', 'visits_count_directcare_period2', 'visits_count_lifestylecare_period3'
+                    ]
+
+    # visit_keys = natural_sort([c for c in d.keys() if (c.startswith("visits_count_Phone"))] + 
+    #                           [c for c in d.keys() if (c.startswith("visits_count_Presumed"))] + 
+    #                           [c for c in d.keys() if (c.startswith("visits_count_VVC"))])
+
+    # visit_dict = OrderedDict((k, d[k]) for k  in visit_keys if d[k] > 0)
+    visit_dict = OrderedDict((k, d[k]) for k  in visit_keys)
 
     visit_prefix = set([k.replace("_period1", '').replace("_period2", '').replace("_period3", '') for k in visit_dict.keys()])
     suffix = ["_period1", "_period2", "_period3"]
@@ -85,7 +95,7 @@ class DefaultPatientService(MethodView):
         'ID':'PatientICN',
         'Gender': 'Gender_M',
         "Age": "AgeAtIndexDate",
-        'Vaccination_Status':'TotalSeriesCount',
+        'Vaccination_Status':'covid_vaccine_TotalSeriesCount',
         'Race':'Race',
         'Ethnicity':'Ethnicity',
         'Marital_Status':'MaritalStatus',
@@ -126,7 +136,7 @@ class DetailedPatientService(MethodView):
       fs = src.create_filter_set([{'column_name':"PatientICN", "in_set": [str(patient_id)]}])
       export = src.export(filter_set=fs)
       if len(export['data']) == 0: raise NameError(f"Patient ({patient_id})not found!")
-      
+
       keys = [src.id_to_colnames[cid] for cid in export['column_indices']]
       values = [d[0] for d in export['data']]
 
@@ -136,8 +146,8 @@ class DetailedPatientService(MethodView):
       #patient physical details
       return_data['physical'] = {
           "Age": zipdict["AgeAtIndexDate"],
-          "Over Weight": "Yes" if zipdict["OverweightAtIndex"] == 1 else "No",
-          "BMI": zipdict["BMIAtIndex"],
+          "Over Weight": "Yes" if zipdict["conditions_pre_OverweightAtIndex"] == 1 else "No",
+          "BMI": zipdict["vitals_BMIAtIndex"],
           "Gender": "Male" if zipdict["Gender_M"] == 1 else "Female",
           "BloodType": get_bloodtype(zipdict)
           }
@@ -158,9 +168,10 @@ class DetailedPatientService(MethodView):
 
       return_data['raw'] = zipdict
 
-      return_data['comorbidities'] = {k: v for k, v in zipdict.items() if "2yrs" in k and v == 1}
+      return_data['comorbidities'] = {k.replace("conditions_pre_", ""): v for k, v in zipdict.items() if "conditions" in k and v == 1}
       
       return_data['carepath'] = get_carepath(zipdict)
+      print(9)
 
       return return_data
     except NameError:
