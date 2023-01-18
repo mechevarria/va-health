@@ -6,7 +6,7 @@ import re
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from schemas import PatientCardSchema
+from schemas import PatientCardSchema, DetailedPatientSchema
 
 from globals import user, get_all_group_id
 
@@ -256,20 +256,22 @@ class DefaultPatientService(MethodView):
       abort(404, message="Error getting Patients from source")
 
 
-@blp.route("/patient/<string:patient_id>")
+@blp.route("/patient")
 class DetailedPatientService(MethodView):
   '''Gets patient detail values the specific patient id'''
+  @blp.arguments(DetailedPatientSchema)
   @blp.response(200)
-  def get(self, patient_id):
+  def post(self, patient_data):
     print("In call")
     '''Gets all KPI values the source'''
+    pid = str(patient_data['patient_id'])
     try:
       return_data = {}
 
       src = user['connection'].get_source(name=user['source_name_holdout'])
-      fs = src.create_filter_set([{'column_name':"PatientICN", "in_set": [str(patient_id)]}])
+      fs = src.create_filter_set([{'column_name':"PatientICN", "in_set": [pid]}])
       export = src.export(filter_set=fs)
-      if len(export['data']) == 0: raise NameError(f"Patient ({patient_id})not found!")
+      if len(export['data']) == 0: raise NameError(f"Patient ({pid})not found!")
 
       keys = [src.id_to_colnames[cid] for cid in export['column_indices']]
       values = [d[0] for d in export['data']]
@@ -305,8 +307,7 @@ class DetailedPatientService(MethodView):
       return_data['comorbidities'] = {k.replace("conditions_pre_", ""): v for k, v in zipdict.items() if "conditions" in k and v == 1}
       return_data['carepath'] = get_carepath(zipdict)
 
-      #TODO: need to get/specify behaviors
-      if True:
+      if patient_data['neighbor_criteria'] == 'meds':
         behavior_keys = [k for k in zipdict.keys() if k.startswith('nn1_')]
       else:
         behavior_keys = [k for k in zipdict.keys() if k.startswith('nn2_')]
@@ -316,7 +317,7 @@ class DetailedPatientService(MethodView):
 
       return return_data
     except NameError:
-      abort(400, message=f"Patient ({patient_id}) not found!")
+      abort(400, message=f"Patient ({pid}) not found!")
 
     except:
-      abort(404, message=f"Error getting Patient ({patient_id}) data from source")
+      abort(404, message=f"Error getting Patient ({pid}) data from source")

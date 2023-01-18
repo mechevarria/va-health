@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, validate
 
 class KpiCardSchema(Schema):
     name=fields.Str(required=True)
@@ -43,6 +43,10 @@ class NetworkSchema(Schema):
     simplified=fields.Bool(required=True)
     # data=fields.List(dump_only=True)
     # nodes=fields.Nested(GraphNodeSchema(), dump_only=True)
+
+class DetailedPatientSchema(Schema):
+    patient_id=fields.Str(required=True)
+    neighbor_criteria = fields.Str(validate=validate.OneOf(["meds", "visits"]), required=True)
 
 class PatientCardSchema(Schema):
     ID=fields.Str(required=True)
