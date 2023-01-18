@@ -51,9 +51,6 @@ def get_carepath(d):
       for s in suffix: _[mp.replace('meds_', "")][s] = med_dict.get(mp+s, 0)
             
     _dict['diabetic_meds'] = _
-    print(_dict.keys())
-    print(_dict)
-    print()
     #NON diabetic meds
     non_diabetic_med_keys = natural_sort([c for c in d.keys() if (c.startswith("meds_pre") 
                                                  or c.startswith("meds_post") 
@@ -84,9 +81,6 @@ def get_carepath(d):
         _[mp]={'pre': pre, 'post': post}
 
     _dict['meds'] = _
-    print(_dict.keys())
-    print(_dict)
-    print()
     #Visits
     visit_keys = ['visits_count_Phone_period1', 'visits_count_Phone_period2', 'visits_count_Phone_period3',
                     'visits_count_Presumed In Person_period1', 'visits_count_Presumed In Person_period2', 'visits_count_Presumed In Person_period3',
@@ -108,27 +102,11 @@ def get_carepath(d):
         for s in suffix: _[kp][s] = visit_dict.get(kp+s, 0)
     
     _dict['visits'] = _
-    print(_dict.keys())
-    print(_dict)
-    print()
     return _dict
 
-def get_consesus_carepath(d, behavior_keys):
+def compute_carepath_from_dataframe(d, df):
     _dict = {}
     
-    #get list of nearest neighbors ids
-    nn_ids = [str(d[k]) for k in behavior_keys]
-
-    src = user['connection'].get_source(name=user['source_name_holdout'])
-    #create filter set based on ids
-    fs = src.create_filter_set([{'column_name':"PatientICN", "in_set": nn_ids}])
-    export = src.export(filter_set=fs)
-    if len(export['data']) == 0: raise NameError(f"Patient neighbors not found!")
-
-    #convert export to pandas dataframe
-    cols = [src.id_to_colnames[i] for i in export['column_indices']]
-    df = pd.DataFrame(export['data'], index=cols).T
-
     #get DIABETIC MED meds for carepath
     diabetic_med_keys = natural_sort([c for c in d.keys() if (c.startswith("meds_") 
                                                  and not c.startswith("meds_pre") 
@@ -146,7 +124,7 @@ def get_consesus_carepath(d, behavior_keys):
 
     _dict['diabetic_meds'] = _
 
-    #get NON DIABETIC MED meds for carepath
+        #get NON DIABETIC MED meds for carepath
     #only show now diabetic meds with numbers > 0.7 for either pre/post
     non_diabetic_med_keys = natural_sort([c for c in d.keys() if (c.startswith("meds_pre") 
                                                  or c.startswith("meds_post") 
@@ -177,7 +155,6 @@ def get_consesus_carepath(d, behavior_keys):
                       
     _dict['meds'] = _
 
-
     #Get consensus visits carepaths
     visit_prefix = ['visits_count_Phone', 'visits_count_Presumed In Person', 'visits_count_VVC',
               'visits_count_comorbiditiescare', 'visits_count_directcare', 'visits_count_lifestylecare']
@@ -192,6 +169,44 @@ def get_consesus_carepath(d, behavior_keys):
     _dict['visits'] = _
 
     return _dict
+
+def get_consesus_carepath(d, behavior_keys):
+    
+    #get list of nearest neighbors ids
+    nn_ids = [str(d[k]) for k in behavior_keys]
+
+    src = user['connection'].get_source(name=user['source_name_holdout'])
+    #create filter set based on ids
+    fs = src.create_filter_set([{'column_name':"PatientICN", "in_set": nn_ids}])
+    export = src.export(filter_set=fs)
+    if len(export['data']) == 0: raise NameError(f"Patient neighbors not found!")
+
+    #convert export to pandas dataframe
+    cols = [src.id_to_colnames[i] for i in export['column_indices']]
+    df = pd.DataFrame(export['data'], index=cols).T
+
+    return compute_carepath_from_dataframe(d, df)
+
+
+def get_ai_recommended_carepath(d, behavior_keys):
+    
+    #get list of nearest neighbors ids
+    nn_ids = [str(d[k]) for k in behavior_keys]
+
+    src = user['connection'].get_source(name=user['source_name_holdout'])
+    #create filter set based on ids
+    fs = src.create_filter_set([{'column_name':"PatientICN", "in_set": nn_ids}])
+    export = src.export(filter_set=fs)
+    if len(export['data']) == 0: raise NameError(f"Patient neighbors not found!")
+
+    #convert export to pandas dataframe
+    cols = [src.id_to_colnames[i] for i in export['column_indices']]
+    df = pd.DataFrame(export['data'], index=cols).T
+    print("df shape before filter:", df.shape)
+    df = df[df['Is_increase_A1Clast_period3_to_4_change'] == 0]
+    print("df shape after filter:", df.shape)
+
+    return compute_carepath_from_dataframe(d, df)
 
 
 @blp.route("/patient")
@@ -296,7 +311,8 @@ class DetailedPatientService(MethodView):
       else:
         behavior_keys = [k for k in zipdict.keys() if k.startswith('nn2_')]
 
-      return_data['consensus_carepath'] = get_consesus_carepath(zipdict, behavior_keys)
+      return_data['carepath_consensus'] = get_consesus_carepath(zipdict, behavior_keys)
+      return_data['carepath_recommended'] = get_ai_recommended_carepath(zipdict, behavior_keys)
 
       return return_data
     except NameError:
