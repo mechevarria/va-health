@@ -53,3 +53,5 @@ class PatientCardSchema(Schema):
     Ethnicity=fields.Str(required=True)
     Marital_Status=fields.Str(required=True)
     Rurality=fields.Str(required=True)
+    A1C_Increase_Risk=fields.Str(required=True)
+    Engagement_Decrease_Risk=fields.Str(required=True)
