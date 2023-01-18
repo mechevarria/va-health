@@ -100,6 +100,8 @@ class DefaultPatientService(MethodView):
         'Ethnicity':'Ethnicity',
         'Marital_Status':'MaritalStatus',
         'Rurality':'Rurality',
+        "A1C_Increase_Risk": "Risk_score_is_increase_A1Clast_period3_to_4_change",
+        "Engagement_Decrease_Risk": "Risk_score_is_decrease_visits_count_permonth_period3_to_4_change"
       }
 
       for k, v in columns.items():
@@ -113,7 +115,7 @@ class DefaultPatientService(MethodView):
           _ = ["Male" if (i == 1) else "Female" for i in _ ]
         values[k] = _
 
-
+      
       df = pd.DataFrame(values)
       df.apply(pd.Series.explode).to_dict(orient='records')
 
