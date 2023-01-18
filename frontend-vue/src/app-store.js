@@ -131,7 +131,8 @@ const store = new Vuex.Store({
             inputMin: 20,
             max: 90,
             inputMax: 120,
-            enabled: false
+            enabled: false,
+            percentage: false
         }, {
             name: 'A1C_last_period4',
             label: 'A1C',
@@ -140,7 +141,8 @@ const store = new Vuex.Store({
             inputMin: 4,
             max: 15,
             inputMax: 22,
-            enabled: false
+            enabled: false,
+            percentage: false
         }, {
             label: 'Vaccination Status',
             name: 'covid_vaccine_TotalSeriesCount',
@@ -149,7 +151,8 @@ const store = new Vuex.Store({
             inputMin: 0,
             max: 3,
             inputMax: 3,
-            enabled: false
+            enabled: false,
+            percentage: false
         },{
             name: 'covid_post_procedures_Hospitalization60d',
             label: 'Hospitalizations',
