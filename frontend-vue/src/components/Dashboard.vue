@@ -205,6 +205,7 @@ export default {
           } else {
             postFilter.min = filter.min
             postFilter.max = filter.max
+            postFilter.percentage = filter.percentage
           }
 
           postFilters.push(postFilter)
