@@ -111,6 +111,8 @@ class FilterService(MethodView):
   @blp.response(200, AppliedFilter)
   def post(self, filter_data):
     #check each filter to make sure categorical and numeric formatted correctly
+    print(filter_data)
+    
     for filter in filter_data['filters']:
       if filter['categorical']:
         if not('value' in filter.keys() and 'is_equal' in filter.keys()):

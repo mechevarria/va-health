@@ -19,6 +19,7 @@ class FilterSchema(Schema):
     
     min=fields.Float(required=False)
     max=fields.Float(required=False)
+    percentage=fields.Bool(required=False)
 
 class AppliedFilter(Schema):
     id=fields.Str(dump_only=True)

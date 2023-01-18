@@ -133,7 +133,7 @@ const store = new Vuex.Store({
             inputMax: 120,
             enabled: false
         }, {
-            name: 'A1C_last_period4_2021-03-01_2022-03-01',
+            name: 'A1C_last_period4',
             label: 'A1C',
             categorical: false,
             min: 5,
@@ -143,7 +143,7 @@ const store = new Vuex.Store({
             enabled: false
         }, {
             label: 'Vaccination Status',
-            name: 'TotalSeriesCount',
+            name: 'covid_vaccine_TotalSeriesCount',
             categorical: false,
             min: 0,
             inputMin: 0,
@@ -151,7 +151,7 @@ const store = new Vuex.Store({
             inputMax: 3,
             enabled: false
         },{
-            name: 'Hospitalization60d',
+            name: 'covid_post_procedures_Hospitalization60d',
             label: 'Hospitalizations',
             categorical: true,
             value: '0',
@@ -164,7 +164,7 @@ const store = new Vuex.Store({
             enabled: false
         },{
             label: 'In-Person Visit %',
-            name: 'visits_count_proportion_Presumed In Person_period4_2021-03-01_2022-03-01',
+            name: 'visits_count_proportion_Presumed In Person_period3',
             categorical: false,
             min: 0,
             inputMin: 0,
