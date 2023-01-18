@@ -130,16 +130,60 @@
         </div>
       </div>
     </div>
-    <div class="card">
-      <div class="card-body">
-        <strong class="mb-2">Medicines</strong>
-        <pre>{{ data.carepath.meds }}</pre>
+    <div class="card-deck mb-4">
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text">
+            <strong class="mb-2">Medicines</strong>
+            <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
+          </p>
+          <table class="table table-striped">
+            <tr>
+              <th>Medicine</th>
+              <th>Period 1/2</th>
+              <th>Period 3</th>
+            </tr>
+            <tbody>
+              <tr
+                v-for="(entry, index) in Object.entries(data.carepath.meds)"
+                :key="index"
+              >
+                <td>{{ entry[0] }}</td>
+                <td>{{ entry[1]._period1_2 }}</td>
+                <td>{{ entry[1]._period3 }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- <pre>{{ data.carepath.meds }}</pre> -->
+        </div>
       </div>
-    </div>
-    <div class="card">
-      <div class="card-body">
-        <strong class="mb-2">Visits</strong>
-        <pre>{{ data.carepath.visits }}</pre>
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text">
+            <strong class="mb-2">Visits</strong>
+            <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
+          </p>
+          <table class="table table-striped">
+            <tr>
+              <th>Visit Type</th>
+              <th>Period 1</th>
+              <th>Period 2</th>
+              <th>Period 3</th>
+            </tr>
+            <tbody>
+              <tr
+                v-for="(entry, index) in Object.entries(data.carepath.visits)"
+                :key="index"
+              >
+                <td>{{ entry[0] }}</td>
+                <td>{{ entry[1]._period1 }}</td>
+                <td>{{ entry[1]._period2 }}</td>
+                <td>{{ entry[1]._period3 }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <!-- <pre>{{ data.carepath.visits }}</pre> -->
+        </div>
       </div>
     </div>
   </div>
@@ -159,7 +203,11 @@ export default {
         demographics: {},
         risk_scores: {},
         comorbidities: {},
-        raw: {}
+        raw: {},
+        carepath: {
+          meds: {},
+          visits: {}
+        }
       },
       isBusy: true
     }
