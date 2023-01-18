@@ -39,7 +39,10 @@ class FilterService(MethodView):
       if filter['categorical']:
         _fds.append({"column_name": filter["name"], "in_set": [filter['value']], "not": not filter["is_equal"]})
       else:
-        _fds.append({"column_name": filter["name"], "in_range": [filter["min"], filter["max"]]})
+        if filter.get("percentage", False):
+          _fds.append({"column_name": filter["name"], "in_range": [filter["min"] / 100, filter["max"] / 100]})
+        else:
+          _fds.append({"column_name": filter["name"], "in_range": [filter["min"], filter["max"]]})
 
     return _fds
 
@@ -112,7 +115,7 @@ class FilterService(MethodView):
   def post(self, filter_data):
     #check each filter to make sure categorical and numeric formatted correctly
     print(filter_data)
-    
+
     for filter in filter_data['filters']:
       if filter['categorical']:
         if not('value' in filter.keys() and 'is_equal' in filter.keys()):
