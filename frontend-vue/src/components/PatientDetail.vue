@@ -78,7 +78,7 @@
         </div>
       </div>
     </div>
-    <div class="card-deck">
+    <div class="card-deck mb-4">
       <div class="card">
         <div class="card-body">
           <p class="card-text">
@@ -128,6 +128,18 @@
             >
           </p>
         </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <strong class="mb-2">Medicines</strong>
+        <pre>{{ data.carepath.meds }}</pre>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <strong class="mb-2">Visits</strong>
+        <pre>{{ data.carepath.visits }}</pre>
       </div>
     </div>
   </div>
