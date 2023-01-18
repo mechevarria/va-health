@@ -27,7 +27,14 @@
             bordered
             ref="table"
             @row-clicked="onRowClick"
-          ></b-table>
+          >
+            <template #cell(A1C_Increase_Risk)="data">
+              <span class="badge rounded-pill text-white" :class="getClassName(data.value)">{{ data.value }}</span>
+            </template>
+            <template #cell(Engagement_Decrease_Risk)="data">
+              <span class="badge rounded-pill text-white" :class="getClassName(data.value)">{{ data.value }}</span>
+            </template>
+          </b-table>
           <div class="d-flex">
             <b-pagination
               v-model="currentPage"
@@ -86,6 +93,16 @@ export default {
           key: 'Vaccination_Status',
           label: 'Vaccination Status',
           sortable: true
+        },
+        {
+          key: 'A1C_Increase_Risk',
+          label: 'A1C Increase Risk',
+          sortable: true
+        },
+        {
+          key: 'Engagement_Decrease_Risk',
+          label: 'Engagement Decrease Risk',
+          sortable: true
         }
       ]
     }
@@ -93,6 +110,18 @@ export default {
   methods: {
     onRowClick(row) {
       this.$router.push(`/home/patient/${row.ID}`)
+    },
+    getClassName(score) {
+      switch (true) {
+        case score < 0.333:
+          return 'bg-success'
+        case score > 0.333 && score < 0.666:
+          return 'bg-warning'
+        case score > 0.666:
+          return 'bg-danger'
+        default:
+          return 'c-callout-info'
+      }
     },
     getData() {
       this.isBusy = true
