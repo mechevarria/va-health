@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <span>
     <div class="card-deck mb-4">
       <div class="card">
         <div class="card-body">
@@ -77,43 +77,31 @@
           </span>
         </div>
       </div>
-    </div>
-    <div class="card-deck mb-4">
+
       <div class="card">
         <div class="card-body">
           <p class="card-text">
             <strong class="mb-2">Risk Scores</strong>
             <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
           </p>
-          <div class="row">
-            <div class="col-md-5">
-              <div
-                class="c-callout"
-                :class="getClassName(data.risk_scores.a1c_increase_risk)"
-              >
-                <small class="text-muted">A1C Increase Risk</small><br />
-                <strong class="h4">{{
-                  data.risk_scores.a1c_increase_risk
-                }}</strong>
-              </div>
-            </div>
-            <!--/.col-->
-            <div class="col-md-7">
-              <div
-                class="c-callout"
-                :class="getClassName(data.risk_scores.engagement_decrease_risk)"
-              >
-                <small class="text-muted">Engagement Decrease Risk</small><br />
-                <strong class="h4">{{
-                  data.risk_scores.engagement_decrease_risk
-                }}</strong>
-              </div>
-            </div>
-            <!--/.col-->
+          <div
+            class="c-callout mb-4 mt-4"
+            :class="getClassName(data.risk_scores.a1c_increase_risk)"
+          >
+            <small class="text-muted">A1C Increase Risk</small><br />
+            <strong class="h4">{{ data.risk_scores.a1c_increase_risk }}</strong>
+          </div>
+          <div
+            class="c-callout"
+            :class="getClassName(data.risk_scores.engagement_decrease_risk)"
+          >
+            <small class="text-muted">Engagement Decrease Risk</small><br />
+            <strong class="h4">{{
+              data.risk_scores.engagement_decrease_risk
+            }}</strong>
           </div>
         </div>
       </div>
-
       <div class="card">
         <div class="card-body">
           <p class="card-text">
@@ -130,6 +118,7 @@
         </div>
       </div>
     </div>
+    <h5>Carepath</h5>
     <div class="card-deck mb-4">
       <div class="card">
         <div class="card-body">
@@ -140,7 +129,7 @@
           <table class="table table-striped">
             <tr>
               <th>Medicine</th>
-              <th>Period 1/2</th>
+              <th>Period 1 - 2</th>
               <th>Period 3</th>
             </tr>
             <tbody>
@@ -154,7 +143,6 @@
               </tr>
             </tbody>
           </table>
-          <!-- <pre>{{ data.carepath.meds }}</pre> -->
         </div>
       </div>
       <div class="card">
@@ -182,11 +170,25 @@
               </tr>
             </tbody>
           </table>
-          <!-- <pre>{{ data.carepath.visits }}</pre> -->
         </div>
       </div>
     </div>
-  </div>
+    <b-form-group label="Nearest Neighbor Criteria for Consensus and Recommended Carepaths">
+      <b-form-radio-group
+        v-model="selectedCriteria"
+        :options="criteriaOptions"
+        class="mb-3"
+        value-field="item"
+        text-field="name"
+        :disabled="isBusy"
+        button-variant="outline-primary"
+        buttons
+      ></b-form-radio-group>
+    </b-form-group>
+    <h5>Consensus Carepath</h5>
+    <h5>Recommended Carepath</h5>
+    <pre>{{ data }}</pre>
+  </span>
 </template>
 <script>
 import axios from 'axios'
@@ -198,6 +200,11 @@ export default {
   data() {
     return {
       id: 0,
+      selectedCriteria: 'meds',
+      criteriaOptions: [
+        { item: 'meds', name: 'Medicines' },
+        { item: 'visits', name: 'Visits' }
+      ],
       data: {
         physical: {},
         demographics: {},
@@ -225,11 +232,15 @@ export default {
           return 'c-callout-info'
       }
     },
-    getDetails() {
+    postDetails() {
       this.isBusy = true
-      const url = `/api/patient/${this.id}`
+      const url = '/api/patient'
+      const body = {
+        patient_id: this.id,
+        neighbor_criteria: this.selectedCriteria
+      }
       axios
-        .get(url)
+        .post(url, body)
         .then((res) => {
           this.data = res.data
         })
@@ -243,12 +254,8 @@ export default {
     }
   },
   created() {
-    this.$root.$on('bg::checkbox::change', (id, values) => {
-      console.log('id:', id)
-      console.log('values:', values)
-    })
     this.id = this.$route.params.id
-    this.getDetails()
+    this.postDetails()
   }
 }
 </script>
