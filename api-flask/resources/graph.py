@@ -1,3 +1,4 @@
+import scipy.stats as stats
 from itertools import combinations
 
 from flask import request
@@ -17,6 +18,12 @@ def norm_list(the_list, new_min_value=0, new_max_value=1, return_int = False):
   scaled_values = [ (v - min_value) / delta_value * (new_max_value - new_min_value) + new_min_value for v in  the_list]
   if return_int: scaled_values = [round(i) for i in scaled_values]
   return scaled_values
+
+def scale_colors(colors):
+  zscaled_colors = stats.zscore(colors)
+  #using c/abs(c) to determine the sign of c 
+  zscaled_colors = [c if abs(c) < 2 else c/abs(c) * 2 for c in stats.zscore(zscaled_colors)]
+  return norm_list(zscaled_colors)
 
 def get_group_coloring(src, groups: list, column_name: str):
     _colors={}
@@ -77,7 +84,8 @@ def get_simplied_group_network(src, name, color_name):
   group_colors_keys = [k for k in group_colors.keys()]
 
   group_colors_values = [group_colors[k] for k in group_colors_keys]
-  scaled_group_colors = norm_list(group_colors_values, 0, 1)
+  # scaled_group_colors = norm_list(group_colors_values, 0, 1)
+  scaled_group_colors = group_colors_values
   scaled_group_colors = dict(zip(group_colors_keys, scaled_group_colors))
 
   for e, k in enumerate(groups.keys()):
@@ -106,7 +114,7 @@ def get_normal_network(src, name, color_name):
   outcome_coloring = src.create_coloring(name=color_name, column_name=color_name)
   coloring_values = nw.get_coloring_values(name=color_name)
   #scale coloring between zero and 1
-  norm_coloring_values = norm_list(coloring_values)
+  norm_coloring_values = scale_colors(coloring_values)
 
   #Get plotX and plotY values
   x = [v['x'] for v in nw.nodes]
