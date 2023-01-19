@@ -82,19 +82,19 @@ const store = new Vuex.Store({
                 value: 'DIVORCED', text: 'Divorced'
             }, {
                 value: 'MARRIED', text: 'Married'
-            },{
+            }, {
                 value: 'NEVER MARRIED', text: 'Never Married'
-            },{
+            }, {
                 value: 'SEPERATED', text: 'Seperated'
-            },{
+            }, {
                 value: 'SINGLE', text: 'Single'
             }, {
                 value: 'UNKNOWN', text: 'Unknown'
             }, {
                 value: 'WIDOW/WIDOWER', text: 'Widow/Widower'
-            },{
+            }, {
                 value: 'WIDOWED', text: 'Widowed'
-            },{
+            }, {
                 value: '"Missing"', text: 'Missing'
             }],
             boolOptions: [{
@@ -153,7 +153,7 @@ const store = new Vuex.Store({
             inputMax: 3,
             enabled: false,
             percentage: false
-        },{
+        }, {
             name: 'covid_post_procedures_Hospitalization60d',
             label: 'Hospitalizations',
             categorical: true,
@@ -165,7 +165,7 @@ const store = new Vuex.Store({
             }],
             is_equal: true,
             enabled: false
-        },{
+        }, {
             label: 'In-Person Visit %',
             name: 'visits_count_proportion_Presumed In Person_period3',
             categorical: false,
