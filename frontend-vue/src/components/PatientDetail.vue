@@ -129,8 +129,8 @@
           <table class="table table-striped">
             <tr>
               <th>Medicine</th>
-              <th>Period 1 - 2</th>
-              <th>Period 3</th>
+              <th>Pre</th>
+              <th>Post</th>
             </tr>
             <tbody>
               <tr
@@ -138,8 +138,33 @@
                 :key="index"
               >
                 <td>{{ entry[0] }}</td>
-                <td>{{ entry[1]._period1_2 }}</td>
-                <td>{{ entry[1]._period3 }}</td>
+                <td><i class="cil-check-circle text-primary" v-if="entry[1].pre == 1"></i></td>
+                <td><i class="cil-check-circle text-primary" v-if="entry[1].post == 1"></i></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text">
+            <strong class="mb-2">Diabetic Medicines</strong>
+            <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
+          </p>
+          <table class="table table-striped">
+            <tr>
+              <th>Medicine</th>
+              <th>Period 1 - 2</th>
+              <th>Period 3</th>
+            </tr>
+            <tbody>
+              <tr
+                v-for="(entry, index) in Object.entries(data.carepath.diabetic_meds)"
+                :key="index"
+              >
+                <td>{{ entry[0] }}</td>
+                <td><i class="cil-check-circle text-primary" v-if="entry[1]._period1_2 == 1"></i></td>
+                <td><i class="cil-check-circle text-primary" v-if="entry[1]._period3 == 1"></i></td>
               </tr>
             </tbody>
           </table>
@@ -164,20 +189,23 @@
                 :key="index"
               >
                 <td>{{ entry[0] }}</td>
-                <td>{{ entry[1]._period1 }}</td>
-                <td>{{ entry[1]._period2 }}</td>
-                <td>{{ entry[1]._period3 }}</td>
+                <td><i class="cil-check-circle text-primary" v-if="entry[1].period1 == 1"></i></td>
+                <td><i class="cil-check-circle text-primary" v-if="entry[1].period2 == 1"></i></td>
+                <td><i class="cil-check-circle text-primary" v-if="entry[1].period3 == 1"></i></td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
-    <b-form-group label="Nearest Neighbor Criteria for Consensus and Recommended Carepaths">
+    <hr/>
+    <b-form-group
+      label="Nearest Neighbor Criteria for Consensus and Recommended Carepaths"
+    >
       <b-form-radio-group
         v-model="selectedCriteria"
         :options="criteriaOptions"
-        class="mb-3"
+        class="mb-1"
         value-field="item"
         text-field="name"
         :disabled="isBusy"
@@ -186,7 +214,165 @@
       ></b-form-radio-group>
     </b-form-group>
     <h5>Consensus Carepath</h5>
+    <div class="card-deck mb-4">
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text">
+            <strong class="mb-2">Medicines</strong>
+            <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
+          </p>
+          <table class="table table-striped">
+            <tr>
+              <th>Medicine</th>
+              <th>Pre</th>
+              <th>Post</th>
+            </tr>
+            <tbody>
+              <tr
+                v-for="(entry, index) in Object.entries(data.carepath_consensus.meds)"
+                :key="index"
+              >
+                <td>{{ entry[0] }}</td>
+                <td><b-progress show-progress :value="entry[1].pre" variant="primary" :max="1"></b-progress></td>
+                <td><b-progress show-progress :value="entry[1].post" variant="primary" :max="1"></b-progress></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text">
+            <strong class="mb-2">Diabetic Medicines</strong>
+            <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
+          </p>
+          <table class="table table-striped">
+            <tr>
+              <th>Medicine</th>
+              <th>Period 1 - 2</th>
+              <th>Period 3</th>
+            </tr>
+            <tbody>
+              <tr
+                v-for="(entry, index) in Object.entries(data.carepath_consensus.diabetic_meds)"
+                :key="index"
+              >
+                <td>{{ entry[0] }}</td>
+                <td><b-progress show-progress :value="entry[1]._period1_2" variant="primary" :max="1"></b-progress></td>
+                <td><b-progress show-progress :value="entry[1]._period3" variant="primary" :max="1"></b-progress></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text">
+            <strong class="mb-2">Visits</strong>
+            <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
+          </p>
+          <table class="table table-striped">
+            <tr>
+              <th>Visit Type</th>
+              <th>Period 1</th>
+              <th>Period 2</th>
+              <th>Period 3</th>
+            </tr>
+            <tbody>
+              <tr
+                v-for="(entry, index) in Object.entries(data.carepath_consensus.visits)"
+                :key="index"
+              >
+                <td>{{ entry[0] }}</td>
+                <td><b-progress show-progress :value="entry[1].period1" variant="primary" :max="1"></b-progress></td>
+                <td><b-progress show-progress :value="entry[1].period2" variant="primary" :max="1"></b-progress></td>
+                <td><b-progress show-progress :value="entry[1].period3" variant="primary" :max="1"></b-progress></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
     <h5>Recommended Carepath</h5>
+    <div class="card-deck mb-4">
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text">
+            <strong class="mb-2">Medicines</strong>
+            <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
+          </p>
+          <table class="table table-striped">
+            <tr>
+              <th>Medicine</th>
+              <th>Pre</th>
+              <th>Post</th>
+            </tr>
+            <tbody>
+              <tr
+                v-for="(entry, index) in Object.entries(data.carepath_recommended.meds)"
+                :key="index"
+              >
+                <td>{{ entry[0] }}</td>
+                <td><b-progress show-progress :value="entry[1].pre" variant="primary" :max="1"></b-progress></td>
+                <td><b-progress show-progress :value="entry[1].post" variant="primary" :max="1"></b-progress></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text">
+            <strong class="mb-2">Diabetic Medicines</strong>
+            <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
+          </p>
+          <table class="table table-striped">
+            <tr>
+              <th>Medicine</th>
+              <th>Period 1 - 2</th>
+              <th>Period 3</th>
+            </tr>
+            <tbody>
+              <tr
+                v-for="(entry, index) in Object.entries(data.carepath_recommended.diabetic_meds)"
+                :key="index"
+              >
+                <td>{{ entry[0] }}</td>
+                <td><b-progress show-progress :value="entry[1]._period1_2" variant="primary" :max="1"></b-progress></td>
+                <td><b-progress show-progress :value="entry[1]._period3" variant="primary" :max="1"></b-progress></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <p class="card-text">
+            <strong class="mb-2">Visits</strong>
+            <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
+          </p>
+          <table class="table table-striped">
+            <tr>
+              <th>Visit Type</th>
+              <th>Period 1</th>
+              <th>Period 2</th>
+              <th>Period 3</th>
+            </tr>
+            <tbody>
+              <tr
+                v-for="(entry, index) in Object.entries(data.carepath_recommended.visits)"
+                :key="index"
+              >
+                <td>{{ entry[0] }}</td>
+                <td><b-progress show-progress :value="entry[1].period1" variant="primary" :max="1"></b-progress></td>
+                <td><b-progress show-progress :value="entry[1].period2" variant="primary" :max="1"></b-progress></td>
+                <td><b-progress show-progress :value="entry[1].period3" variant="primary" :max="1"></b-progress></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
     <pre>{{ data }}</pre>
   </span>
 </template>
@@ -205,21 +391,35 @@ export default {
         { item: 'meds', name: 'Medicines' },
         { item: 'visits', name: 'Visits' }
       ],
-      data: {
+      data: {},
+      isBusy: true
+    }
+  },
+  methods: {
+    clearData() {
+      this.data = {
         physical: {},
         demographics: {},
         risk_scores: {},
         comorbidities: {},
         raw: {},
         carepath: {
+          diabetic_meds: {},
+          meds: {},
+          visits: {}
+        },
+        carepath_consensus: {
+          diabetic_meds: {},
+          meds: {},
+          visits: {}
+        },
+        carepath_recommended: {
+          diabetic_meds: {},
           meds: {},
           visits: {}
         }
-      },
-      isBusy: true
-    }
-  },
-  methods: {
+      }
+    },
     getClassName(score) {
       switch (true) {
         case score < 0.333:
@@ -233,6 +433,7 @@ export default {
       }
     },
     postDetails() {
+      this.clearData()
       this.isBusy = true
       const url = '/api/patient'
       const body = {
@@ -251,6 +452,13 @@ export default {
         .finally(() => {
           this.isBusy = false
         })
+    }
+  },
+  watch: {
+    selectedCriteria(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        this.postDetails()
+      }
     }
   },
   created() {
