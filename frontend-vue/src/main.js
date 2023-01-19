@@ -1,6 +1,20 @@
 import Vue from 'vue'
 import App from './App.vue'
-import { NavPlugin, DropdownPlugin, ToastPlugin, TablePlugin, PaginationPlugin, FormSelectPlugin, ModalPlugin, ProgressPlugin, FormInputPlugin, FormSpinbuttonPlugin, FormCheckboxPlugin } from 'bootstrap-vue'
+import {
+  NavPlugin,
+  DropdownPlugin,
+  ToastPlugin,
+  TablePlugin,
+  PaginationPlugin,
+  FormSelectPlugin,
+  ModalPlugin,
+  ProgressPlugin,
+  FormInputPlugin,
+  FormSpinbuttonPlugin,
+  FormCheckboxPlugin,
+  FormRadioPlugin,
+  FormGroupPlugin
+} from 'bootstrap-vue'
 import VueMobileDetection from 'vue-mobile-detection'
 import 'perfect-scrollbar/dist/perfect-scrollbar'
 import '@popperjs/core/dist/esm/popper'
@@ -21,11 +35,13 @@ Vue.use(ProgressPlugin)
 Vue.use(FormInputPlugin)
 Vue.use(FormSpinbuttonPlugin)
 Vue.use(FormCheckboxPlugin)
+Vue.use(FormRadioPlugin)
+Vue.use(FormGroupPlugin)
 Vue.use(VueMobileDetection)
 Vue.use(HighchartsVue)
 
 new Vue({
-  render: h => h(App),
+  render: (h) => h(App),
   router,
   store
 }).$mount('#app')
