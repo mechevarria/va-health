@@ -41,13 +41,11 @@ class ExplainService(MethodView):
     '''Gets Top explainers for all groups in default netowrk'''
     try:
       src = user['connection'].get_source(name=user['source_name'])
-      #TODO: Must use final network name for VA source
-      #Place holder is OAA_1 here
       network_name = user['network_name']
       return get_compares(src, network_name)
 
-    except:
-      abort(404, message="Error getting explains from server")
+    except Exception as e: 
+      abort(http_status_code=404, message=str(e))
 
 
 @blp.route("/explain/<string:filter_id>")
@@ -63,5 +61,5 @@ class FilteredExplainService(MethodView):
 
       return get_compares(src, network_name)
 
-    except:
-      abort(404, message="Error getting explains from server")
+    except Exception as e: 
+      abort(http_status_code=404, message=str(e))

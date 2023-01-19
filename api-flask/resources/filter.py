@@ -58,30 +58,22 @@ class FilterService(MethodView):
     #Discussion with Amy recommended using the same metric and lense that she used in her analysis
     #check to see if network exists
     nw = src.get_network(group['name'])
-    if type(nw) == dict: 
-      # network = src.create_network(group['name'],{
-      #               'row_group_id': group['id'],
-      #               'column_set_id': src.get_column_set(name='features')['id'], 
-      #               'metric': {'id': 'Angle'},
-      #               'lenses': [{'resolution': 30, 'id': 'Metric PCA coord 1',
-      #                           'equalize': True, 'gain': 3.0},
-      #                         {'resolution': 30, 'id': 'Metric PCA coord 2',
-      #                           'equalize': True, 'gain': 3.0}]
-      #                 }
-      #               )
-      col_set_id = src.get_network(user['network_name']).column_set_id
+    # If network exists, this will be type ayasdi.core.networks.Network
+    # So there is no need to create
+    #If network is dictionary, then {'msg': "Network with name 'xxxx' does not exist"}
+    # this is a dict and so we need to create network
+    if type(nw) == dict:   
+      #get default network and use props to create new network
+      base_nw = src.get_network(user['network_name'])
+      col_set_id = base_nw.column_set_id
 
       # TODO: Metric and lense - Either get from env if affine or from nw if NOT affine
       network = src.create_network(group['name'], {
               'row_group_id': group['id'],
               'column_set_id': col_set_id, 
-              'metric': {'id': 'Angle'},
-              'lenses': [{'resolution': 30, 'id': 'Metric PCA coord 1',
-                          'equalize': True, 'gain': 3.0},
-                        {'resolution': 30, 'id': 'Metric PCA coord 2',
-                          'equalize': True, 'gain': 3.0}]
-                }
-              )
+              'metric': base_nw.metric,
+              'lenses': base_nw.lenses
+      })
 
       new_coloring = src.create_coloring(name='A1Clast_period2_to_4_change', column_name='A1Clast_period2_to_4_change')
       coloring_values = network.get_coloring_values(name='A1Clast_period2_to_4_change')
@@ -156,6 +148,6 @@ class FilterService(MethodView):
           self.compute_cohort_analysis(src, grp)
 
       return applied_filter
-    except:
-      abort(404, message="Error creating filter on server")
+    except Exception as e: 
+      abort(http_status_code=404, message=f"Error creating filter on server. Error: {str(e)}")
   

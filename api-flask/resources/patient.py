@@ -93,13 +93,13 @@ def get_carepath(d):
     visit_dict = OrderedDict((k, d[k]) for k  in visit_keys)
 
     visit_prefix = set([k.replace("_period1", '').replace("_period2", '').replace("_period3", '') for k in visit_dict.keys()])
-    suffix = ["_period1", "_period2", "_period3"]
+    suffix = ["period1", "period2", "period3"]
     
     _ = {}
     for kp in visit_prefix:
         #Check if prefix already in dict.  If not, then add
         if (kp) not in _: _[kp]={}
-        for s in suffix: _[kp][s] = visit_dict.get(kp+s, 0)
+        for s in suffix: _[kp][s] = visit_dict.get(f'{kp}_{s}', 0)
     
     _dict['visits'] = _
     return _dict
@@ -318,6 +318,5 @@ class DetailedPatientService(MethodView):
       return return_data
     except NameError:
       abort(400, message=f"Patient ({pid}) not found!")
-
-    except:
-      abort(404, message=f"Error getting Patient ({pid}) data from source")
+    except Exception as e: 
+      abort(http_status_code=404, message=f"Error getting Patient ({pid}) data from source. Error: {str(e)}")

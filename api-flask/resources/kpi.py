@@ -53,9 +53,8 @@ class DefaultKPIService(MethodView):
       kpis = compute_kpis(src, grp_id)
 
       return kpis
-
-    except:
-      abort(404, message="Error getting KPI from source")
+    except Exception as e: 
+      abort(http_status_code=404, message=f"Error getting KPI from source. Error: {str(e)}")
 
 
 @blp.route("/kpi/<string:filter_id>")
@@ -69,5 +68,5 @@ class FilteredKPIService(MethodView):
       src = user['connection'].get_source(name=user['source_name'])
       kpis = compute_kpis(src, filter_id)
       return kpis
-    except:
-      abort(404, message="Error getting KPI from source")
+    except Exception as e: 
+      abort(http_status_code=404, message=f"Error getting KPI from source. Error: {str(e)}")
