@@ -46,8 +46,8 @@ class ExplainService(MethodView):
       network_name = user['network_name']
       return get_compares(src, network_name)
 
-    except:
-      abort(404, message="Error getting explains from server")
+    except Exception as e: 
+      abort(http_status_code=404, message=str(e))
 
 
 @blp.route("/explain/<string:filter_id>")
@@ -63,5 +63,5 @@ class FilteredExplainService(MethodView):
 
       return get_compares(src, network_name)
 
-    except:
-      abort(404, message="Error getting explains from server")
+    except Exception as e: 
+      abort(http_status_code=404, message=str(e))

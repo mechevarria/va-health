@@ -318,6 +318,5 @@ class DetailedPatientService(MethodView):
       return return_data
     except NameError:
       abort(400, message=f"Patient ({pid}) not found!")
-
-    except:
-      abort(404, message=f"Error getting Patient ({pid}) data from source")
+    except Exception as e: 
+      abort(http_status_code=404, message=f"Error getting Patient ({pid}) data from source. Error: {str(e)}")

@@ -179,9 +179,8 @@ class GraphService(MethodView):
       network_data['nodes'] = nodes
 
       return jsonify(network_data)
-
-    except:
-      abort(404, message="Error getting network graph from server")
+    except Exception as e: 
+      abort(http_status_code=404, message=f"Error getting network graph from server. Error: {str(e)}")
 
 
 @blp.route("/graph/color")
@@ -236,5 +235,5 @@ class GraphService(MethodView):
 
       return jsonify(network_data)
 
-    except:
-      abort(404, message="Error getting network graph from server")
+    except Exception as e: 
+      abort(http_status_code=404, message=f"Error getting network graph from server. Error: {str(e)}")

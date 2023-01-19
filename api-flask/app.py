@@ -1,5 +1,6 @@
 import os
 import sys  
+import json
 
 import ayasdi.core as ac
 from flask import Flask
@@ -66,8 +67,8 @@ def get_cookie():
         user['connection'].check_platform_version()
         return {"message": "Error reseting cookie !"}
 
-    except:
-        return {"message": "Cookie was reset"}
+    except Exception as e: 
+        return {"message": "Cookie was reset", 'exception': str(e)}
 
 
 api.register_blueprint(StatusBlueprint)
