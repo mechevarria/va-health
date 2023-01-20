@@ -25,12 +25,18 @@ def scale_colors(colors):
   zscaled_colors = [c if abs(c) < 2 else c/abs(c) * 2 for c in stats.zscore(zscaled_colors)]
   return norm_list(zscaled_colors)
 
-def get_group_coloring(src, groups: list, column_name: str):
-    _colors={}
-    colors = src.get_group_features(column_name=column_name, group_list=groups)
-    for g, row_color  in colors.items():
-      _colors[g]= sum([float(i) for i in row_color.values()]) / len(row_color.values())
-    return _colors
+def get_group_coloring(src, nw, node_groups: list, column_name: str):
+  outcome_coloring = src.create_coloring(name=column_name, column_name=column_name)
+  coloring_values = nw.get_coloring_values(name=column_name)
+
+  _colors={}
+  for g in node_groups:  
+    color = []
+    for n in g['node_ids']:
+      color.append(coloring_values[n])
+  
+    _colors[g['id']] = sum(color) / len(color)
+  return _colors
 
 
 def compute_group_centroid(node_group: dict, network_nodes: list):
@@ -59,7 +65,6 @@ def get_simplied_group_network(src, name, color_name):
   sizes = []
   centroid_x = []
   centroid_y = []
-
   for g in node_groups:
       grp = src.get_group(id=g['id'])
       groups[g['id']] = grp
@@ -77,19 +82,12 @@ def get_simplied_group_network(src, name, color_name):
   data = []
   nodes = []
 
-  #create nodes with edges to self to ensure all groups make it into the graph
-  #for instance a connected component that is one group would only show up here
-  # since it would not have any conenctions to other groups
-  group_colors = get_group_coloring(src, node_groups, color_name)
-  group_colors_keys = [k for k in group_colors.keys()]
-
-  group_colors_values = [group_colors[k] for k in group_colors_keys]
-  # scaled_group_colors = norm_list(group_colors_values, 0, 1)
-  scaled_group_colors = group_colors_values
-  scaled_group_colors = dict(zip(group_colors_keys, scaled_group_colors))
+  group_colors = get_group_coloring(src, nw, node_groups, color_name)
+  scaled_group_colors = scale_colors(list(group_colors.values()))
+  scaled_group_colors = dict(zip(group_colors.keys(), scaled_group_colors))
 
   for e, k in enumerate(groups.keys()):
-    nodes.append({'id': k, 'groupId': k, 'colorScale': scaled_group_colors[int(k)], "marker": { "radius": scaled_sizes[e]}, "plotX": centroid_x[e], "plotY": centroid_y[e]})
+    nodes.append({'id': k, 'groupId': k, 'colorScale': scaled_group_colors[k], "marker": { "radius": scaled_sizes[e]}, "plotX": centroid_x[e], "plotY": centroid_y[e]})
 
   #Create Nodes with edges
   for f, t in combs:
@@ -169,64 +167,6 @@ class GraphService(MethodView):
         grp = src.get_group(id=network_data['filter_id'])
         grp_name = grp['name']
       else:
-        #TODO: Must use final network name for VA source
-        #Place holder is OAA_1 here
-        grp_name = user['network_name']
-      
-      if network_data['simplified']:
-        print("Simplified")
-      
-        data, nodes = get_simplied_group_network(src, grp_name, network_data['color_name'])
-      else:
-        print("Regular")
-        #get network nodes
-        data, nodes = get_normal_network(src, grp_name, network_data['color_name'])
-      print("C")
-
-      network_data['data'] = data
-      network_data['nodes'] = nodes
-
-      return jsonify(network_data)
-    except Exception as e: 
-      abort(http_status_code=404, message=f"Error getting network graph from server. Error: {str(e)}")
-
-
-@blp.route("/graph/color")
-class GraphService(MethodView):
-  @blp.arguments(NetworkSchema)
-  # @blp.response(200, NetworkSchema)
-  def post(self, network_data):
-    """Returns nodes in this format for network graph
-        filter_id: 123456,
-        color_field: column_name,
-        data = [
-            ['A', 'C']
-            ['A', 'D'],
-            ['A', 'E'],
-            ['A', 'F'],
-            ['A', 'G'],
-            ['B', 'C'],
-            ['B', 'D']
-        ],
-        nodes = [{
-                      id: 'A',
-                      colorIndex: 4.1,
-                      readius: 21
-                  }, {
-                      id: 'B',
-                      colorIndex: 2.4,
-                      radius: 11.8
-        }]   
-    """
-    try:
-      src = user['connection'].get_source(name=user['source_name'])
-
-      if "filter_id" in network_data:
-        grp = src.get_group(id=network_data['filter_id'])
-        grp_name = grp['name']
-      else:
-        #TODO: Must use final network name for VA source
-        #Place holder is OAA_1 here
         grp_name = user['network_name']
       
       if network_data['simplified']:
@@ -242,6 +182,5 @@ class GraphService(MethodView):
       network_data['nodes'] = nodes
 
       return jsonify(network_data)
-
     except Exception as e: 
       abort(http_status_code=404, message=f"Error getting network graph from server. Error: {str(e)}")
