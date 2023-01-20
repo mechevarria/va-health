@@ -11,12 +11,11 @@ docker rm frontend-vue
 # remove existing images
 docker rmi $api
 docker rmi $frontend
-repo=../../tar-export
 
 echo "loading api.tar"
-docker load -i $repo/api.tar
+docker load -i api.tar
 
 echo "loading frontend.tar"
-docker load -i $repo/frontend.tar
+docker load -i frontend.tar
 
 docker images
