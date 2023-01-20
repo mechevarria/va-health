@@ -22,4 +22,5 @@ docker run \
     --env SOURCE_NAME_HOLDOUT=$SOURCE_NAME_HOLDOUT \
     --env FLASK_APP=$FLASK_APP \
     --env FLASK_DEBUG=$FLASK_DEBUG \
+    --env NETWORK_NAME=$NETWORK_NAME \
     quay.io/mechevarria/api-flask
