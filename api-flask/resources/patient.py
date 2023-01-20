@@ -104,7 +104,7 @@ def get_carepath(d):
     _dict['visits'] = _
     return _dict
 
-def compute_carepath_from_dataframe(d, df):
+def compute_carepath_from_dataframe(d, df, threshold):
     _dict = {}
     
     #get DIABETIC MED meds for carepath
@@ -150,7 +150,7 @@ def compute_carepath_from_dataframe(d, df):
         else:
             pass
             
-        if (pre > 70 or post > 70):
+        if (pre >= threshold or post >= threshold):
             _[mp]={'pre': pre/100, 'post': post/100}
                       
     _dict['meds'] = _
@@ -170,12 +170,12 @@ def compute_carepath_from_dataframe(d, df):
 
     return _dict
 
-def get_consesus_carepath(d, behavior_keys):
+def get_consesus_carepath(d, behavior_keys, threshold=70):
     
     #get list of nearest neighbors ids
     nn_ids = [str(d[k]) for k in behavior_keys]
 
-    src = user['connection'].get_source(name=user['source_name_holdout'])
+    src = user['connection'].get_source(name=user['source_name'])
     #create filter set based on ids
     fs = src.create_filter_set([{'column_name':"PatientICN", "in_set": nn_ids}])
     export = src.export(filter_set=fs)
@@ -185,15 +185,15 @@ def get_consesus_carepath(d, behavior_keys):
     cols = [src.id_to_colnames[i] for i in export['column_indices']]
     df = pd.DataFrame(export['data'], index=cols).T
 
-    return compute_carepath_from_dataframe(d, df)
+    return compute_carepath_from_dataframe(d, df, threshold)
 
 
-def get_ai_recommended_carepath(d, behavior_keys):
+def get_ai_recommended_carepath(d, behavior_keys, threshold=70):
     
     #get list of nearest neighbors ids
     nn_ids = [str(d[k]) for k in behavior_keys]
 
-    src = user['connection'].get_source(name=user['source_name_holdout'])
+    src = user['connection'].get_source(name=user['source_name'])
     #create filter set based on ids
     fs = src.create_filter_set([{'column_name':"PatientICN", "in_set": nn_ids}])
     export = src.export(filter_set=fs)
@@ -206,7 +206,7 @@ def get_ai_recommended_carepath(d, behavior_keys):
     df = df[df['Is_increase_A1Clast_period3_to_4_change'] == 0]
     print("df shape after filter:", df.shape)
 
-    return compute_carepath_from_dataframe(d, df)
+    return compute_carepath_from_dataframe(d, df, threshold)
 
 
 @blp.route("/patient")
@@ -257,7 +257,7 @@ class DefaultPatientService(MethodView):
 
 
 @blp.route("/patient")
-class DetailedPatientService(MethodView):
+class DetailedPatientService(MethodView): 
   '''Gets patient detail values the specific patient id'''
   @blp.arguments(DetailedPatientSchema)
   @blp.response(200)
@@ -312,8 +312,10 @@ class DetailedPatientService(MethodView):
       else:
         behavior_keys = [k for k in zipdict.keys() if k.startswith('nn2_')]
 
-      return_data['carepath_consensus'] = get_consesus_carepath(zipdict, behavior_keys)
-      return_data['carepath_recommended'] = get_ai_recommended_carepath(zipdict, behavior_keys)
+      # return_data['carepath_consensus'] = return_data['carepath']
+      # return_data['carepath_recommended'] = return_data['carepath']
+      return_data['carepath_consensus'] = get_consesus_carepath(zipdict, behavior_keys, patient_data['medicine_threshold'])
+      return_data['carepath_recommended'] = get_ai_recommended_carepath(zipdict, behavior_keys, patient_data['medicine_threshold'])
 
       return return_data
     except NameError:
