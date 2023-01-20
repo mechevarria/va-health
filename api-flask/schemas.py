@@ -47,6 +47,7 @@ class NetworkSchema(Schema):
 class DetailedPatientSchema(Schema):
     patient_id=fields.Str(required=True)
     neighbor_criteria = fields.Str(validate=validate.OneOf(["meds", "visits"]), required=True)
+    medicine_threshold = fields.Int(required=True)
 
 class PatientCardSchema(Schema):
     ID=fields.Str(required=True)
