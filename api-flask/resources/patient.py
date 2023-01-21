@@ -252,8 +252,8 @@ class DefaultPatientService(MethodView):
 
       return df.to_dict(orient='records')
 
-    except:
-      abort(404, message="Error getting Patients from source")
+    except Exception as e: 
+      abort(http_status_code=404, message=f"Error getting Patient data from source. Error: {str(e)}")
 
 
 @blp.route("/patient")

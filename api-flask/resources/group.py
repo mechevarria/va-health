@@ -7,24 +7,88 @@ from globals import user
 
 blp = Blueprint("group", __name__, description="Operations on groups")
 
+def get_categorcial_column_list(column_names):
+  #prefixes to use
+  prefixes = [
+  'VeteranFlag_',
+  'PatientType_',
+  'MaritalStatus_',
+  'Gender_',
+  'PeriodOfService_',
+  'Eligibility_',
+  'Race_',
+  'Ethnicity_',
+  'BloodType_',
+  'Rurality_',
+  'covid_vaccine_',
+  'covid_symptomsseverity_',
+  'covid_pre_',
+  'covid_post_',
+  'conditions_pre_',
+  'meds_pre_',
+  'meds_post_',
+  'meds_',
+  'modality_',
+  ]
+
+  visit_cols_suffixes = ['period1', 'period2', 'period3']
+  cols_we_want = ['Medicaid', 'Medicare', 'OtherInsurance', 'NoRecordOfInsurance' ]
+
+  #add all columns that start with the specified prefixes
+  for p in prefixes:
+    cols_we_want = cols_we_want + [c for c in column_names if c.startswith(p)]
+
+  #add columns for visit_cols_prefixes and visit_cols_suffixes 
+  cols_we_want = [c for c in cols_we_want if not c.endswith("OccurrenceType")]
+  cols_we_want = [c for c in cols_we_want if not c.endswith("change")]
+
+  return cols_we_want
+
+def get_continuous_column_list(column_names):
+  #prefixes to use
+  prefixes = [
+  'vitals_',
+  'A1C_',
+  'Risk_score_',
+  ]
+
+  #Need for each period 1/2/3
+  visit_cols_prefixes = [
+  'visits_count_',
+  'visits_count_permonth_',
+  'visits_count_Phone_',
+  'visits_count_Presumed In Person_',
+  'visits_count_VVC_',
+  'visits_count_permonth_Phone_',
+  'visits_count_permonth_Presumed In Person_',
+  'visits_count_permonth_VVC_',
+  'visits_count_proportion_Phone_',
+  'visits_count_proportion_Presumed In Person_',
+  'visits_count_proportion_VVC_',
+  'visits_count_comorbiditiescare_',
+  'visits_count_directcare_',
+  'visits_count_lifestylecare_',
+  'visits_count_permonth_comorbiditiescare_',
+  'visits_count_permonth_directcare_',
+  'visits_count_permonth_lifestylecare_',
+  'visits_count_proportion_comorbiditiescare_',
+  'visits_count_proportion_directcare_',
+  'visits_count_proportion_lifestylecare_',
+  ]
+  visit_cols_suffixes = ['period1', 'period2', 'period3']
+  cols_we_want = ['AgeAtIndex', 'Is_increase_A1Clast_period3_to_4_change' , 'Is_decrease_visits_count_permonth_period3_to_4_change']
+
+  #add all columns that start with the specified prefixes
+  for p in prefixes:
+    cols_we_want = cols_we_want + [c for c in column_names if c.startswith(p)]
+
+  #add columns for visit_cols_prefixes and visit_cols_suffixes 
+  cols_we_want = cols_we_want + [p+s for p in visit_cols_prefixes for s in visit_cols_suffixes]  
+  cols_we_want = [c for c in cols_we_want if not 'period5' in c]
+
+  return cols_we_want
+
 def get_group_details(src, group_1_id, group_2_id="Rest"):
-  # here is the list of columns we want
-  cols = ["MaritalStatus_MARRIED", "MaritalStatus_WIDOWED", 
-          "MaritalStatus_NEVER MARRIED", "MaritalStatus_DIVORCED", 
-          "AgeAtIndexDate", 
-          "Rurality_SmallTownRural", "Rurality_Urban", "Rurality_CityTown", 
-          "Ethnicity_HISPANIC OR LATINO", "Race_Asian", "Race_Black or African American", "Race_White", "Race_American Indian or Alaska Native", 
-          "visits_count_proportion_Presumed In Person_period4_2021-03-01_2022-03-01", 
-          "visits_count_proportion_VVC_period4_2021-03-01_2022-03-01", 
-          "visits_count_proportion_Phone_period4_2021-03-01_2022-03-01"
-          ]
-
-  cols += [c for c in src.column_names if "30d" in c[-3:]]
-  cols += [c for c in src.column_names if "60d" in c[-3:]]
-  cols += [c for c in src.column_names if "2yrs" in c]
-  #get compare for group
-  # src.get_comparison(name='18310991_1 vs. Rest on All columns')
-
   if group_2_id=="Rest":
     print("group 2 is REST")
     grp = src.get_group(id=group_1_id)
@@ -48,8 +112,10 @@ def get_group_details(src, group_1_id, group_2_id="Rest"):
 
     _exp['id'] = comp['id']
   
-  #search continuous_explainers
   _explainers = []
+
+  #search continuous_explainers
+  cols = get_continuous_column_list(src.column_names)
   for e in comp['continuous_explainers']:
     if e['name'] in cols:
       _ = {"type": "continuous", 'name': e['name'], 'primary_group_mean': e['primary_group_mean'], "primary_group_quartiles": e['quartiles'][0],
@@ -57,6 +123,7 @@ def get_group_details(src, group_1_id, group_2_id="Rest"):
       _explainers.append(_)
 
   #search cat_explainers
+  cols = get_categorcial_column_list(src.column_names)
   for e in comp['categorical_explainers']:
     if e['name'].split(' =')[0] in cols: 
       _ = {"type": "categorical", 'name': e['name'], 'primary_group_percent': round(e['percent_in_group'][0]*100,2), 'secondary_group_percent': round(e['percent_in_group'][1]*100,2)}
