@@ -26,6 +26,13 @@
       </b-dropdown>
       <b-form-checkbox
         class="float-right mr-3 mt-2"
+        v-model="simulation"
+        :id="`simulation-${label}`"
+        :disabled="isBusy"
+        >Simulation</b-form-checkbox
+      >
+      <b-form-checkbox
+        class="float-right mr-3 mt-2"
         v-model="simplified"
         :id="`simplified-${label}`"
         :disabled="isBusy"
@@ -37,8 +44,8 @@
         <highcharts
           class="hc"
           :options="chartOptions"
-          :updateArgs="[true, true]"
           ref="chart"
+          v-if="showChart"
         ></highcharts>
       </div>
     </div>
@@ -70,6 +77,8 @@ export default {
       data: [],
       isBusy: false,
       simplified: true,
+      showChart: true,
+      simulation: false,
       selectedColor: '',
       selectedText: '',
       colorScale: null,
@@ -88,7 +97,7 @@ export default {
           {
             enableMouseTracking: true,
             layoutAlgorithm: {
-              enableSimulation: true,
+              enableSimulation: false,
               initialPositions: 'circle'
             },
             dataLabels: {
@@ -159,6 +168,13 @@ export default {
     },
     simplified() {
       this.getGraph()
+    },
+    simulation() {
+      this.showChart = false
+      this.chartOptions.series[0].layoutAlgorithm.enableSimulation = this.simulation
+      setTimeout(() => {
+        this.showChart = true
+      }, 10)
     }
   },
   created() {
