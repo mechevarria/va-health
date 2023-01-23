@@ -1,13 +1,25 @@
 <template>
   <span>
-    <div class="ml-1 mb-2" v-if="isBusy">
-      <i class="spinner-border spinner-border-sm mb-1 ml-1 mt-1"></i>
+    <div class="d-flex justify-content-end">
+      <button type="button" class="btn btn-secondary" :disabled="isBusy" @click="getKpi()">
+        <i class="cil-reload btn-icon mr-1" v-if="!isBusy"></i>
+        <i
+          class="spinner-border spinner-border-sm btn-icon mr-1"
+          v-if="isBusy"
+        ></i>
+        KPI
+      </button>
     </div>
     <div class="card-deck">
-      <div class="card mb-4 mt-2 text-white" v-for="(kpi, index) in data" :key="index" :class="getStyle(index)">
+      <div
+        class="card mb-4 mt-2 text-white"
+        v-for="(kpi, index) in data"
+        :key="index"
+        :class="getStyle(index)"
+      >
         <div class="card-body">
-            {{ kpi.name }}
-            <h4>{{ kpi.value }}</h4>
+          {{ kpi.name }}
+          <h4>{{ kpi.value }}</h4>
         </div>
       </div>
     </div>
@@ -26,13 +38,22 @@ export default {
   data() {
     return {
       data: [],
-      isBusy: true
+      isBusy: false
     }
   },
   methods: {
+    placeholder() {
+      this.data = []
+      for (let i = 0; i < 5; i++) {
+      this.data.push({
+        name: '--',
+        value: '--'
+      })
+    }
+    },
     getKpi() {
       this.isBusy = true
-      this.data = true
+      this.placeholder()
       let url = '/api/kpi'
       if (this.filterId > 0) {
         url = url + `/${this.filterId}`
@@ -55,30 +76,25 @@ export default {
       switch (index) {
         case 0:
           style = 'bg-secondary'
-          break;
+          break
         case 1:
           style = 'bg-primary'
-          break;
+          break
         case 2:
           style = 'bg-warning'
-          break;
+          break
         case 3:
           style = 'bg-success'
-          break;
+          break
         case 4:
           style = 'bg-info'
-          break;
+          break
       }
       return style
     }
   },
-  watch: {
-    filterId() {
-      this.getKpi()
-    }
-  },
   created() {
-    this.getKpi()
+    this.placeholder()
   }
 }
 </script>
