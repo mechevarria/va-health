@@ -12,7 +12,8 @@ import {
   FormInputPlugin,
   FormSpinbuttonPlugin,
   FormCheckboxPlugin,
-  FormRadioPlugin
+  FormRadioPlugin,
+  TooltipPlugin
 } from 'bootstrap-vue'
 import VueMobileDetection from 'vue-mobile-detection'
 import 'perfect-scrollbar/dist/perfect-scrollbar'
@@ -35,6 +36,7 @@ Vue.use(FormInputPlugin)
 Vue.use(FormSpinbuttonPlugin)
 Vue.use(FormCheckboxPlugin)
 Vue.use(FormRadioPlugin)
+Vue.use(TooltipPlugin)
 Vue.use(VueMobileDetection)
 Vue.use(HighchartsVue)
 

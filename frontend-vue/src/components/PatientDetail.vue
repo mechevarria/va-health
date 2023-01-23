@@ -293,6 +293,8 @@
                     :value="entry[1].pre"
                     variant="primary"
                     :max="1"
+                    v-b-tooltip
+                    :title="entry[1].pre"
                   ></b-progress>
                 </td>
                 <td>
@@ -302,6 +304,8 @@
                     :value="entry[1].post"
                     variant="primary"
                     :max="1"
+                    v-b-tooltip
+                    :title="entry[1].post"
                   ></b-progress>
                 </td>
               </tr>
@@ -336,6 +340,8 @@
                     :value="entry[1]._period1_2"
                     variant="primary"
                     :max="1"
+                    v-b-tooltip
+                    :title="entry[1]._period1_2"
                   ></b-progress>
                 </td>
                 <td>
@@ -345,6 +351,8 @@
                     :value="entry[1]._period3"
                     variant="primary"
                     :max="1"
+                    v-b-tooltip
+                    :title="entry[1]._period3"
                   ></b-progress>
                 </td>
               </tr>
@@ -380,6 +388,8 @@
                     :value="entry[1].period1"
                     variant="primary"
                     :max="1"
+                    v-b-tooltip
+                    :title="entry[1].period1"
                   ></b-progress>
                 </td>
                 <td>
@@ -389,6 +399,8 @@
                     :value="entry[1].period2"
                     variant="primary"
                     :max="1"
+                    v-b-tooltip
+                    :title="entry[1].period2"
                   ></b-progress>
                 </td>
                 <td>
@@ -398,6 +410,8 @@
                     :value="entry[1].period3"
                     variant="primary"
                     :max="1"
+                    v-b-tooltip
+                    :title="entry[1].period3"
                   ></b-progress>
                 </td>
               </tr>
@@ -435,6 +449,8 @@
                     :value="entry[1].pre"
                     variant="primary"
                     :max="1"
+                    v-b-tooltip
+                    :title="entry[1].pre"
                   ></b-progress>
                 </td>
                 <td>
@@ -444,6 +460,8 @@
                     :value="entry[1].post"
                     variant="primary"
                     :max="1"
+                    v-b-tooltip
+                    :title="entry[1].post"
                   ></b-progress>
                 </td>
               </tr>
@@ -478,6 +496,8 @@
                     :value="entry[1]._period1_2"
                     variant="primary"
                     :max="1"
+                    v-b-tooltip
+                    :title="entry[1]._period1_2"
                   ></b-progress>
                 </td>
                 <td>
@@ -487,6 +507,8 @@
                     :value="entry[1]._period3"
                     variant="primary"
                     :max="1"
+                    v-b-tooltip
+                    :title="entry[1]._period3"
                   ></b-progress>
                 </td>
               </tr>
@@ -522,6 +544,8 @@
                     :value="entry[1].period1"
                     variant="primary"
                     :max="1"
+                    v-b-tooltip
+                    :title="entry[1].period1"
                   ></b-progress>
                 </td>
                 <td>
@@ -531,6 +555,8 @@
                     :value="entry[1].period2"
                     variant="primary"
                     :max="1"
+                    v-b-tooltip
+                    :title="entry[1].period2"
                   ></b-progress>
                 </td>
                 <td>
@@ -540,6 +566,8 @@
                     :value="entry[1].period3"
                     variant="primary"
                     :max="1"
+                    v-b-tooltip
+                    :title="entry[1].period3"
                   ></b-progress>
                 </td>
               </tr>
