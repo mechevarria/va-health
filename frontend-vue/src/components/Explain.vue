@@ -1,35 +1,77 @@
 <template>
   <span>
     <h5>Groups:</h5>
-    <div class="ml-1 mb-2" v-if="isBusy">
-      <i class="spinner-border spinner-border-sm mb-1 ml-1 mt-1"></i>
-    </div>
     <div class="row row-cols-1 row-cols-md-3">
+      <!-- default load card -->
+      <div class="col" v-if="groups.length < 1">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="d-flex justify-content-between align-items-center">
+              --
+              <button
+                type="button"
+                class="btn btn-sm btn-secondary"
+                @click="getExplain()"
+              >
+                <i class="cil-reload btn-icon" v-if="!isBusy"></i>
+                <i
+                  class="spinner-border spinner-border-sm btn-icon"
+                  v-if="isBusy"
+                ></i>
+              </button>
+            </h5>
+            <span class="bg-light text-dark">
+              <span class="font-weight-bold">Patients:</span>
+              -- |
+              <span class="font-weight-bold">Top Explainers:</span>
+              --
+            </span>
+          </div>
+        </div>
+      </div>
       <div class="col" v-for="(group, index) in groups" :key="index">
         <div class="card">
           <div class="card-header">
             <h5 class="d-flex justify-content-between align-items-center">
               {{ group.id }}
-              <button type="button" class="btn btn-sm" @click="toggleExplain(index)">
-                <i v-if="!group.visible" class="cil-chevron-bottom btn-icon"></i>
+              <button
+                type="button"
+                class="btn btn-sm"
+                @click="toggleExplain(index)"
+              >
+                <i
+                  v-if="!group.visible"
+                  class="cil-chevron-bottom btn-icon"
+                ></i>
                 <i v-if="group.visible" class="cil-chevron-top btn-icon"></i>
               </button>
             </h5>
             <span class="bg-light text-dark">
-              <span class="font-weight-bold">Patients:</span> {{ group.group_size }} | <span class="font-weight-bold">Top
-                Explainers:</span> {{ group.explains.length }}
+              <span class="font-weight-bold">Patients:</span>
+              {{ group.group_size }} |
+              <span class="font-weight-bold">Top Explainers:</span>
+              {{ group.explains.length }}
             </span>
           </div>
           <div class="card-body" v-if="group.visible">
             <div class="card-text">
               <div class="d-flex justify-content-between align-items-center">
                 <b>Top Explainers:</b>
-                <button class="btn btn-primary mt-2 mb-2" @click="getGroupDetails(group.id, index)">
+                <button
+                  class="btn btn-primary mt-2 mb-2"
+                  @click="getGroupDetails(group.id, index)"
+                >
                   <i class="cil-list-rich btn-icon mr-1"></i>All Explainers
                 </button>
               </div>
               <ul class="list-group list-group-flush">
-                <li class="list-group-item" v-for="(explain, index) in group.explains" v-bind:key="index">{{ explain }}</li>
+                <li
+                  class="list-group-item"
+                  v-for="(explain, index) in group.explains"
+                  v-bind:key="index"
+                >
+                  {{ explain }}
+                </li>
               </ul>
             </div>
           </div>
@@ -43,7 +85,7 @@
 <script>
 import { mapState } from 'vuex'
 import axios from 'axios'
-import msgMixin from '../mixins/msg-mixin';
+import msgMixin from '../mixins/msg-mixin'
 
 export default {
   name: 'AppExplain',
@@ -60,16 +102,16 @@ export default {
       this.isBusy = true
       this.groups = []
       let url = '/api/explain'
-      if(this.filterId > 0) {
+      if (this.filterId > 0) {
         url = url + `/${this.filterId}`
       }
       axios
         .get(url)
         .then((res) => {
           this.groups = res.data
-          this.groups.forEach(group => {
+          this.groups.forEach((group) => {
             group.visible = false
-          });
+          })
         })
         .catch((err) => {
           console.error(err)
@@ -91,11 +133,8 @@ export default {
   },
   watch: {
     filterId() {
-      this.getExplain()
+      this.groups = []
     }
-  },
-  created() {
-    this.getExplain()
   }
 }
 </script>
