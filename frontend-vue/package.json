@@ -1,6 +1,6 @@
 {
   "name": "clinical-health",
-  "version": "0.5.8",
+  "version": "0.5.9",
   "author": "Mike Echevarria <michael.echevarria@symphonyai.com>",
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -18,7 +18,7 @@
     "highcharts": "^10.3.1",
     "highcharts-vue": "^1.4.0",
     "perfect-scrollbar": "^1.5.5",
-    "vue": "~2.7.13",
+    "vue": "~2.7.14",
     "vue-mobile-detection": "~1.0.0",
     "vue-router": "~3.6.5",
     "vuex": "~3.6.2"
@@ -32,7 +32,7 @@
     "eslint-plugin-vue": "^9.6.0",
     "node-sass": "^7.0.3",
     "sass-loader": "^13.1.0",
-    "vue-template-compiler": "~2.7.13"
+    "vue-template-compiler": "~2.7.14"
   },
   "eslintConfig": {
     "root": true,
