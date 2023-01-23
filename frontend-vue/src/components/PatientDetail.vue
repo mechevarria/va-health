@@ -288,7 +288,8 @@
                 <td>{{ entry[0] }}</td>
                 <td>
                   <b-progress
-                    show-progress
+                    show-value
+                    :precision="2"
                     :value="entry[1].pre"
                     variant="primary"
                     :max="1"
@@ -296,7 +297,8 @@
                 </td>
                 <td>
                   <b-progress
-                    show-progress
+                    show-value
+                    :precision="2"
                     :value="entry[1].post"
                     variant="primary"
                     :max="1"
@@ -329,7 +331,8 @@
                 <td>{{ entry[0] }}</td>
                 <td>
                   <b-progress
-                    show-progress
+                    show-value
+                    :precision="2"
                     :value="entry[1]._period1_2"
                     variant="primary"
                     :max="1"
@@ -337,7 +340,8 @@
                 </td>
                 <td>
                   <b-progress
-                    show-progress
+                    show-value
+                    :precision="2"
                     :value="entry[1]._period3"
                     variant="primary"
                     :max="1"
@@ -371,7 +375,8 @@
                 <td>{{ entry[0] }}</td>
                 <td>
                   <b-progress
-                    show-progress
+                    show-value
+                    :precision="2"
                     :value="entry[1].period1"
                     variant="primary"
                     :max="1"
@@ -379,7 +384,8 @@
                 </td>
                 <td>
                   <b-progress
-                    show-progress
+                    show-value
+                    :precision="2"
                     :value="entry[1].period2"
                     variant="primary"
                     :max="1"
@@ -387,7 +393,8 @@
                 </td>
                 <td>
                   <b-progress
-                    show-progress
+                    show-value
+                    :precision="2"
                     :value="entry[1].period3"
                     variant="primary"
                     :max="1"
@@ -423,7 +430,8 @@
                 <td>{{ entry[0] }}</td>
                 <td>
                   <b-progress
-                    show-progress
+                    show-value
+                    :precision="2"
                     :value="entry[1].pre"
                     variant="primary"
                     :max="1"
@@ -431,7 +439,8 @@
                 </td>
                 <td>
                   <b-progress
-                    show-progress
+                    show-value
+                    :precision="2"
                     :value="entry[1].post"
                     variant="primary"
                     :max="1"
@@ -464,7 +473,8 @@
                 <td>{{ entry[0] }}</td>
                 <td>
                   <b-progress
-                    show-progress
+                    show-value
+                    :precision="2"
                     :value="entry[1]._period1_2"
                     variant="primary"
                     :max="1"
@@ -472,7 +482,8 @@
                 </td>
                 <td>
                   <b-progress
-                    show-progress
+                    show-value
+                    :precision="2"
                     :value="entry[1]._period3"
                     variant="primary"
                     :max="1"
@@ -506,7 +517,8 @@
                 <td>{{ entry[0] }}</td>
                 <td>
                   <b-progress
-                    show-progress
+                    show-value
+                    :precision="2"
                     :value="entry[1].period1"
                     variant="primary"
                     :max="1"
@@ -514,7 +526,8 @@
                 </td>
                 <td>
                   <b-progress
-                    show-progress
+                    show-value
+                    :precision="2"
                     :value="entry[1].period2"
                     variant="primary"
                     :max="1"
@@ -522,7 +535,8 @@
                 </td>
                 <td>
                   <b-progress
-                    show-progress
+                    show-value
+                    :precision="2"
                     :value="entry[1].period3"
                     variant="primary"
                     :max="1"
