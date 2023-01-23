@@ -1,8 +1,10 @@
 <template>
   <span>
-    <span class="d-flex justify-content-between align-items-center mb-2" v-if="groupId.length > 1 && !isBusy">
-      <h5>Group {{ groupId }} Explains:
-      </h5>
+    <span
+      class="d-flex justify-content-between align-items-center mb-2"
+      v-if="groupId.length > 1 && !isBusy"
+    >
+      <h5>Group {{ groupId }} Explains:</h5>
       <button type="button" class="btn btn-secondary" @click="clearGroup()">
         <span class="cil-x-circle icon mr-1"></span>Clear
       </button>
@@ -11,7 +13,10 @@
       <div class="card">
         <div class="card-header">
           Continuous Explains
-          <i class="spinner-border spinner-border-sm mb-1 ml-1" v-if="isBusy"></i>
+          <i
+            class="spinner-border spinner-border-sm mb-1 ml-1"
+            v-if="isBusy"
+          ></i>
         </div>
         <div class="card-body">
           <table class="table table-sm">
@@ -21,8 +26,15 @@
                   {{ explain.name }}
                 </td>
                 <td>
-                  <highcharts class="hc" :options="explain.primaryChart"></highcharts>
-                  <highcharts v-if="showSecondary" class="hc" :options="explain.secondaryChart"></highcharts>
+                  <highcharts
+                    class="hc"
+                    :options="explain.primaryChart"
+                  ></highcharts>
+                  <highcharts
+                    v-if="showSecondary"
+                    class="hc"
+                    :options="explain.secondaryChart"
+                  ></highcharts>
                 </td>
               </tr>
             </tbody>
@@ -32,7 +44,10 @@
       <div class="card">
         <div class="card-header">
           Categorial Explains
-          <i class="spinner-border spinner-border-sm mb-1 ml-1" v-if="isBusy"></i>
+          <i
+            class="spinner-border spinner-border-sm mb-1 ml-1"
+            v-if="isBusy"
+          ></i>
         </div>
         <div class="card-body">
           <table class="table table-sm">
@@ -41,9 +56,17 @@
                 {{ explain.name }}
               </td>
               <td>
-                <b-progress show-progress :value="explain.primary_group_percent" variant="primary"></b-progress>
-                <b-progress v-if="showSecondary" show-progress :value="explain.secondary_group_percent"
-                  variant="info"></b-progress>
+                <b-progress
+                  show-progress
+                  :value="explain.primary_group_percent"
+                  variant="primary"
+                ></b-progress>
+                <b-progress
+                  v-if="showSecondary"
+                  show-progress
+                  :value="explain.secondary_group_percent"
+                  variant="info"
+                ></b-progress>
               </td>
             </tr>
           </table>
@@ -61,7 +84,7 @@ import axios from 'axios'
 import { Chart } from 'highcharts-vue'
 import Highcharts from 'highcharts'
 import highchartsMore from 'highcharts/highcharts-more'
-import msgMixin from '../mixins/msg-mixin';
+import msgMixin from '../mixins/msg-mixin'
 
 highchartsMore(Highcharts)
 
@@ -71,10 +94,10 @@ export default {
     highcharts: Chart
   },
   mixins: [msgMixin],
-  computed: mapState(['groupId','colors']),
+  computed: mapState(['groupId', 'colors', 'filterId']),
   props: {
     showSecondary: Boolean,
-    clearOnCreate: Boolean,
+    clearOnCreate: Boolean
   },
   data() {
     return {
@@ -121,14 +144,19 @@ export default {
         title: {
           text: null
         },
-        series: [{
-          name: '',
-          data: []
-        }]
+        series: [
+          {
+            name: '',
+            data: []
+          }
+        ]
       }
     }
   },
   watch: {
+    filterId() {
+      this.clearGroup()
+    },
     groupId(newValue) {
       if (newValue.length > 1) {
         this.isBusy = true
@@ -138,24 +166,38 @@ export default {
         axios
           .get(url)
           .then((res) => {
-            res.data.explains.forEach(explain => {
+            res.data.explains.forEach((explain) => {
               if (explain.type == 'categorical') {
                 this.catExplains.push(explain)
               } else {
-                explain.primaryChart = JSON.parse(JSON.stringify(this.defaultOptions))
+                explain.primaryChart = JSON.parse(
+                  JSON.stringify(this.defaultOptions)
+                )
                 explain.primaryChart.series[0].name = explain.name
-                explain.primaryChart.series[0].data = [explain.primary_group_quartiles]
-                explain.primaryChart.plotOptions.boxplot.fillColor = this.colors.primary
-                explain.primaryChart.plotOptions.boxplot.stemColor = this.colors.primary
-                explain.primaryChart.plotOptions.boxplot.whiskerColor = this.colors.primary
+                explain.primaryChart.series[0].data = [
+                  explain.primary_group_quartiles
+                ]
+                explain.primaryChart.plotOptions.boxplot.fillColor =
+                  this.colors.primary
+                explain.primaryChart.plotOptions.boxplot.stemColor =
+                  this.colors.primary
+                explain.primaryChart.plotOptions.boxplot.whiskerColor =
+                  this.colors.primary
 
                 if (this.showSecondary) {
-                  explain.secondaryChart = JSON.parse(JSON.stringify(this.defaultOptions))
+                  explain.secondaryChart = JSON.parse(
+                    JSON.stringify(this.defaultOptions)
+                  )
                   explain.secondaryChart.series[0].name = explain.name
-                  explain.secondaryChart.series[0].data = [explain.secondary_group_quartiles]
-                  explain.secondaryChart.plotOptions.boxplot.fillColor = this.colors.info
-                  explain.secondaryChart.plotOptions.boxplot.stemColor = this.colors.info
-                  explain.secondaryChart.plotOptions.boxplot.whiskerColor = this.colors.info
+                  explain.secondaryChart.series[0].data = [
+                    explain.secondary_group_quartiles
+                  ]
+                  explain.secondaryChart.plotOptions.boxplot.fillColor =
+                    this.colors.info
+                  explain.secondaryChart.plotOptions.boxplot.stemColor =
+                    this.colors.info
+                  explain.secondaryChart.plotOptions.boxplot.whiskerColor =
+                    this.colors.info
                 }
 
                 this.contExplains.push(explain)
@@ -186,6 +228,6 @@ export default {
 </script>
 <style>
 .app-explain {
-  width: 50%
+  width: 50%;
 }
 </style>
