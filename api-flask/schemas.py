@@ -41,6 +41,7 @@ class NetworkSchema(Schema):
     filter_id=fields.Str(required=False)
     color_name=fields.Str(required=True)
     simplified=fields.Bool(required=True)
+    chart_width=fields.Int(required=True)
     # data=fields.List(dump_only=True)
     # nodes=fields.Nested(GraphNodeSchema(), dump_only=True)
 

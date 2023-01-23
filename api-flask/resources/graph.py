@@ -52,7 +52,7 @@ def compute_group_centroid(node_group: dict, network_nodes: list):
   
   return x, y
 
-def get_simplied_group_network(src, name, color_name):
+def get_simplied_group_network(src, name, color_name, chart_width):
 
   nw = src.get_network(name=name)
   node_groups = nw.get_node_groups()
@@ -75,7 +75,7 @@ def get_simplied_group_network(src, name, color_name):
       centroid_y.append(_y)
 
   scaled_sizes =  norm_list(sizes, 10, 30, True) #Mike requested the radius scale between 30 and 10
-  centroid_x = norm_list(centroid_x, 5, 495, True)
+  centroid_x = norm_list(centroid_x, 5, chart_width, True)
   centroid_y = norm_list(centroid_y, 5, 295, True)
 
   combs = list(combinations(groups.keys(), 2))
@@ -95,7 +95,7 @@ def get_simplied_group_network(src, name, color_name):
   
   return data, nodes
 
-def get_normal_network(src, name, color_name):
+def get_normal_network(src, name, color_name, chart_width):
   nw = src.get_network(name=name)
 
   #adds in all links
@@ -103,7 +103,6 @@ def get_normal_network(src, name, color_name):
   data = data + [[0,11], [0,14], ..., [33, 62],...]
   '''
   data = [[ str(d['from']), str(d['to']) ] for d in nw.links]
-    
   #scale sizes
   sizes = [d['row_count'] for d in nw.nodes]
   norm_sizes = norm_list(sizes, 2, 10)
@@ -117,7 +116,7 @@ def get_normal_network(src, name, color_name):
   #Get plotX and plotY values
   x = [v['x'] for v in nw.nodes]
   y = [-1*v['y'] for v in nw.nodes]
-  x = norm_list(x, 5, 495, True)
+  x = norm_list(x, 5, chart_width, True)
   y = norm_list(y, 5, 295, True)
 
   nodes_id_to_group_id = {}
@@ -172,11 +171,11 @@ class GraphService(MethodView):
       if network_data['simplified']:
         print("Simplified")
       
-        data, nodes = get_simplied_group_network(src, grp_name, network_data['color_name'])
+        data, nodes = get_simplied_group_network(src, grp_name, network_data['color_name'], network_data['chart_width'])
       else:
         print("Regular")
         #get network nodes
-        data, nodes = get_normal_network(src, grp_name, network_data['color_name'])
+        data, nodes = get_normal_network(src, grp_name, network_data['color_name'], network_data['chart_width'])
 
       network_data['data'] = data
       network_data['nodes'] = nodes

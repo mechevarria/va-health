@@ -235,11 +235,17 @@ class DefaultPatientService(MethodView):
         "Engagement_Decrease_Risk": "Risk_score_is_decrease_visits_count_permonth_period3_to_4_change"
       }
 
+      column = "eric"
       for k, v in columns.items():
+        column = k
+
         #Convert to int
-        if k in ['ID', 'Gender', 'Age', 'Vaccination_Status']:
+        # if k in ['ID', 'Gender', 'Age', 'Vaccination_Status']:
+        if k in ['PICKLE']:
           _ = [int(i) for i in group_stat(src, grp, v)]
         #Convert to string
+        elif k in ['A1C_Increase_Risk', "Engagement_Decrease_Risk"]:
+          _ = [round(float(i), 2) for i in group_stat(src, grp, v)]
         else:
           _ = [str(i) for i in group_stat(src, grp, v)]
         if k == "Gender":
@@ -253,7 +259,7 @@ class DefaultPatientService(MethodView):
       return df.to_dict(orient='records')
 
     except Exception as e: 
-      abort(http_status_code=404, message=f"Error getting Patient data from source. Error: {str(e)}")
+      abort(http_status_code=404, message=f"Error getting Patient data from source for column {column} Error: {str(e)}")
 
 
 @blp.route("/patient")
