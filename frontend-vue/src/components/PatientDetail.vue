@@ -212,22 +212,13 @@
               >
                 <td>{{ entry[0] }}</td>
                 <td>
-                  <i
-                    class="cil-check-circle text-primary"
-                    v-if="entry[1].period1 == 1"
-                  ></i>
+                  {{ entry[1].period1 }}
                 </td>
                 <td>
-                  <i
-                    class="cil-check-circle text-primary"
-                    v-if="entry[1].period2 == 1"
-                  ></i>
+                  {{ entry[1].period2 }}
                 </td>
                 <td>
-                  <i
-                    class="cil-check-circle text-primary"
-                    v-if="entry[1].period3 == 1"
-                  ></i>
+                  {{ entry[1].period3 }}
                 </td>
               </tr>
             </tbody>
