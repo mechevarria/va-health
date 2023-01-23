@@ -40,11 +40,10 @@
       >
     </div>
     <div class="card-body">
-      <div class="card-text">
+      <div class="card-text" ref="chartContainer">
         <highcharts
           class="hc"
           :options="chartOptions"
-          ref="chart"
           v-if="showChart"
         ></highcharts>
       </div>
@@ -82,6 +81,7 @@ export default {
       selectedColor: '',
       selectedText: '',
       colorScale: null,
+      chartWidth: 0,
       chartOptions: {
         credits: {
           enabled: false
@@ -136,7 +136,8 @@ export default {
       const url = '/api/graph'
       const body = {
         color_name: this.selectedColor,
-        simplified: this.simplified
+        simplified: this.simplified,
+        chart_width: this.$refs.chartContainer.offsetWidth
       }
       if (this.filterId > 0) {
         body.filter_id = this.filterId
@@ -177,7 +178,7 @@ export default {
       }, 10)
     }
   },
-  created() {
+  mounted() {
     if(this.label > 1) {
       this.simplified = false
     }
