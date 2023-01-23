@@ -1,15 +1,5 @@
 <template>
   <span>
-    <div class="d-flex justify-content-end">
-      <button type="button" class="btn btn-secondary" :disabled="isBusy" @click="getKpi()">
-        <i class="cil-reload btn-icon mr-1" v-if="!isBusy"></i>
-        <i
-          class="spinner-border spinner-border-sm btn-icon mr-1"
-          v-if="isBusy"
-        ></i>
-        KPI
-      </button>
-    </div>
     <div class="card-deck">
       <div
         class="card mb-4 mt-2 text-white"
@@ -18,7 +8,7 @@
         :class="getStyle(index)"
       >
         <div class="card-body">
-          {{ kpi.name }}
+          {{ kpi.name }}  <i class="spinner-border spinner-border-sm float-right" v-if="isBusy"></i>
           <h4>{{ kpi.value }}</h4>
         </div>
       </div>
@@ -42,18 +32,18 @@ export default {
     }
   },
   methods: {
-    placeholder() {
+    setPlaceholder() {
       this.data = []
       for (let i = 0; i < 5; i++) {
-      this.data.push({
-        name: '--',
-        value: '--'
-      })
-    }
+        this.data.push({
+          name: '--',
+          value: '--'
+        })
+      }
     },
     getKpi() {
+      this.setPlaceholder()
       this.isBusy = true
-      this.placeholder()
       let url = '/api/kpi'
       if (this.filterId > 0) {
         url = url + `/${this.filterId}`
@@ -93,8 +83,13 @@ export default {
       return style
     }
   },
+  watch: {
+    filterId() {
+      this.getKpi()
+    }
+  },
   created() {
-    this.placeholder()
+    this.getKpi()
   }
 }
 </script>
