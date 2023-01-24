@@ -12,8 +12,13 @@
 
     <div class="card" v-if="groupId.length > 1 && !isBusy">
       <div class="card-body">
+        <h6 class="card-subtitle mb-2">{{ data.group_size }} patients in group</h6>
         <p class="card-text">
-          <pre>{{ data }}</pre>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" v-for="(explain, index) in data.explains" :key="index">
+              {{ explain }}
+            </li>
+          </ul>
         </p>
       </div>
     </div>
