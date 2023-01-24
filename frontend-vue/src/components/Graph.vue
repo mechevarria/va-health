@@ -56,7 +56,7 @@ Networkgraph(Highcharts)
 
 export default {
   name: 'AppGraph',
-  computed: mapState(['filterId', 'colorOptions', 'colors']),
+  computed: mapState(['filterId', 'colorOptions', 'colors', 'doRedraw']),
   mixins: [msgMixin],
   props: {
     label: {
@@ -160,6 +160,15 @@ export default {
     },
     simplified() {
       this.getGraph()
+    },
+    doRedraw() {
+      if(this.doRedraw && this.label === 1) {
+        this.showChart = false
+        setTimeout(() => {
+          this.showChart = true
+          this.$store.commit('noRedraw')
+        },10)
+      }
     }
   },
   mounted() {
