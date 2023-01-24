@@ -26,13 +26,6 @@
       </b-dropdown>
       <b-form-checkbox
         class="float-right mr-3 mt-2"
-        v-model="simulation"
-        :id="`simulation-${label}`"
-        :disabled="isBusy"
-        >Simulation</b-form-checkbox
-      >
-      <b-form-checkbox
-        class="float-right mr-3 mt-2"
         v-model="simplified"
         :id="`simplified-${label}`"
         :disabled="isBusy"
@@ -77,7 +70,6 @@ export default {
       isBusy: false,
       simplified: true,
       showChart: true,
-      simulation: false,
       selectedColor: '',
       selectedText: '',
       colorScale: null,
@@ -98,7 +90,7 @@ export default {
             enableMouseTracking: true,
             layoutAlgorithm: {
               enableSimulation: false,
-              initialPositions: 'circle'
+              maxIterations: 2
             },
             dataLabels: {
               enabled: false
@@ -137,7 +129,7 @@ export default {
       const body = {
         color_name: this.selectedColor,
         simplified: this.simplified,
-        chart_width: this.$refs.chartContainer.offsetWidth
+        chart_width: this.$refs.chartContainer.offsetWidth - 10
       }
       if (this.filterId > 0) {
         body.filter_id = this.filterId
@@ -149,7 +141,6 @@ export default {
           let nodes = res.data.nodes
           nodes.forEach((node) => {
             node.color = this.colorScale(node.colorScale).toString()
-            //console.log(`node: ${node.id}, color: ${node.color}, colorScale: ${node.colorScale}`)
           })
           this.chartOptions.series[0].nodes = nodes
           this.chartOptions.series[0].data = res.data.data
@@ -169,13 +160,6 @@ export default {
     },
     simplified() {
       this.getGraph()
-    },
-    simulation() {
-      this.showChart = false
-      this.chartOptions.series[0].layoutAlgorithm.enableSimulation = this.simulation
-      setTimeout(() => {
-        this.showChart = true
-      }, 10)
     }
   },
   mounted() {
