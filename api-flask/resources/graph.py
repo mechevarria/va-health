@@ -116,7 +116,17 @@ def get_normal_network(src, name, color_name, chart_width):
   data = [[ str(d['from']), str(d['to']) ] for d in nw.links]
 
   #scale sizes
-  sizes = [d['row_count'] for d in nw.nodes] + [len(singleton_node_ids)]  #Add another value and scale for the size of the singletons
+  sizes = [d['row_count'] for d in nw.nodes] 
+  #Add another value and scale for the size of the singletons
+  if len(singleton_node_ids) > 0:
+    if max(sizes) < len(singleton_node_ids):
+      #create a node just a little bigger than biggest
+      sizes = sizes + [max(sizes)*1.05] 
+
+    else:
+      #create a node the correct size
+      sizes = sizes + [len(singleton_node_ids)] 
+  
   norm_sizes = norm_list(sizes, 2, 10)
 
   #get coloring values
