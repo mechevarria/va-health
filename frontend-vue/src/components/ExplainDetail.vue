@@ -1,15 +1,12 @@
 <template>
   <span>
-    <span
-      class="d-flex justify-content-between align-items-center mb-2"
-      v-if="groupId.length > 1 && !isBusy"
-    >
-      <h5>Group {{ groupId }} Explains:</h5>
-      <button type="button" class="btn btn-secondary" @click="clearGroup()">
-        <span class="cil-x-circle icon mr-1"></span>Clear
-      </button>
+    <span class="mb-2" v-if="groupId.length > 1">
+      <h5>
+        All Explains for Group {{ groupId }}:
+        <i class="spinner-border spinner-border-sm mb-1 ml-1" v-if="isBusy"></i>
+      </h5>
     </span>
-    <div class="card-deck mb-2" v-if="groupId.length > 1">
+    <div class="card-deck mb-2" v-if="groupId.length > 1 && !isBusy">
       <div class="card">
         <div class="card-header">
           Continuous Explains
@@ -159,62 +156,65 @@ export default {
     },
     groupId(newValue) {
       if (newValue.length > 1) {
-        this.isBusy = true
-        this.catExplains = []
-        this.contExplains = []
-        const url = `/api/group/${newValue}`
-        axios
-          .get(url)
-          .then((res) => {
-            res.data.explains.forEach((explain) => {
-              if (explain.type == 'categorical') {
-                this.catExplains.push(explain)
-              } else {
-                explain.primaryChart = JSON.parse(
-                  JSON.stringify(this.defaultOptions)
-                )
-                explain.primaryChart.series[0].name = explain.name
-                explain.primaryChart.series[0].data = [
-                  explain.primary_group_quartiles
-                ]
-                explain.primaryChart.plotOptions.boxplot.fillColor =
-                  this.colors.primary
-                explain.primaryChart.plotOptions.boxplot.stemColor =
-                  this.colors.primary
-                explain.primaryChart.plotOptions.boxplot.whiskerColor =
-                  this.colors.primary
-
-                if (this.showSecondary) {
-                  explain.secondaryChart = JSON.parse(
-                    JSON.stringify(this.defaultOptions)
-                  )
-                  explain.secondaryChart.series[0].name = explain.name
-                  explain.secondaryChart.series[0].data = [
-                    explain.secondary_group_quartiles
-                  ]
-                  explain.secondaryChart.plotOptions.boxplot.fillColor =
-                    this.colors.info
-                  explain.secondaryChart.plotOptions.boxplot.stemColor =
-                    this.colors.info
-                  explain.secondaryChart.plotOptions.boxplot.whiskerColor =
-                    this.colors.info
-                }
-
-                this.contExplains.push(explain)
-              }
-            })
-          })
-          .catch((err) => {
-            console.error(err)
-            this.errorMsg(err.message)
-          })
-          .finally(() => {
-            this.isBusy = false
-          })
+        this.getExplainDetail(newValue)
       }
     }
   },
   methods: {
+    getExplainDetail(groupId) {
+      this.isBusy = true
+      this.catExplains = []
+      this.contExplains = []
+      const url = `/api/group/${groupId}`
+      axios
+        .get(url)
+        .then((res) => {
+          res.data.explains.forEach((explain) => {
+            if (explain.type == 'categorical') {
+              this.catExplains.push(explain)
+            } else {
+              explain.primaryChart = JSON.parse(
+                JSON.stringify(this.defaultOptions)
+              )
+              explain.primaryChart.series[0].name = explain.name
+              explain.primaryChart.series[0].data = [
+                explain.primary_group_quartiles
+              ]
+              explain.primaryChart.plotOptions.boxplot.fillColor =
+                this.colors.primary
+              explain.primaryChart.plotOptions.boxplot.stemColor =
+                this.colors.primary
+              explain.primaryChart.plotOptions.boxplot.whiskerColor =
+                this.colors.primary
+
+              if (this.showSecondary) {
+                explain.secondaryChart = JSON.parse(
+                  JSON.stringify(this.defaultOptions)
+                )
+                explain.secondaryChart.series[0].name = explain.name
+                explain.secondaryChart.series[0].data = [
+                  explain.secondary_group_quartiles
+                ]
+                explain.secondaryChart.plotOptions.boxplot.fillColor =
+                  this.colors.info
+                explain.secondaryChart.plotOptions.boxplot.stemColor =
+                  this.colors.info
+                explain.secondaryChart.plotOptions.boxplot.whiskerColor =
+                  this.colors.info
+              }
+
+              this.contExplains.push(explain)
+            }
+          })
+        })
+        .catch((err) => {
+          console.error(err)
+          this.errorMsg(err.message)
+        })
+        .finally(() => {
+          this.isBusy = false
+        })
+    },
     clearGroup() {
       this.contExplains = []
       this.catExplains = []
