@@ -10,6 +10,7 @@ const store = new Vuex.Store({
         messages: [],
         groupId: 0,
         filterId: 0,
+        doRedraw: false,
         colors: {
             secondary: '#ea39b8',
             warning: '#ffc107',
@@ -216,6 +217,12 @@ const store = new Vuex.Store({
         },
         clearFilter(state) {
             state.filterId = 0
+        },
+        doRedraw(state) {
+            state.doRedraw = true
+        },
+        noRedraw(state) {
+            state.doRedraw = false
         }
     }
 })
