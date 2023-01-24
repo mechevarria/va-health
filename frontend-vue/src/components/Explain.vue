@@ -1,81 +1,20 @@
 <template>
   <span>
-    <h5>Groups:</h5>
-    <div class="row row-cols-1 row-cols-md-3">
-      <!-- default load card -->
-      <div class="col" v-if="groups.length < 1">
-        <div class="card">
-          <div class="card-header">
-            <h5 class="d-flex justify-content-between align-items-center">
-              --
-              <button
-                type="button"
-                class="btn btn-sm btn-secondary"
-                @click="getExplain()"
-              >
-                <i class="cil-reload btn-icon" v-if="!isBusy"></i>
-                <i
-                  class="spinner-border spinner-border-sm btn-icon"
-                  v-if="isBusy"
-                ></i>
-              </button>
-            </h5>
-            <span class="bg-light text-dark">
-              <span class="font-weight-bold">Patients:</span>
-              -- |
-              <span class="font-weight-bold">Top Explainers:</span>
-              --
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="col" v-for="(group, index) in groups" :key="index">
-        <div class="card">
-          <div class="card-header">
-            <h5 class="d-flex justify-content-between align-items-center">
-              {{ group.id }}
-              <button
-                type="button"
-                class="btn btn-sm"
-                @click="toggleExplain(index)"
-              >
-                <i
-                  v-if="!group.visible"
-                  class="cil-chevron-bottom btn-icon"
-                ></i>
-                <i v-if="group.visible" class="cil-chevron-top btn-icon"></i>
-              </button>
-            </h5>
-            <span class="bg-light text-dark">
-              <span class="font-weight-bold">Patients:</span>
-              {{ group.group_size }} |
-              <span class="font-weight-bold">Top Explainers:</span>
-              {{ group.explains.length }}
-            </span>
-          </div>
-          <div class="card-body" v-if="group.visible">
-            <div class="card-text">
-              <div class="d-flex justify-content-between align-items-center">
-                <b>Top Explainers:</b>
-                <button
-                  class="btn btn-primary mt-2 mb-2"
-                  @click="getGroupDetails(group.id, index)"
-                >
-                  <i class="cil-list-rich btn-icon mr-1"></i>All Explainers
-                </button>
-              </div>
-              <ul class="list-group list-group-flush">
-                <li
-                  class="list-group-item"
-                  v-for="(explain, index) in group.explains"
-                  v-bind:key="index"
-                >
-                  {{ explain }}
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+    <span v-if="groupId.length > 1" class="d-flex justify-content-between align-items-center mb-2">
+      <h5>Top Explains for Group {{ groupId }}
+        <i class="spinner-border spinner-border-sm mb-1 ml-1" v-if="isBusy"></i>
+      </h5>
+
+      <button type="button" class="btn btn-secondary" @click="clearGroup()" :disabled="isBusy">
+        <span class="cil-x-circle icon mr-1"></span>Clear
+      </button>
+    </span>
+
+    <div class="card" v-if="groupId.length > 1 && !isBusy">
+      <div class="card-body">
+        <p class="card-text">
+          <pre>{{ data }}</pre>
+        </p>
       </div>
     </div>
     <router-view></router-view>
@@ -90,28 +29,26 @@ import msgMixin from '../mixins/msg-mixin'
 export default {
   name: 'AppExplain',
   mixins: [msgMixin],
-  computed: mapState(['filterId']),
+  computed: mapState(['groupId']),
   data() {
     return {
       isBusy: false,
-      groups: []
+      data: {}
     }
   },
   methods: {
-    getExplain() {
+    clearGroup() {
+      this.data = {}
+      this.$store.commit('clearGroup')
+    },
+    getTopExplains(groupId) {
       this.isBusy = true
-      this.groups = []
-      let url = '/api/explain'
-      if (this.filterId > 0) {
-        url = url + `/${this.filterId}`
-      }
+      this.data = {}
+      let url = `/api/explain/${groupId}`
       axios
         .get(url)
         .then((res) => {
-          this.groups = res.data
-          this.groups.forEach((group) => {
-            group.visible = false
-          })
+          this.data = res.data
         })
         .catch((err) => {
           console.error(err)
@@ -120,21 +57,17 @@ export default {
         .finally(() => {
           this.isBusy = false
         })
-    },
-    toggleExplain(index) {
-      let group = this.groups[index]
-      group.visible = !group.visible
-      this.$set(this.groups, index, group)
-    },
-    getGroupDetails(id, index) {
-      this.$store.commit('setGroup', id)
-      this.toggleExplain(index)
     }
   },
   watch: {
-    filterId() {
-      this.groups = []
+    groupId(newValue) {
+      if(newValue.length > 1) {
+        this.getTopExplains(newValue)
+      }
     }
+  },
+  created() {
+    this.clearGroup()
   }
 }
 </script>
