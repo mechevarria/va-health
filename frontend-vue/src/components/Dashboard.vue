@@ -237,6 +237,11 @@ export default {
     doClear() {
       this.$store.commit('clearFilter')
     }
+  },
+  watch: {
+    compare() {
+      this.$store.commit('doRedraw')
+    } 
   }
 }
 </script>
