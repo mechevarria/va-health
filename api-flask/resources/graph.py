@@ -98,13 +98,25 @@ def get_simplied_group_network(src, name, color_name, chart_width):
 def get_normal_network(src, name, color_name, chart_width):
   nw = src.get_network(name=name)
 
+  all_node_ids= set(range(nw.node_count))
+
+  #get all nodes with edges to remove singletons
+  nodes_with_edges_ids = set()
+  for link in nw.links:
+    nodes_with_edges_ids.add(link['from'])
+    nodes_with_edges_ids.add(link['to'])  
+
+  singleton_node_ids = all_node_ids.difference(nodes_with_edges_ids)
+
+  #get list of non-sigleton nodes
   #adds in all links
   '''
   data = data + [[0,11], [0,14], ..., [33, 62],...]
   '''
   data = [[ str(d['from']), str(d['to']) ] for d in nw.links]
+
   #scale sizes
-  sizes = [d['row_count'] for d in nw.nodes]
+  sizes = [d['row_count'] for d in nw.nodes] + [len(singleton_node_ids)]  #Add another value and scale for the size of the singletons
   norm_sizes = norm_list(sizes, 2, 10)
 
   #get coloring values
@@ -112,13 +124,20 @@ def get_normal_network(src, name, color_name, chart_width):
   coloring_values = nw.get_coloring_values(name=color_name)
   #scale coloring between zero and 1
   norm_coloring_values = scale_colors(coloring_values)
-
   #Get plotX and plotY values
-  x = [v['x'] for v in nw.nodes]
-  y = [-1*v['y'] for v in nw.nodes]
+  if len(singleton_node_ids) > 0:
+    #Singleton points, need to add extra point
+    x = [v['x'] for v in nw.nodes] + [sum([v['x'] for v in nw.nodes if int(v['id']) in singleton_node_ids]) / len(singleton_node_ids)]
+    y = [-1*v['y'] for v in nw.nodes] + [sum([-1*v['y'] for v in nw.nodes if int(v['id']) in singleton_node_ids]) / len(singleton_node_ids)]
+  else:
+    #No singleton points, no need to add extra point
+    x = [v['x'] for v in nw.nodes]
+    y = [-1*v['y'] for v in nw.nodes]
+
   x = norm_list(x, 5, chart_width, True)
   y = norm_list(y, 5, 295, True)
 
+  #Singletons should not be in a group
   nodes_id_to_group_id = {}
   for g in nw.node_groups:
       for ni in g['node_ids']:
@@ -126,7 +145,27 @@ def get_normal_network(src, name, color_name, chart_width):
 
   # get node dict
   #scale radius between 10 and 2
-  nodes = [{'id': d['id'], 'groupId': nodes_id_to_group_id[int(d['id'])] if int(d['id']) in nodes_id_to_group_id else None, 'marker': { 'radius': norm_sizes[e] }, 'colorScale':  norm_coloring_values[e], "plotX": x[e], "plotY": y[e]} for e, d in enumerate(nw.nodes)]
+  nodes = [{'id': d['id'], 'groupId': nodes_id_to_group_id[int(d['id'])] if int(d['id']) in nodes_id_to_group_id else None, 
+              'marker': { 'radius': norm_sizes[e] }, 'colorScale':  norm_coloring_values[e], "plotX": x[e], "plotY": y[e]} 
+              for e, d in enumerate(nw.nodes) if e in nodes_with_edges_ids]
+  
+
+  #add one singleton node that contains all singletons
+  #get singlton centroid
+  # singleton_nodes = [n for n in nw.nodes if int(n['id']) in singleton_node_ids]
+  if len(singleton_node_ids) > 0:
+    sing_x = x[-1]
+    sing_y = y[-1]
+
+    #compute average node color for singleotn nodes
+    sing_color = [norm_coloring_values[e] for e in singleton_node_ids]
+    sing_color = sum([norm_coloring_values[e] for e in singleton_node_ids]) / len(singleton_node_ids)
+    
+    sing_size = norm_sizes[-1]  #added extra size for singltons above
+
+    #add singlton node to list 
+    nodes = nodes + [{'id': 'Singletons', 'groupId': None, 
+                 'marker': { 'radius': sing_size }, 'colorScale':  sing_color, "plotX": sing_x, "plotY": sing_y} ]
 
   return data, nodes
 
