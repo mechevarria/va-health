@@ -51,7 +51,10 @@ def get_compares(src, group_id):
   grp = src.get_group(id=group_id)
   _exp = {'id': grp['id'], 'name': grp['name'], 'group_size': grp['row_count']}
 
-  comp = src.get_comparison(name=f"{grp['name']} vs. Rest on All columns")
+  comp = src.get_comparison(name=f"{grp['name']} vs. Rest")
+  if "msg" in comp:  #means dictionary returned with message saying compare does not exist
+      comp = src.compare_groups(group_1_name=grp['name'],group_2_name='Rest', name=f"{grp['name']} vs. Rest", async_=False)
+
   top_continuous_explainers = list(filter(lambda e: e['ks_score'] > 0.5, comp['continuous_explainers']))
   sorted_continuous_explainers = sorted(top_continuous_explainers, key=lambda d: d['ks_score'])
   sorted_continuous_explainers = [f"{c['name']} {'higher' if c['ks_sign']=='+' else 'lower'} than cohort -> {'Significant' if c['ks_score']>= 0.7 else 'Moderate'}" for c in sorted_continuous_explainers]

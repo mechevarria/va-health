@@ -95,10 +95,10 @@ def get_group_details(src, group_1_id, group_2_id="Rest"):
     _exp = {'id': grp['id'], 'primary_name': grp['name'], 'primary_size': grp['row_count'], 'secondary_name': 'Rest', 'secondary_size': src.row_count - grp['row_count']}
 
     #check to make sure comparison exists.  If not, create
-    comp = src.get_comparison(name=f"{grp['name']} vs. Rest on All columns")
+    comp = src.get_comparison(name=f"{grp['name']} vs. Rest")
 
-    if "msg" in comp:
-      comp = src.compare_groups(group_1_name=grp['name'],group_2_name="Rest", async_=False)
+    if "msg" in comp:  #means dictionary returned with message saying compare does not exist
+      comp = src.compare_groups(group_1_name=grp['name'],group_2_name="Rest", name=f"{grp['name']} vs. Rest", async_=False)
   else:
     print("group 2 is NOT rest")
 
@@ -106,9 +106,9 @@ def get_group_details(src, group_1_id, group_2_id="Rest"):
     grp2 = src.get_group(id=group_2_id)
     _exp = {'primary_name': grp1['name'], 'primary_size': grp1['row_count'], 'secondary_name': grp2['name'], 'secondary_size': grp2['row_count']}
 
-    comp = src.get_comparison(name=f"{grp1['name']} vs. {grp2['name']} on All columns")
-    if "msg" in comp:
-      comp = src.compare_groups(group_1_name=grp1['name'],group_2_name=grp2['name'], async_=False)
+    comp = src.get_comparison(name=f"{grp1['name']} vs. {grp2['name']}")
+    if "msg" in comp:  #means dictionary returned with message saying compare does not exist
+      comp = src.compare_groups(group_1_name=grp1['name'],group_2_name=grp2['name'], name=f"{grp1['name']} vs. {grp2['name']}", async_=False)
 
     _exp['id'] = comp['id']
   

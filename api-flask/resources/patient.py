@@ -304,8 +304,8 @@ class DetailedPatientService(MethodView):
 
       #predictive risk scores
       return_data['risk_scores'] = {
-          "a1c_increase_risk": zipdict["Risk_score_is_increase_A1Clast_period3_to_4_change"],
-          "engagement_decrease_risk": zipdict["Risk_score_is_decrease_visits_count_permonth_period3_to_4_change"]
+          "a1c_increase_risk": round(float(zipdict["Risk_score_is_increase_A1Clast_period3_to_4_change"]), 3),
+          "engagement_decrease_risk": round(float(zipdict["Risk_score_is_decrease_visits_count_permonth_period3_to_4_change"]), 3)
           }
 
       return_data['raw'] = zipdict

@@ -54,7 +54,7 @@ class FilterService(MethodView):
     filter_id: the id for the filter/group 
     '''
     #create the network
-    #TODO - OAA with Target?  Or using metric and lense from base network
+    #using metric and lense from base network
     #Discussion with Amy recommended using the same metric and lense that she used in her analysis
     #check to see if network exists
     nw = src.get_network(group['name'])
@@ -85,14 +85,15 @@ class FilterService(MethodView):
                                           name=group['id'])
 
       #create comparisons vs rest
-      jobs = []
-      for g in autogroups.groups:
-        jobs.append(src.compare_groups(group_1_name=g['name'],group_2_name="Rest", async_=True))
+      # jobs = []
+      # for g in autogroups.groups:
+      #   jobs.append(src.compare_groups(group_1_name=g['name'],group_2_name="Rest", async_=True))
 
-      for e, job in enumerate(jobs):
-          print(e, job)
-          job.sync()
-
+      # # for e, job in enumerate(jobs):
+      # #     print(e, job)
+      # #     job.sync()
+      pg_ids = [g['id'] for g in autogroups.groups]
+      src.compare_multiple_groups(primary_group_ids = pg_ids, secondary_group = 'Rest', async_=True)
     return
     
 
