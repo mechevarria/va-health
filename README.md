@@ -8,6 +8,7 @@ cd api-flask
 pip install -r requirements.txt
 ```
 * Set necessary environment variables in `api-flask/.env`
+* Do **NOT** use spaces for the values
 ```properties
 EUREKA_USER="firstname.lastname@symphonyai.com"
 EUREKA_PASS="my_password"
@@ -16,7 +17,7 @@ SOURCE_NAME="iris.csv"
 FLASK_APP="app.py"
 FLASK_DEBUG="1"
 SOURCE_NAME_HOLDOUT="va_health_test.csv"
-NETWORK_NAME="OAA 1"
+NETWORK_NAME="OAA_1"
 ```
 
 For local development, this script will start up the flask server
