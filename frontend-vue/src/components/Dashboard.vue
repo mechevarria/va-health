@@ -65,7 +65,7 @@
       </div>
     </div>
     <AppExplain />
-    <AppExplainDetail :show-secondary="false" />
+    <AppExplainDetail show-secondary />
     <b-modal
       id="filter-modal"
       title="Dashboard Filter"
