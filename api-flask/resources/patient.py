@@ -310,7 +310,7 @@ class DetailedPatientService(MethodView):
           "engagement_decrease_risk": round(float(zipdict["Risk_score_is_decrease_visits_count_permonth_period3_to_4_change"]), 3)
           }
 
-      return_data['raw'] = zipdict
+      # return_data['raw'] = zipdict
 
       return_data['comorbidities'] = {k.replace("conditions_pre_", ""): v for k, v in zipdict.items() if "conditions" in k and v == 1}
       return_data['carepath'] = get_carepath(zipdict)
