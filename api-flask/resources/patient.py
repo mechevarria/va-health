@@ -246,10 +246,12 @@ class DefaultPatientService(MethodView):
         #Convert to string
         elif k in ['A1C_Increase_Risk', "Engagement_Decrease_Risk"]:
           _ = [round(float(i), 2) for i in group_stat(src, grp, v)]
+        elif k == "Gender":
+          _digit = [round(float(i), 2) for i in group_stat(src, grp, v)]
+          _ = ["Male" if (i == 1) else "Female" for i in _digit]
         else:
           _ = [str(i) for i in group_stat(src, grp, v)]
-        if k == "Gender":
-          _ = ["Male" if (i == 1) else "Female" for i in _ ]
+
         values[k] = _
 
     
