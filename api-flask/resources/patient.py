@@ -18,9 +18,11 @@ def natural_sort(l):
     return sorted(l, key=alphanum_key)
 
 def group_stat(src, grp, column_name):
-  _= src.get_group_features(column_name=column_name, group_list=[grp])
-  values = [v for v in _[list(_.keys())[0]].values()]
-  return values
+    gfd=src.get_group_features(column_name=column_name, group_list=[grp])
+    _ = gfd[int(grp['id'])]
+    sorted_keys = sorted(list(_.keys()))
+    values = [_[k] for k in sorted_keys]
+    return values
 
 def get_bloodtype(dict):
   bt_dict = {k: dict.get(k, None) for k in dict.keys() if "BloodType_" in k}
