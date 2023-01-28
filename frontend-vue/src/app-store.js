@@ -12,12 +12,12 @@ const store = new Vuex.Store({
         filterId: 0,
         doRedraw: false,
         colors: {
-            // secondary: '#ea39b8',
-            // warning: '#ffc107',
-            // info: '#1ba2f6',
-            secondary: '#ff0000',
-            warning: '#ffea00',
-            info: '#008000',
+            secondary: '#ea39b8',
+            warning: '#ffc107',
+            info: '#1ba2f6',
+            graphLow: '#ff0000',
+            graphMid: '#ffea00',
+            graphHigh: '#008000',
             primary: '#6f42c1'
         },
         colorOptions: [{
