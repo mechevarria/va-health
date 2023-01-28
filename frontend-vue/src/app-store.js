@@ -12,23 +12,41 @@ const store = new Vuex.Store({
         filterId: 0,
         doRedraw: false,
         colors: {
-            secondary: '#ea39b8',
-            warning: '#ffc107',
-            info: '#1ba2f6',
+            // secondary: '#ea39b8',
+            // warning: '#ffc107',
+            // info: '#1ba2f6',
+            secondary: '#ff0000',
+            warning: '#ffea00',
+            info: '#008000',
             primary: '#6f42c1'
         },
         colorOptions: [{
             value: 'A1Clast_period2_to_4_change',
-            text: 'Change in A1C'
+            text: 'Change in A1C (period 2->4)'
+        }, {
+            value: 'A1Clast_period3_to_4_change',
+            text: 'Change in A1C (period 3->4)'
         }, {
             value: 'visits_count_permonth_period2_to_4_change',
-            text: 'Change in Engagement'
+            text: 'Visits: change in Engagement (period 2->4)'
         }, {
-            value: 'Is_increase_A1Clast_period3_to_4_change',
-            text: 'Predicted A1C Increase'
+            value: 'visits_count_permonth_period3_to_4_change',
+            text: 'Visits: change in Engagement (period 3->4)'
         }, {
-            value: 'Is_decrease_visits_count_permonth_period3_to_4_change',
-            text: 'Predicted Change in Engagement'
+            value: 'visits_count_proportion_Presumed In Person_period3',
+            text: 'Visits: In-Person %'
+        },{
+            value: 'modality_stayed_f2f_period2_to_3',
+            text: 'Modality: stayed face-to-face'
+        }, {
+            value: 'modality_stayed_remote_period2_to_3',
+            text: 'Modality: stayed remote'
+        }, {
+            value: 'modality_switched_to_f2f_period2_to_3',
+            text: 'Modality: switched to face-to-face'
+        }, {
+            value: 'modality_switched_to_remote_period2_to_3',
+            text: 'Modality: switched to remote'
         }],
         filters: [{
             name: 'Race',

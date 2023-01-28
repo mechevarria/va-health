@@ -11,6 +11,7 @@ from globals import user
 
 blp = Blueprint("graph", __name__, description="Operations on graph")
 
+'''Normalize colors between an uper and lower bound'''
 def norm_list(the_list, new_min_value=0, new_max_value=1, return_int = False):
   min_value = min(the_list)
   max_value = max(the_list)
@@ -19,6 +20,9 @@ def norm_list(the_list, new_min_value=0, new_max_value=1, return_int = False):
   if return_int: scaled_values = [round(i) for i in scaled_values]
   return scaled_values
 
+'''Scale colors values, basically bin all numbers more than 
+two std away from the mean into the same bins, i for positive and 
+1 for negative'''
 def scale_colors(colors):
   zscaled_colors = stats.zscore(colors)
   #using c/abs(c) to determine the sign of c 
@@ -74,7 +78,7 @@ def get_simplied_group_network(src, name, color_name, chart_width):
       centroid_x.append(_x)
       centroid_y.append(_y)
 
-  scaled_sizes =  norm_list(sizes, 10, 30, True) #Mike requested the radius scale between 30 and 10
+  scaled_sizes =  norm_list(sizes, 7, 15, True) #Mike requested the radius scale between 30 and 10
   centroid_x = norm_list(centroid_x, 5, chart_width, True)
   centroid_y = norm_list(centroid_y, 5, 295, True)
 
@@ -127,7 +131,7 @@ def get_normal_network(src, name, color_name, chart_width):
       #create a node the correct size
       sizes = sizes + [len(singleton_node_ids)] 
   
-  norm_sizes = norm_list(sizes, 2, 10)
+  norm_sizes = norm_list(sizes, 3,5)
 
   #get coloring values
   outcome_coloring = src.create_coloring(name=color_name, column_name=color_name)
@@ -164,8 +168,10 @@ def get_normal_network(src, name, color_name, chart_width):
   #get singlton centroid
   # singleton_nodes = [n for n in nw.nodes if int(n['id']) in singleton_node_ids]
   if len(singleton_node_ids) > 0:
-    sing_x = x[-1]
-    sing_y = y[-1]
+    # sing_x = x[-1]
+    # sing_y = y[-1]
+    sing_x = 20
+    sing_y = 20
 
     #compute average node color for singleotn nodes
     sing_color = [norm_coloring_values[e] for e in singleton_node_ids]
