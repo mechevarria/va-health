@@ -21,11 +21,20 @@ const store = new Vuex.Store({
             primary: '#6f42c1'
         },
         colorOptions: [{
+            value: 'A1C_last_period2',
+            text: 'A1C: Period 2'
+        }, {
+            value: 'A1C_last_period3',
+            text: 'A1C: Period 3'
+        }, {
+            value: 'A1C_last_period4',
+            text: 'A1C: Period 4'
+        }, {
             value: 'A1Clast_period2_to_4_change',
-            text: 'Change in A1C (period 2->4)'
+            text: 'A1C: Change (period 2->4)'
         }, {
             value: 'A1Clast_period3_to_4_change',
-            text: 'Change in A1C (period 3->4)'
+            text: 'A1C: Change (period 3->4)'
         }, {
             value: 'visits_count_permonth_period2_to_4_change',
             text: 'Visits: change in Engagement (period 2->4)'
@@ -36,6 +45,15 @@ const store = new Vuex.Store({
             value: 'visits_count_proportion_Presumed In Person_period3',
             text: 'Visits: In-Person %'
         },{
+            value: 'visits_count_period2',
+            text: 'Visits: Total Count Period 2'
+        }, {
+            value: 'visits_count_period3',
+            text: 'Visits: Total Count Period 3'
+        }, {
+            value: 'visits_count_period4',
+            text: 'Visits: Total Count Period 4'
+        }, {
             value: 'modality_stayed_f2f_period2_to_3',
             text: 'Modality: stayed face-to-face'
         }, {
