@@ -189,7 +189,7 @@ export default {
       this.isBusy = true
       this.$bvModal.hide('filter-modal')
       this.$store.commit('setFilters', this.filters)
-      this.infoMsg('Creating dashboard filter, please wait')
+      this.infoMsg('Computing data science pipeline, may take a few minutes')
 
       const url = '/api/filter'
       const postFilters = []
