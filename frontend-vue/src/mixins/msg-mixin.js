@@ -45,7 +45,7 @@ export default {
         solid: true,
         noCloseButton: true,
         toastClass: msg.classes,
-        toaster: 'b-toaster-bottom-center mb-2'
+        toaster: 'b-toaster-top-center mt-2'
       })
       this.$store.commit('addMessage', msg)
     }
