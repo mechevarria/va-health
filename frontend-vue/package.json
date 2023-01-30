@@ -1,6 +1,6 @@
 {
   "name": "clinical-health",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "author": "Mike Echevarria <michael.echevarria@symphonyai.com>",
   "scripts": {
     "serve": "vue-cli-service serve",

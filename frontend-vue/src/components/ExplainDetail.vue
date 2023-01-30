@@ -16,26 +16,20 @@
           ></i>
         </div>
         <div class="card-body">
-          <table class="table table-sm">
-            <tbody>
-              <tr v-for="(explain, index) in contExplains" :key="index">
-                <td class="app-explain">
-                  {{ explain.name }}
-                </td>
-                <td>
-                  <highcharts
-                    class="hc"
-                    :options="explain.primaryChart"
-                  ></highcharts>
-                  <highcharts
-                    v-if="showSecondary"
-                    class="hc"
-                    :options="explain.secondaryChart"
-                  ></highcharts>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <span v-for="(explain, index) in contExplains" :key="index">
+            <div class="row">
+              <div class="col-sm-6">
+                {{ explain.name }}
+              </div>
+              <div class="col-sm-6">
+                <highcharts
+                  class="hc"
+                  :options="explain.chart"
+                ></highcharts>
+              </div>
+            </div>
+            <hr />
+          </span>
         </div>
       </div>
       <div class="card">
@@ -47,26 +41,30 @@
           ></i>
         </div>
         <div class="card-body">
-          <table class="table table-sm">
-            <tr v-for="(explain, index) in catExplains" :key="index">
-              <td class="app-explain">
+          <span v-for="(explain, index) in catExplains" :key="index">
+            <div class="row">
+              <div class="col-sm-6">
                 {{ explain.name }}
-              </td>
-              <td>
-                <b-progress
-                  show-progress
-                  :value="explain.primary_group_percent"
-                  variant="primary"
-                ></b-progress>
-                <b-progress
-                  v-if="showSecondary"
-                  show-progress
-                  :value="explain.secondary_group_percent"
-                  variant="info"
-                ></b-progress>
-              </td>
-            </tr>
-          </table>
+              </div>
+              <div class="col-sm-6">
+                <div>
+                  <b-progress
+                    show-progress
+                    :value="explain.primary_group_percent"
+                    variant="primary"
+                  ></b-progress>
+                </div>
+                <div>
+                  <b-progress
+                    show-progress
+                    :value="explain.secondary_group_percent"
+                    variant="info"
+                  ></b-progress>
+                </div>
+              </div>
+            </div>
+            <hr />
+          </span>
         </div>
       </div>
     </div>
@@ -93,7 +91,6 @@ export default {
   mixins: [msgMixin],
   computed: mapState(['groupId', 'colors', 'filterId']),
   props: {
-    showSecondary: Boolean,
     clearOnCreate: Boolean
   },
   data() {
@@ -101,53 +98,7 @@ export default {
       isBusy: false,
       catExplains: [],
       contExplains: [],
-      defaultOptions: {
-        credits: {
-          enabled: false
-        },
-        chart: {
-          type: 'boxplot',
-          inverted: true,
-          backgroundColor: null,
-          height: '40',
-          spacingleft: 0,
-          spacingBottom: 0,
-          spacingTop: 0,
-          spacingRight: 0
-        },
-        tooltip: {
-          outside: true
-        },
-        legend: {
-          enabled: false
-        },
-        xAxis: {
-          visible: false
-        },
-        yAxis: {
-          visible: false
-        },
-        plotOptions: {
-          boxplot: {
-            fillColor: '',
-            stemColor: '',
-            whiskerColor: '',
-            medianColor: '#ffffff',
-            series: {
-              animation: false
-            }
-          }
-        },
-        title: {
-          text: null
-        },
-        series: [
-          {
-            name: '',
-            data: []
-          }
-        ]
-      }
+      defaultOptions: {}
     }
   },
   watch: {
@@ -173,35 +124,22 @@ export default {
             if (explain.type == 'categorical') {
               this.catExplains.push(explain)
             } else {
-              explain.primaryChart = JSON.parse(
+              explain.chart = JSON.parse(
                 JSON.stringify(this.defaultOptions)
               )
-              explain.primaryChart.series[0].name = explain.name
-              explain.primaryChart.series[0].data = [
-                explain.primary_group_quartiles
-              ]
-              explain.primaryChart.plotOptions.boxplot.fillColor =
-                this.colors.primary
-              explain.primaryChart.plotOptions.boxplot.stemColor =
-                this.colors.primary
-              explain.primaryChart.plotOptions.boxplot.whiskerColor =
-                this.colors.primary
+              // set boxplot data primary
+              explain.chart.series[0].data[0].low = explain.primary_group_quartiles[0]
+              explain.chart.series[0].data[0].q1 = explain.primary_group_quartiles[1]
+              explain.chart.series[0].data[0].median = explain.primary_group_quartiles[2]
+              explain.chart.series[0].data[0].q3 = explain.primary_group_quartiles[3]
+              explain.chart.series[0].data[0].high = explain.primary_group_quartiles[4]
 
-              if (this.showSecondary) {
-                explain.secondaryChart = JSON.parse(
-                  JSON.stringify(this.defaultOptions)
-                )
-                explain.secondaryChart.series[0].name = explain.name
-                explain.secondaryChart.series[0].data = [
-                  explain.secondary_group_quartiles
-                ]
-                explain.secondaryChart.plotOptions.boxplot.fillColor =
-                  this.colors.info
-                explain.secondaryChart.plotOptions.boxplot.stemColor =
-                  this.colors.info
-                explain.secondaryChart.plotOptions.boxplot.whiskerColor =
-                  this.colors.info
-              }
+              // set boxplot data secondary
+              explain.chart.series[0].data[1].low = explain.secondary_group_quartiles[0]
+              explain.chart.series[0].data[1].q1 = explain.secondary_group_quartiles[1]
+              explain.chart.series[0].data[1].median = explain.secondary_group_quartiles[2]
+              explain.chart.series[0].data[1].q3 = explain.secondary_group_quartiles[3]
+              explain.chart.series[0].data[1].high = explain.secondary_group_quartiles[4]
 
               this.contExplains.push(explain)
             }
@@ -219,15 +157,68 @@ export default {
       this.contExplains = []
       this.catExplains = []
       this.$store.commit('clearGroup')
+    },
+    setDefaultOptions() {
+      this.defaultOptions = {
+        credits: {
+          enabled: false
+        },
+        chart: {
+          type: 'boxplot',
+          height: '60',
+          inverted: true,
+          backgroundColor: null,
+          spacingleft: 0,
+          spacingBottom: 0,
+          spacingTop: 0,
+          spacingRight: 0
+        },
+        legend: {
+          enabled: false
+        },
+        xAxis: {
+          visible: false
+        },
+        yAxis: {
+          visible: true,
+          title: null
+        },
+        title: {
+          text: null
+        },
+        tooltip: {
+          outside: true
+        },
+        series: [
+          {
+            data: [
+              {
+                low: 0,
+                q1: 0,
+                median: 0,
+                q3: 0,
+                high: 0,
+                name: 'Primary',
+                color: this.colors.primary
+              },
+              {
+                low: 0,
+                q1: 0,
+                median: 0,
+                q3: 0,
+                high: 0,
+                name: 'Secondary',
+                color: this.colors.secondary
+              }
+            ]
+          }
+        ]
+      }
     }
   },
   created() {
+    this.setDefaultOptions()
     this.clearGroup()
   }
 }
 </script>
-<style>
-.app-explain {
-  width: 50%;
-}
-</style>
