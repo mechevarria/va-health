@@ -199,7 +199,9 @@ export default {
                 q3: 0,
                 high: 0,
                 name: 'Primary',
-                color: this.colors.primary
+                color: this.colors.primary,
+                fillColor: this.colors.primary,
+                medianColor: '#ffffff'
               },
               {
                 low: 0,
@@ -208,7 +210,9 @@ export default {
                 q3: 0,
                 high: 0,
                 name: 'Secondary',
-                color: this.colors.secondary
+                color: this.colors.info,
+                fillColor: this.colors.info,
+                medianColor: '#ffffff'
               }
             ]
           }
