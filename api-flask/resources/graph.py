@@ -1,4 +1,6 @@
 import scipy.stats as stats
+import statistics
+
 from itertools import combinations
 
 from flask import request
@@ -19,6 +21,11 @@ def norm_list(the_list, new_min_value=0, new_max_value=1, return_int = False):
   scaled_values = [ (v - min_value) / delta_value * (new_max_value - new_min_value) + new_min_value for v in  the_list]
   if return_int: scaled_values = [round(i) for i in scaled_values]
   return scaled_values
+
+def color_range(colors):
+    _mean = statistics.mean(colors)
+    _std = statistics.stdev(colors)
+    return {'color_low': _mean - 2*_std, 'color_middle': _mean, 'color_high': _mean + 2*_std }
 
 '''Scale colors values, basically bin all numbers more than 
 two std away from the mean into the same bins, i for positive and 
@@ -57,6 +64,7 @@ def compute_group_centroid(node_group: dict, network_nodes: list):
   return x, y
 
 def get_simplied_group_network(src, name, color_name, chart_width):
+  _return_data = {}
 
   nw = src.get_network(name=name)
   node_groups = nw.get_node_groups()
@@ -85,8 +93,9 @@ def get_simplied_group_network(src, name, color_name, chart_width):
   combs = list(combinations(groups.keys(), 2))
   data = []
   nodes = []
-
+  print(0)
   group_colors = get_group_coloring(src, nw, node_groups, color_name)
+  _return_data['color_controls'] = color_range(list(group_colors.values()))
   scaled_group_colors = scale_colors(list(group_colors.values()))
   scaled_group_colors = dict(zip(group_colors.keys(), scaled_group_colors))
 
@@ -96,10 +105,17 @@ def get_simplied_group_network(src, name, color_name, chart_width):
   #Create Nodes with edges
   for f, t in combs:
     if not set(groups[f]['row_indices']).isdisjoint(set(groups[t]['row_indices'])): data.append([f, t])
+  print(1)
   
-  return data, nodes
+  _return_data['data'] = data
+  _return_data['nodes'] = nodes
+  print(2)
+  
+  return _return_data
 
 def get_normal_network(src, name, color_name, chart_width):
+  _return_data = {}
+
   nw = src.get_network(name=name)
 
   all_node_ids= set(range(nw.node_count))
@@ -117,7 +133,7 @@ def get_normal_network(src, name, color_name, chart_width):
   '''
   data = data + [[0,11], [0,14], ..., [33, 62],...]
   '''
-  data = [[ str(d['from']), str(d['to']) ] for d in nw.links]
+  _return_data['data'] = [[ str(d['from']), str(d['to']) ] for d in nw.links]
 
   #scale sizes
   sizes = [d['row_count'] for d in nw.nodes] 
@@ -136,6 +152,8 @@ def get_normal_network(src, name, color_name, chart_width):
   #get coloring values
   outcome_coloring = src.create_coloring(name=color_name, column_name=color_name)
   coloring_values = nw.get_coloring_values(name=color_name)
+  _return_data['color_controls'] = color_range(coloring_values)
+
   #scale coloring between zero and 1
   norm_coloring_values = scale_colors(coloring_values)
   #Get plotX and plotY values
@@ -182,8 +200,10 @@ def get_normal_network(src, name, color_name, chart_width):
     #add singlton node to list 
     nodes = nodes + [{'id': 'Singletons', 'groupId': None, 
                  'marker': { 'radius': sing_size }, 'colorScale':  sing_color, "plotX": sing_x, "plotY": sing_y} ]
-
-  return data, nodes
+  
+  _return_data['nodes'] = nodes
+  
+  return _return_data
 
 
 @blp.route("/graph")
@@ -226,14 +246,15 @@ class GraphService(MethodView):
       if network_data['simplified']:
         print("Simplified")
       
-        data, nodes = get_simplied_group_network(src, grp_name, network_data['color_name'], network_data['chart_width'])
+        _graph = get_simplied_group_network(src, grp_name, network_data['color_name'], network_data['chart_width'])
       else:
         print("Regular")
         #get network nodes
-        data, nodes = get_normal_network(src, grp_name, network_data['color_name'], network_data['chart_width'])
+        _graph = get_normal_network(src, grp_name, network_data['color_name'], network_data['chart_width'])
 
-      network_data['data'] = data
-      network_data['nodes'] = nodes
+      network_data['data'] = _graph['data']
+      network_data['nodes'] = _graph['nodes']
+      network_data['color_controls'] = _graph['color_controls']
 
       return jsonify(network_data)
     except Exception as e: 
