@@ -50,9 +50,6 @@ const store = new Vuex.Store({
             value: 'visits_count_period3',
             text: 'Visits: Total Count Period 3'
         }, {
-            value: 'visits_count_period4',
-            text: 'Visits: Total Count Period 4'
-        }, {
             value: 'modality_stayed_f2f_period2_to_3',
             text: 'Modality: stayed face-to-face'
         }, {
