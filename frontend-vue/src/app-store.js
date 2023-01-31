@@ -15,9 +15,8 @@ const store = new Vuex.Store({
             secondary: '#ea39b8',
             warning: '#ffc107',
             info: '#1ba2f6',
-            graphLow: '#ff0000',
-            graphMid: '#ffea00',
-            graphHigh: '#008000',
+            success: '#3cf281',
+            danger: '#e44c55',
             primary: '#6f42c1'
         },
         colorOptions: [{

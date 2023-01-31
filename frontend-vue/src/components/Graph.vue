@@ -175,7 +175,10 @@ export default {
     if(this.label > 1) {
       this.simplified = false
     }
-    this.colorScale = chroma.scale([this.colors.graphLow, this.colors.graphMid, this.colors.graphHigh])
+    const red = chroma(this.colors.danger).darken(0.6)
+    const yellow = this.colors.warning
+    const green = chroma(this.colors.success)
+    this.colorScale = chroma.scale([red, yellow, green])
     this.selectedColor = this.colorOptions[this.label - 1].value
     this.selectedText = this.colorOptions[this.label - 1].text
     this.getGraph()
