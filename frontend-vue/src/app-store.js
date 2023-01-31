@@ -176,19 +176,19 @@ const store = new Vuex.Store({
             inputMax: 22,
             enabled: false,
             percentage: false
-        }, {
-            label: 'Vaccination Status',
-            name: 'covid_vaccine_TotalSeriesCount',
+        },{
+            label: 'In-Person Visit %',
+            name: 'visits_count_proportion_Presumed In Person_period3',
             categorical: false,
             min: 0,
             inputMin: 0,
-            max: 3,
-            inputMax: 3,
+            max: 100,
+            inputMax: 100,
             enabled: false,
-            percentage: false
+            percentage: true
         }, {
-            name: 'covid_post_procedures_Hospitalization60d',
-            label: 'Hospitalizations',
+            label: 'Stayed face-to-face',
+            name: 'modality_stayed_f2f_period2_to_3',
             categorical: true,
             value: '0',
             valueOptions: [{
@@ -199,16 +199,42 @@ const store = new Vuex.Store({
             is_equal: true,
             enabled: false
         }, {
-            label: 'In-Person Visit %',
-            name: 'visits_count_proportion_Presumed In Person_period3',
-            categorical: false,
-            min: 0,
-            inputMin: 0,
-            max: 100,
-            inputMax: 100,
-            enabled: false,
-            percentage: true
-        }]
+            label: 'Stayed remote',
+            name: 'modality_stayed_remote_period2_to_3',
+            categorical: true,
+            value: '0',
+            valueOptions: [{
+                value: '0', text: 'False'
+            }, {
+                value: '1', text: 'True'
+            }],
+            is_equal: true,
+            enabled: false
+        }, {
+            label: 'Switched to face-to-face',
+            name: 'modality_switched_to_f2f_period2_to_3',
+            categorical: true,
+            value: '0',
+            valueOptions: [{
+                value: '0', text: 'False'
+            }, {
+                value: '1', text: 'True'
+            }],
+            is_equal: true,
+            enabled: false
+        }, {
+            label: 'Swirched to remote',
+            name: 'modality_switched_to_remote_period2_to_3',
+            categorical: true,
+            value: '0',
+            valueOptions: [{
+                value: '0', text: 'False'
+            }, {
+                value: '1', text: 'True'
+            }],
+            is_equal: true,
+            enabled: false
+        },]
     },
     mutations: {
         toggleSidebarMin(state) {
