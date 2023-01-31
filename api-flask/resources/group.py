@@ -76,7 +76,8 @@ def get_continuous_column_list(column_names):
   'visits_count_proportion_lifestylecare_',
   ]
   visit_cols_suffixes = ['period1', 'period2', 'period3']
-  cols_we_want = ['AgeAtIndex', 'Is_increase_A1Clast_period3_to_4_change' , 'Is_decrease_visits_count_permonth_period3_to_4_change']
+  # cols_we_want = ['AgeAtIndex', 'Is_increase_A1Clast_period3_to_4_change' , 'Is_decrease_visits_count_permonth_period3_to_4_change']
+  cols_we_want = ['AgeAtIndex']
 
   #add all columns that start with the specified prefixes
   for p in prefixes:
