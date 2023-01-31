@@ -177,11 +177,15 @@ export default {
           enabled: false
         },
         xAxis: {
-          visible: false
+          visible: false,
+          minPadding: 0,
+          maxPadding: 0
         },
         yAxis: {
           visible: true,
-          title: null
+          title: null,
+          minPadding: 0,
+          maxPadding: 0
         },
         title: {
           text: null
