@@ -29,10 +29,25 @@
             @row-clicked="onRowClick"
           >
             <template #cell(A1C_Increase_Risk)="data">
-              <span class="badge rounded-pill text-white" :class="getClassName(data.value)">{{ data.value }}</span>
+              <span
+                class="badge rounded-pill text-white"
+                :class="getClassName(data.value)"
+                >{{ data.value }}</span
+              >
             </template>
             <template #cell(Engagement_Decrease_Risk)="data">
-              <span class="badge rounded-pill text-white" :class="getClassName(data.value)">{{ data.value }}</span>
+              <span
+                class="badge rounded-pill text-white"
+                :class="getClassName(data.value)"
+                >{{ data.value }}</span
+              >
+            </template>
+            <template #cell(Total_Risk)="data">
+              <span
+                class="badge rounded-pill text-white"
+                :class="getClassName(data.value)"
+                >{{ data.value }}</span
+              >
             </template>
           </b-table>
           <div class="d-flex">
@@ -92,6 +107,11 @@ export default {
         {
           key: 'Vaccination_Status',
           label: 'Vaccination Status',
+          sortable: true
+        },
+        {
+          key: 'Total_Risk',
+          label: 'Total Risk',
           sortable: true
         },
         {
