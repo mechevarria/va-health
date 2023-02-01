@@ -3,10 +3,6 @@
     <div class="d-flex justify-content-between align-items-center mb-2">
       <h4>
         Group Comparison
-        <i
-          class="spinner-border spinner-border-sm mb-1 ml-1 mt-1"
-          v-if="isBusy"
-        ></i>
       </h4>
       <button
         type="button"
