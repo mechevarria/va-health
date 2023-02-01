@@ -9,12 +9,16 @@
             v-if="isBusy"
           ></i>
         </div>
-        <div class="mr-3">
-          <highcharts
-            class="hc"
-            :options="colorChart"
-            v-if="!isBusy"
-          ></highcharts>
+        <div class="mr-3 mt-2">
+          <div
+            class="rounded app-gradient"
+            :style="`background-image: linear-gradient(to right,${lowColor},${midColor},${highColor})`"
+          ></div>
+          <div class="d-flex justify-content-between">
+            <div class="app-label">{{ lowLabel }}</div>
+            <div class="app-label">{{ midLabel }}</div>
+            <div class="app-label">{{ highLabel }}</div>
+          </div>
         </div>
         <div class="mr-3">
           <b-dropdown
@@ -87,6 +91,12 @@ export default {
       selectedColor: '',
       selectedText: '',
       colorScale: null,
+      highColor: '',
+      highLabel: '--',
+      midColor: '',
+      midLabel: '--',
+      lowColor: '',
+      lowLabel: '--',
       chartWidth: 0,
       graphOptions: {
         credits: {
@@ -127,116 +137,6 @@ export default {
             nodes: []
           }
         ]
-      },
-      colorChart: {
-        exporting: {
-          enabled: false
-        },
-        chart: {
-          type: 'bar',
-          height: '30',
-          width: '200',
-          backgroundColor: null,
-          spacingTop: 0,
-          spacingRight: 0,
-          spacingBottom: 0,
-          spacingLeft: 0,
-          plotBorderWidth: 0,
-          margin: [10, 0, 0, 0]
-        },
-        credits: {
-          enabled: false
-        },
-        title: {
-          text: ''
-        },
-        yAxis: {
-          visible: false,
-          minPadding: 0,
-          maxPadding: 0
-        },
-        xAxis: {
-          visible: false,
-          minPadding: 0,
-          maxPadding: 0
-        },
-        legend: {
-          enabled: false
-        },
-        plotOptions: {
-          bar: {
-            borderWidth: 0
-          },
-          series: {
-            enableMouseTracking: false,
-            stacking: 'normal'
-          }
-        },
-        series: [
-          {
-            data: [
-              {
-                y: 5,
-                name: '',
-                dataLabels: {
-                  enabled: true,
-                  y: -10,
-                  x: 5,
-                  align: 'right',
-                  format: '{point.name}'
-                },
-                color: {
-                  linearGradient: {
-                    x1: 1,
-                    x2: 1,
-                    y1: 1,
-                    y2: 0
-                  },
-                  stops: []
-                }
-              }
-            ]
-          },
-          {
-            data: [
-              {
-                y: 0,
-                name: '',
-                color: '',
-                dataLabels: {
-                  enabled: true,
-                  y: -10,
-                  align: 'center',
-                  format: '{point.name}'
-                }
-              }
-            ]
-          },
-          {
-            data: [
-              {
-                y: 5,
-                name: '',
-                dataLabels: {
-                  enabled: true,
-                  y: -10,
-                  x: -5,
-                  align: 'left',
-                  format: '{point.name}'
-                },
-                color: {
-                  linearGradient: {
-                    x1: 1,
-                    x2: 1,
-                    y1: 1,
-                    y2: 0
-                  },
-                  stops: []
-                }
-              }
-            ]
-          }
-        ]
       }
     }
   },
@@ -265,9 +165,9 @@ export default {
         .post(url, body)
         .then((res) => {
           // set labels for color scale
-          this.colorChart.series[0].data[0].name = res.data.color_controls.color_high
-          this.colorChart.series[1].data[0].name = res.data.color_controls.color_middle
-          this.colorChart.series[2].data[0].name = res.data.color_controls.color_low
+          this.highLabel = res.data.color_controls.color_high
+          this.midLabel = res.data.color_controls.color_middle
+          this.lowLabel = res.data.color_controls.color_low
 
           let nodes = res.data.nodes
           nodes.forEach((node) => {
@@ -306,25 +206,11 @@ export default {
     if (this.label > 1) {
       this.simplified = false
     }
-    const red = chroma(this.colors.danger).darken(0.6)
-    const yellow = chroma(this.colors.warning)
-    const green = chroma(this.colors.success)
+    this.lowColor = chroma(this.colors.danger).darken(0.6)
+    this.midColor = chroma(this.colors.warning)
+    this.highColor = chroma(this.colors.success)
 
-    this.colorScale = chroma.scale([red, yellow, green])
-
-    // mid to high
-    this.colorChart.series[0].data[0].color.stops = [
-      [0, String(yellow)],
-      [1, String(green)]
-    ]
-    // mid
-    this.colorChart.series[1].data[0].color = String(yellow)
-
-    // low to mid
-    this.colorChart.series[2].data[0].color.stops = [
-      [0, String(red)],
-      [1, String(yellow)]
-    ]
+    this.colorScale = chroma.scale([this.lowColor, this.midColor, this.highColor])
 
     this.selectedColor = this.colorOptions[this.label - 1].value
     this.selectedText = this.colorOptions[this.label - 1].text
@@ -332,3 +218,12 @@ export default {
   }
 }
 </script>
+<style>
+.app-label {
+  font-size: 0.8em;
+}
+.app-gradient {
+  width: 146px;
+  height: 14px;
+}
+</style>
