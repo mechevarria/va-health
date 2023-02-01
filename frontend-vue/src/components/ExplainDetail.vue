@@ -10,12 +10,13 @@
       <div class="card">
         <div class="card-header">
           Continuous Explains
-          <i
-            class="spinner-border spinner-border-sm mb-1 ml-1"
-            v-if="isBusy"
-          ></i>
         </div>
         <div class="card-body">
+          <div class="d-flex justify-content-end">
+            <div class="badge bg-primary text-white mr-2">{{ primaryName }}</div>
+            <div class="badge  bg-info text-white">{{ secondaryName }}</div>
+          </div>
+          <hr/>
           <span v-for="(explain, index) in contExplains" :key="index">
             <div class="row">
               <div class="col-sm-6">
@@ -35,12 +36,13 @@
       <div class="card">
         <div class="card-header">
           Categorial Explains
-          <i
-            class="spinner-border spinner-border-sm mb-1 ml-1"
-            v-if="isBusy"
-          ></i>
         </div>
         <div class="card-body">
+          <div class="d-flex justify-content-end">
+            <div class="badge bg-primary text-white mr-2">{{ primaryName }}</div>
+            <div class="badge  bg-info text-white">{{ secondaryName }}</div>
+          </div>
+          <hr/>
           <span v-for="(explain, index) in catExplains" :key="index">
             <div class="row">
               <div class="col-sm-6">
@@ -96,6 +98,8 @@ export default {
   data() {
     return {
       isBusy: false,
+      primaryName: '--',
+      secondaryName: '--',
       catExplains: [],
       contExplains: [],
       defaultOptions: {}
@@ -120,6 +124,8 @@ export default {
       axios
         .get(url)
         .then((res) => {
+          this.primaryName = res.data.primary_name
+          this.secondaryName = res.data.secondary_name
           res.data.explains.forEach((explain) => {
             if (explain.type == 'categorical') {
               this.catExplains.push(explain)
