@@ -93,7 +93,7 @@ def get_group_details(src, group_1_id, group_2_id="Rest"):
   if group_2_id=="Rest":
     print("group 2 is REST")
     grp = src.get_group(id=group_1_id)
-    _exp = {'id': grp['id'], 'primary_name': grp['name'], 'primary_size': grp['row_count'], 'secondary_name': 'Rest', 'secondary_size': src.row_count - grp['row_count']}
+    _exp = {'id': grp['id'], 'primary_name': grp['id'], 'primary_size': grp['row_count'], 'secondary_name': 'Rest', 'secondary_size': src.row_count - grp['row_count']}
 
     #check to make sure comparison exists.  If not, create
     comp = src.get_comparison(name=f"{grp['name']} vs. Rest")
@@ -105,7 +105,7 @@ def get_group_details(src, group_1_id, group_2_id="Rest"):
 
     grp1 = src.get_group(id=group_1_id)
     grp2 = src.get_group(id=group_2_id)
-    _exp = {'primary_name': grp1['name'], 'primary_size': grp1['row_count'], 'secondary_name': grp2['name'], 'secondary_size': grp2['row_count']}
+    _exp = {'primary_name': grp['id'], 'primary_size': grp1['row_count'], 'secondary_name': grp2['name'], 'secondary_size': grp2['row_count']}
 
     comp = src.get_comparison(name=f"{grp1['name']} vs. {grp2['name']}")
     if "msg" in comp:  #means dictionary returned with message saying compare does not exist
