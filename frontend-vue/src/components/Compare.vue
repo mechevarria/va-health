@@ -18,8 +18,8 @@
         <i
           class="spinner-border spinner-border-sm btn-icon mr-1"
           v-if="isBusy"
-        ></i
-        >Compare
+        ></i>
+        Compare
       </button>
     </div>
     <div class="card-deck mb-2">
