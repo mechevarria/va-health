@@ -61,3 +61,4 @@ class PatientCardSchema(Schema):
     Rurality=fields.Str(required=True)
     A1C_Increase_Risk=fields.Str(required=True)
     Engagement_Decrease_Risk=fields.Str(required=True)
+    Total_Risk=fields.Str(required=True)
