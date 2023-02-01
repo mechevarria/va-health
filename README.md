@@ -38,6 +38,8 @@ Web application integrating bootstrap based coreui with [Vue](https://vuejs.org/
 * [Vuex](https://vuex.vuejs.org/) for state management
 * [vue-mobile-detection](https://github.com/ajerez/vue-mobile-detection) for checking mobile state
 * [axios](https://github.com/axios/axios) as http client
+* [Highcharts](https://www.highcharts.com) as graphing library
+* [Highcharts Vue](https://github.com/highcharts/highcharts-vue) Vue wrapper for Highcharts
 * [jsonplaceholder](https://jsonplaceholder.typicode.com/) for sample table data
 
 ## Project setup
@@ -84,16 +86,3 @@ TODO
 
 * Import the environment
 * Import the collection
-
-## Items 
-### Frontend
-* provide user friendly name for groups (g1, g2, etc).  This is only in UI so users can discuss easily and to improve look
-* Individual Group Explains
-    * Add scale values to boxplot
-    * Question - Combine zero / one binary categorical explains into one? (note this should be done on backend)
-    * Question - Sort explains by stastical importance? (note this should be done on backend)
-* Add additional filter columns based on clinician feedback
-### API
-* Handle when cohort analysis fails
-* Add color change endpoint that just gets colors?  Note: May be difficult without regen graph 
-* Combine zero / one binary categorical explains into one
