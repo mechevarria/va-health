@@ -65,15 +65,11 @@
             v-for="([key, value], index) in Object.entries(data.demographics)"
             :key="index"
           >
-            <div class="row">
-              <div class="col-sm-3">
-                <p class="mb-0 ml-2">{{ key }}</p>
-              </div>
-              <div class="col-sm-9">
-                <p class="text-muted mb-0">{{ value }}</p>
-              </div>
+            <div class="d-flex justify-content-between">
+              <div>{{ key }}</div>
+              <div class="text-muted">{{ value }}</div>
             </div>
-            <hr class="ml-2" />
+            <hr />
           </span>
         </div>
       </div>
@@ -109,7 +105,7 @@
             <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
             <br />
             <span
-              class="badge rounded-pill bg-danger text-white m-2"
+              class="badge bg-danger text-white m-2"
               v-for="(key, index) in Object.keys(data.comorbidities)"
               :key="index"
               >{{ key }}</span
@@ -126,33 +122,35 @@
             <strong class="mb-2">Medicines</strong>
             <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
           </p>
-          <table class="table table-striped">
-            <tr>
-              <th>Medicine</th>
-              <th>Pre</th>
-              <th>Post</th>
-            </tr>
-            <tbody>
-              <tr
-                v-for="(entry, index) in Object.entries(data.carepath.meds)"
-                :key="index"
-              >
-                <td>{{ entry[0] }}</td>
-                <td>
-                  <i
-                    class="cil-check-circle text-primary"
-                    v-if="entry[1].pre == 1"
-                  ></i>
-                </td>
-                <td>
-                  <i
-                    class="cil-check-circle text-primary"
-                    v-if="entry[1].post == 1"
-                  ></i>
-                </td>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <tr>
+                <th>Medicine</th>
+                <th>Pre</th>
+                <th>Post</th>
               </tr>
-            </tbody>
-          </table>
+              <tbody>
+                <tr
+                  v-for="(entry, index) in Object.entries(data.carepath.meds)"
+                  :key="index"
+                >
+                  <td>{{ entry[0] }}</td>
+                  <td>
+                    <i
+                      class="cil-check-circle text-primary"
+                      v-if="entry[1].pre == 1"
+                    ></i>
+                  </td>
+                  <td>
+                    <i
+                      class="cil-check-circle text-primary"
+                      v-if="entry[1].post == 1"
+                    ></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div class="card">
@@ -161,35 +159,37 @@
             <strong class="mb-2">Diabetic Medicines</strong>
             <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
           </p>
-          <table class="table table-striped">
-            <tr>
-              <th>Medicine</th>
-              <th>Period 1 - 2</th>
-              <th>Period 3</th>
-            </tr>
-            <tbody>
-              <tr
-                v-for="(entry, index) in Object.entries(
-                  data.carepath.diabetic_meds
-                )"
-                :key="index"
-              >
-                <td>{{ entry[0] }}</td>
-                <td>
-                  <i
-                    class="cil-check-circle text-primary"
-                    v-if="entry[1]._period1_2 == 1"
-                  ></i>
-                </td>
-                <td>
-                  <i
-                    class="cil-check-circle text-primary"
-                    v-if="entry[1]._period3 == 1"
-                  ></i>
-                </td>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <tr>
+                <th>Medicine</th>
+                <th>Period 1 - 2</th>
+                <th>Period 3</th>
               </tr>
-            </tbody>
-          </table>
+              <tbody>
+                <tr
+                  v-for="(entry, index) in Object.entries(
+                    data.carepath.diabetic_meds
+                  )"
+                  :key="index"
+                >
+                  <td>{{ entry[0] }}</td>
+                  <td>
+                    <i
+                      class="cil-check-circle text-primary"
+                      v-if="entry[1]._period1_2 == 1"
+                    ></i>
+                  </td>
+                  <td>
+                    <i
+                      class="cil-check-circle text-primary"
+                      v-if="entry[1]._period3 == 1"
+                    ></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div class="card">
@@ -198,39 +198,43 @@
             <strong class="mb-2">Visits</strong>
             <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
           </p>
-          <table class="table table-striped">
-            <tr>
-              <th>Visit Type</th>
-              <th>Period 1</th>
-              <th>Period 2</th>
-              <th>Period 3</th>
-            </tr>
-            <tbody>
-              <tr
-                v-for="(entry, index) in Object.entries(data.carepath.visits)"
-                :key="index"
-              >
-                <td>{{ entry[0] }}</td>
-                <td>
-                  {{ entry[1].period1 }}
-                </td>
-                <td>
-                  {{ entry[1].period2 }}
-                </td>
-                <td>
-                  {{ entry[1].period3 }}
-                </td>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <tr>
+                <th>Visit Type</th>
+                <th>Period 1</th>
+                <th>Period 2</th>
+                <th>Period 3</th>
               </tr>
-            </tbody>
-          </table>
+              <tbody>
+                <tr
+                  v-for="(entry, index) in Object.entries(data.carepath.visits)"
+                  :key="index"
+                >
+                  <td>{{ entry[0] }}</td>
+                  <td>
+                    {{ entry[1].period1 }}
+                  </td>
+                  <td>
+                    {{ entry[1].period2 }}
+                  </td>
+                  <td>
+                    {{ entry[1].period3 }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
     <hr />
     <div class="form-row align-items-center mb-4">
       <div class="col-auto">
-        <label for="selected-criteria" class="pt-1">Cohort Criteria for Carepaths</label>
-        <br/>
+        <label for="selected-criteria" class="pt-1"
+          >Cohort Criteria for Carepaths</label
+        >
+        <br />
         <b-form-radio-group
           id="selected-criteria"
           v-model="selectedCriteria"
@@ -241,9 +245,14 @@
           button-variant="outline-secondary"
           buttons
         ></b-form-radio-group>
+        <a role="button" class="ml-2 mt-1" v-b-tooltip.hover title="Medicines includes Conditions and Demographics. Visits includes Demographics">
+          <i class="c-icon cil-info text-secondary"></i>
+        </a>
       </div>
       <div class="col-auto ml-4">
-        <label for="medicine-threshold">Medicine Threshold <strong>{{ medicineThreshold }}</strong></label>
+        <label for="medicine-threshold"
+          >Medicine Threshold <strong>{{ medicineThreshold }}</strong></label
+        >
         <b-form-input
           id="medicine-threshold"
           v-model="medicineThreshold"
@@ -254,7 +263,12 @@
         ></b-form-input>
       </div>
       <div class="col-auto ml-4 mt-3">
-        <button type="button" class="btn btn-primary" @click="postDetails()" :disabled="isBusy">
+        <button
+          type="button"
+          class="btn btn-primary"
+          @click="postDetails()"
+          :disabled="isBusy"
+        >
           <i class="cil-reload btn-icon mr-1" v-if="!isBusy"></i>
           <i
             class="spinner-border spinner-border-sm btn-icon mr-1"
@@ -272,45 +286,47 @@
             <strong class="mb-2">Medicines</strong>
             <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
           </p>
-          <table class="table table-striped">
-            <tr>
-              <th>Medicine</th>
-              <th>Pre</th>
-              <th>Post</th>
-            </tr>
-            <tbody>
-              <tr
-                v-for="(entry, index) in Object.entries(
-                  data.carepath_consensus.meds
-                )"
-                :key="index"
-              >
-                <td>{{ entry[0] }}</td>
-                <td>
-                  <b-progress
-                    show-value
-                    :precision="2"
-                    :value="entry[1].pre"
-                    variant="primary"
-                    :max="1"
-                    v-b-tooltip
-                    :title="entry[1].pre"
-                  ></b-progress>
-                </td>
-                <td>
-                  <b-progress
-                    show-value
-                    :precision="2"
-                    :value="entry[1].post"
-                    variant="primary"
-                    :max="1"
-                    v-b-tooltip
-                    :title="entry[1].post"
-                  ></b-progress>
-                </td>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <tr>
+                <th>Medicine</th>
+                <th>Pre</th>
+                <th>Post</th>
               </tr>
-            </tbody>
-          </table>
+              <tbody>
+                <tr
+                  v-for="(entry, index) in Object.entries(
+                    data.carepath_consensus.meds
+                  )"
+                  :key="index"
+                >
+                  <td>{{ entry[0] }}</td>
+                  <td>
+                    <b-progress
+                      show-value
+                      :precision="2"
+                      :value="entry[1].pre"
+                      variant="primary"
+                      :max="1"
+                      v-b-tooltip
+                      :title="entry[1].pre"
+                    ></b-progress>
+                  </td>
+                  <td>
+                    <b-progress
+                      show-value
+                      :precision="2"
+                      :value="entry[1].post"
+                      variant="primary"
+                      :max="1"
+                      v-b-tooltip
+                      :title="entry[1].post"
+                    ></b-progress>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div class="card">
@@ -319,45 +335,47 @@
             <strong class="mb-2">Diabetic Medicines</strong>
             <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
           </p>
-          <table class="table table-striped">
-            <tr>
-              <th>Medicine</th>
-              <th>Period 1 - 2</th>
-              <th>Period 3</th>
-            </tr>
-            <tbody>
-              <tr
-                v-for="(entry, index) in Object.entries(
-                  data.carepath_consensus.diabetic_meds
-                )"
-                :key="index"
-              >
-                <td>{{ entry[0] }}</td>
-                <td>
-                  <b-progress
-                    show-value
-                    :precision="2"
-                    :value="entry[1]._period1_2"
-                    variant="primary"
-                    :max="1"
-                    v-b-tooltip
-                    :title="entry[1]._period1_2"
-                  ></b-progress>
-                </td>
-                <td>
-                  <b-progress
-                    show-value
-                    :precision="2"
-                    :value="entry[1]._period3"
-                    variant="primary"
-                    :max="1"
-                    v-b-tooltip
-                    :title="entry[1]._period3"
-                  ></b-progress>
-                </td>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <tr>
+                <th>Medicine</th>
+                <th>Period 1 - 2</th>
+                <th>Period 3</th>
               </tr>
-            </tbody>
-          </table>
+              <tbody>
+                <tr
+                  v-for="(entry, index) in Object.entries(
+                    data.carepath_consensus.diabetic_meds
+                  )"
+                  :key="index"
+                >
+                  <td>{{ entry[0] }}</td>
+                  <td>
+                    <b-progress
+                      show-value
+                      :precision="2"
+                      :value="entry[1]._period1_2"
+                      variant="primary"
+                      :max="1"
+                      v-b-tooltip
+                      :title="entry[1]._period1_2"
+                    ></b-progress>
+                  </td>
+                  <td>
+                    <b-progress
+                      show-value
+                      :precision="2"
+                      :value="entry[1]._period3"
+                      variant="primary"
+                      :max="1"
+                      v-b-tooltip
+                      :title="entry[1]._period3"
+                    ></b-progress>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div class="card">
@@ -366,57 +384,59 @@
             <strong class="mb-2">Visits</strong>
             <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
           </p>
-          <table class="table table-striped">
-            <tr>
-              <th>Visit Type</th>
-              <th>Period 1</th>
-              <th>Period 2</th>
-              <th>Period 3</th>
-            </tr>
-            <tbody>
-              <tr
-                v-for="(entry, index) in Object.entries(
-                  data.carepath_consensus.visits
-                )"
-                :key="index"
-              >
-                <td>{{ entry[0] }}</td>
-                <td>
-                  <b-progress
-                    show-value
-                    :precision="2"
-                    :value="entry[1].period1"
-                    variant="primary"
-                    :max="1"
-                    v-b-tooltip
-                    :title="entry[1].period1"
-                  ></b-progress>
-                </td>
-                <td>
-                  <b-progress
-                    show-value
-                    :precision="2"
-                    :value="entry[1].period2"
-                    variant="primary"
-                    :max="1"
-                    v-b-tooltip
-                    :title="entry[1].period2"
-                  ></b-progress>
-                </td>
-                <td>
-                  <b-progress
-                    show-value
-                    :precision="2"
-                    :value="entry[1].period3"
-                    variant="primary"
-                    :max="1"
-                    v-b-tooltip
-                    :title="entry[1].period3"
-                  ></b-progress>
-                </td>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <tr>
+                <th>Visit Type</th>
+                <th>Period 1</th>
+                <th>Period 2</th>
+                <th>Period 3</th>
               </tr>
-            </tbody>
-          </table>
+              <tbody>
+                <tr
+                  v-for="(entry, index) in Object.entries(
+                    data.carepath_consensus.visits
+                  )"
+                  :key="index"
+                >
+                  <td>{{ entry[0] }}</td>
+                  <td>
+                    <b-progress
+                      show-value
+                      :precision="2"
+                      :value="entry[1].period1"
+                      variant="primary"
+                      :max="1"
+                      v-b-tooltip
+                      :title="entry[1].period1"
+                    ></b-progress>
+                  </td>
+                  <td>
+                    <b-progress
+                      show-value
+                      :precision="2"
+                      :value="entry[1].period2"
+                      variant="primary"
+                      :max="1"
+                      v-b-tooltip
+                      :title="entry[1].period2"
+                    ></b-progress>
+                  </td>
+                  <td>
+                    <b-progress
+                      show-value
+                      :precision="2"
+                      :value="entry[1].period3"
+                      variant="primary"
+                      :max="1"
+                      v-b-tooltip
+                      :title="entry[1].period3"
+                    ></b-progress>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -428,45 +448,47 @@
             <strong class="mb-2">Medicines</strong>
             <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
           </p>
-          <table class="table table-striped">
-            <tr>
-              <th>Medicine</th>
-              <th>Pre</th>
-              <th>Post</th>
-            </tr>
-            <tbody>
-              <tr
-                v-for="(entry, index) in Object.entries(
-                  data.carepath_recommended.meds
-                )"
-                :key="index"
-              >
-                <td>{{ entry[0] }}</td>
-                <td>
-                  <b-progress
-                    show-value
-                    :precision="2"
-                    :value="entry[1].pre"
-                    variant="primary"
-                    :max="1"
-                    v-b-tooltip
-                    :title="entry[1].pre"
-                  ></b-progress>
-                </td>
-                <td>
-                  <b-progress
-                    show-value
-                    :precision="2"
-                    :value="entry[1].post"
-                    variant="primary"
-                    :max="1"
-                    v-b-tooltip
-                    :title="entry[1].post"
-                  ></b-progress>
-                </td>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <tr>
+                <th>Medicine</th>
+                <th>Pre</th>
+                <th>Post</th>
               </tr>
-            </tbody>
-          </table>
+              <tbody>
+                <tr
+                  v-for="(entry, index) in Object.entries(
+                    data.carepath_recommended.meds
+                  )"
+                  :key="index"
+                >
+                  <td>{{ entry[0] }}</td>
+                  <td>
+                    <b-progress
+                      show-value
+                      :precision="2"
+                      :value="entry[1].pre"
+                      variant="primary"
+                      :max="1"
+                      v-b-tooltip
+                      :title="entry[1].pre"
+                    ></b-progress>
+                  </td>
+                  <td>
+                    <b-progress
+                      show-value
+                      :precision="2"
+                      :value="entry[1].post"
+                      variant="primary"
+                      :max="1"
+                      v-b-tooltip
+                      :title="entry[1].post"
+                    ></b-progress>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div class="card">
@@ -475,45 +497,47 @@
             <strong class="mb-2">Diabetic Medicines</strong>
             <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
           </p>
-          <table class="table table-striped">
-            <tr>
-              <th>Medicine</th>
-              <th>Period 1 - 2</th>
-              <th>Period 3</th>
-            </tr>
-            <tbody>
-              <tr
-                v-for="(entry, index) in Object.entries(
-                  data.carepath_recommended.diabetic_meds
-                )"
-                :key="index"
-              >
-                <td>{{ entry[0] }}</td>
-                <td>
-                  <b-progress
-                    show-value
-                    :precision="2"
-                    :value="entry[1]._period1_2"
-                    variant="primary"
-                    :max="1"
-                    v-b-tooltip
-                    :title="entry[1]._period1_2"
-                  ></b-progress>
-                </td>
-                <td>
-                  <b-progress
-                    show-value
-                    :precision="2"
-                    :value="entry[1]._period3"
-                    variant="primary"
-                    :max="1"
-                    v-b-tooltip
-                    :title="entry[1]._period3"
-                  ></b-progress>
-                </td>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <tr>
+                <th>Medicine</th>
+                <th>Period 1 - 2</th>
+                <th>Period 3</th>
               </tr>
-            </tbody>
-          </table>
+              <tbody>
+                <tr
+                  v-for="(entry, index) in Object.entries(
+                    data.carepath_recommended.diabetic_meds
+                  )"
+                  :key="index"
+                >
+                  <td>{{ entry[0] }}</td>
+                  <td>
+                    <b-progress
+                      show-value
+                      :precision="2"
+                      :value="entry[1]._period1_2"
+                      variant="primary"
+                      :max="1"
+                      v-b-tooltip
+                      :title="entry[1]._period1_2"
+                    ></b-progress>
+                  </td>
+                  <td>
+                    <b-progress
+                      show-value
+                      :precision="2"
+                      :value="entry[1]._period3"
+                      variant="primary"
+                      :max="1"
+                      v-b-tooltip
+                      :title="entry[1]._period3"
+                    ></b-progress>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
       <div class="card">
@@ -522,57 +546,59 @@
             <strong class="mb-2">Visits</strong>
             <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
           </p>
-          <table class="table table-striped">
-            <tr>
-              <th>Visit Type</th>
-              <th>Period 1</th>
-              <th>Period 2</th>
-              <th>Period 3</th>
-            </tr>
-            <tbody>
-              <tr
-                v-for="(entry, index) in Object.entries(
-                  data.carepath_recommended.visits
-                )"
-                :key="index"
-              >
-                <td>{{ entry[0] }}</td>
-                <td>
-                  <b-progress
-                    show-value
-                    :precision="2"
-                    :value="entry[1].period1"
-                    variant="primary"
-                    :max="1"
-                    v-b-tooltip
-                    :title="entry[1].period1"
-                  ></b-progress>
-                </td>
-                <td>
-                  <b-progress
-                    show-value
-                    :precision="2"
-                    :value="entry[1].period2"
-                    variant="primary"
-                    :max="1"
-                    v-b-tooltip
-                    :title="entry[1].period2"
-                  ></b-progress>
-                </td>
-                <td>
-                  <b-progress
-                    show-value
-                    :precision="2"
-                    :value="entry[1].period3"
-                    variant="primary"
-                    :max="1"
-                    v-b-tooltip
-                    :title="entry[1].period3"
-                  ></b-progress>
-                </td>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <tr>
+                <th>Visit Type</th>
+                <th>Period 1</th>
+                <th>Period 2</th>
+                <th>Period 3</th>
               </tr>
-            </tbody>
-          </table>
+              <tbody>
+                <tr
+                  v-for="(entry, index) in Object.entries(
+                    data.carepath_recommended.visits
+                  )"
+                  :key="index"
+                >
+                  <td>{{ entry[0] }}</td>
+                  <td>
+                    <b-progress
+                      show-value
+                      :precision="2"
+                      :value="entry[1].period1"
+                      variant="primary"
+                      :max="1"
+                      v-b-tooltip
+                      :title="entry[1].period1"
+                    ></b-progress>
+                  </td>
+                  <td>
+                    <b-progress
+                      show-value
+                      :precision="2"
+                      :value="entry[1].period2"
+                      variant="primary"
+                      :max="1"
+                      v-b-tooltip
+                      :title="entry[1].period2"
+                    ></b-progress>
+                  </td>
+                  <td>
+                    <b-progress
+                      show-value
+                      :precision="2"
+                      :value="entry[1].period3"
+                      variant="primary"
+                      :max="1"
+                      v-b-tooltip
+                      :title="entry[1].period3"
+                    ></b-progress>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
