@@ -23,13 +23,25 @@ def norm_list(the_list, new_min_value=0, new_max_value=1, return_int = False):
   return scaled_values
 
 def color_range(colors):
+    _min = min(colors)
+    _max = max(colors)
+    
     _mean = statistics.mean(colors)
     _std = statistics.stdev(colors)
-    _low = f"< {_mean - 2*_std:.1f}"
-    _mid = f"{_mean:.1f}"
-    _high = f"> {_mean + 2*_std:.1f}"
 
+    if max(_mean - 2*_std, _min) == _min:
+      _low = f"{_min:.1f}"
+    else:
+      _low = f"< {_mean - 2*_std:.1f}"
+
+    _mid = f"{_mean:.1f}"
+
+    if min(_mean + 2*_std, _max) == _max:
+      _high = f"{_max:.1f}"
+    else:
+      _high = f"> {_mean + 2*_std:.1f}"
     return {'color_low': _low, 'color_middle': _mid, 'color_high': _high}
+
 
 '''Scale colors values, basically bin all numbers more than 
 two std away from the mean into the same bins, i for positive and 
