@@ -245,8 +245,13 @@
           button-variant="outline-secondary"
           buttons
         ></b-form-radio-group>
-        <a role="button" class="ml-2 mt-1" v-b-tooltip.hover title="Medicines includes Conditions and Demographics. Visits includes Demographics">
-          <i class="c-icon cil-info text-secondary"></i>
+        <a
+          role="button"
+          class="ml-2 mt-1"
+          v-b-tooltip.hover
+          title="Medicines includes Conditions and Demographics. Visits includes Demographics"
+        >
+          <i class="c-icon cil-info text-secondary app-icon-hover"></i>
         </a>
       </div>
       <div class="col-auto ml-4">
@@ -691,3 +696,8 @@ export default {
   }
 }
 </script>
+<style>
+.app-icon-hover:hover {
+  font-weight: bold;
+}
+</style>
