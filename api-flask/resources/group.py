@@ -105,7 +105,7 @@ def get_group_details(src, group_1_id, group_2_id="Rest"):
 
     grp1 = src.get_group(id=group_1_id)
     grp2 = src.get_group(id=group_2_id)
-    _exp = {'primary_name': grp['id'], 'primary_size': grp1['row_count'], 'secondary_name': grp2['name'], 'secondary_size': grp2['row_count']}
+    _exp = {'primary_name': grp['id'], 'primary_size': grp1['row_count'], 'secondary_name': grp2['id'], 'secondary_size': grp2['row_count']}
 
     comp = src.get_comparison(name=f"{grp1['name']} vs. {grp2['name']}")
     if "msg" in comp:  #means dictionary returned with message saying compare does not exist
