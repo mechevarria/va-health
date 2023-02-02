@@ -81,6 +81,7 @@
               v-model="filter.value"
               :options="filter.valueOptions"
               :disabled="!filter.enabled"
+              size="sm"
             ></b-form-select>
           </div>
           <div class="form-group col-md-5">
@@ -90,6 +91,7 @@
               v-model="filter.is_equal"
               :options="filter.boolOptions"
               :disabled="!filter.enabled"
+              size="sm"
             ></b-form-select>
           </div>
           <div class="form-group col-md-2">
@@ -109,6 +111,7 @@
               :min="filter.inputMin"
               :max="filter.inputMax"
               :disabled="!filter.enabled"
+              size="sm"
             ></b-form-spinbutton>
           </div>
           <div class="form-group col-md-5">
@@ -118,6 +121,7 @@
               :min="filter.inputMin"
               :max="filter.inputMax"
               :disabled="!filter.enabled"
+              size="sm"
             ></b-form-spinbutton>
           </div>
           <div class="form-group col-md-2">
@@ -240,7 +244,7 @@ export default {
   },
   watch: {
     compare() {
-      this.$store.commit('doRedraw')
+      this.$store.commit('doRedraw', 1)
     } 
   }
 }

@@ -10,7 +10,7 @@ const store = new Vuex.Store({
         messages: [],
         groupId: 0,
         filterId: 0,
-        doRedraw: false,
+        doRedraw: 0,
         colors: {
             secondary: '#ea39b8',
             warning: '#ffc107',
@@ -223,7 +223,7 @@ const store = new Vuex.Store({
             is_equal: true,
             enabled: false
         }, {
-            label: 'Swirched to remote',
+            label: 'Switched to remote',
             name: 'modality_switched_to_remote_period2_to_3',
             categorical: true,
             value: '0',
@@ -276,11 +276,11 @@ const store = new Vuex.Store({
         clearFilter(state) {
             state.filterId = 0
         },
-        doRedraw(state) {
-            state.doRedraw = true
+        doRedraw(state, label) {
+            state.doRedraw = label
         },
         noRedraw(state) {
-            state.doRedraw = false
+            state.doRedraw = 0
         }
     }
 })
