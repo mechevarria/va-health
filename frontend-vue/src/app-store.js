@@ -176,6 +176,9 @@ const store = new Vuex.Store({
             inputMax: 22,
             enabled: false,
             percentage: false
+        }, {
+           label: 'Vaccination Status',
+           name: 'covid_vaccine_TotalSeriesCount',
         },{
             label: 'In-Person Visit %',
             name: 'visits_count_proportion_Presumed In Person_period3',

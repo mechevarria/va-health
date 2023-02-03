@@ -261,8 +261,8 @@ class DefaultPatientService(MethodView):
       df = pd.DataFrame(values)
       df.apply(pd.Series.explode).to_dict(orient='records')
 
-      df['Total_Risk'] = df.apply(lambda row: ((2 if row['A1C_Increase_Risk'] >= 0.66 else 1 if row['A1C_Increase_Risk'] >= 0.33 else 0) + 
-                            (2 if row['Engagement_Decrease_Risk'] >= 0.66 else 1 if row['Engagement_Decrease_Risk'] >= 0.33 else 0))/4, axis = 1)
+      df['Total_Risk'] = df.apply(lambda row: ((2 if row['A1C_Increase_Risk'] > 0.66 else 1 if row['A1C_Increase_Risk'] > 0.33 else 0) + 
+                            (2 if row['Engagement_Decrease_Risk'] > 0.66 else 1 if row['Engagement_Decrease_Risk'] > 0.33 else 0))/4, axis = 1)
 
 
                             
