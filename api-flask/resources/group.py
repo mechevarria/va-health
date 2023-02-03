@@ -31,7 +31,6 @@ def get_categorcial_column_list(column_names):
   'modality_',
   ]
 
-  visit_cols_suffixes = ['period1', 'period2', 'period3']
   cols_we_want = ['Medicaid', 'Medicare', 'OtherInsurance', 'NoRecordOfInsurance' ]
 
   #add all columns that start with the specified prefixes
@@ -40,7 +39,7 @@ def get_categorcial_column_list(column_names):
 
   #add columns for visit_cols_prefixes and visit_cols_suffixes 
   cols_we_want = [c for c in cols_we_want if not c.endswith("OccurrenceType")]
-  cols_we_want = [c for c in cols_we_want if not c.endswith("change")]
+  # cols_we_want = [c for c in cols_we_want if not c.endswith("change")]
 
   return cols_we_want
 
@@ -49,11 +48,12 @@ def get_continuous_column_list(column_names):
   prefixes = [
   'vitals_',
   'A1C_',
+  'A1Clast',
   'Risk_score_',
-  ]
+  # ]
 
-  #Need for each period 1/2/3
-  visit_cols_prefixes = [
+  # #Need for each period 1/2/3
+  # visit_cols_prefixes = [
   'visits_count_',
   'visits_count_permonth_',
   'visits_count_Phone_',
@@ -75,7 +75,7 @@ def get_continuous_column_list(column_names):
   'visits_count_proportion_directcare_',
   'visits_count_proportion_lifestylecare_',
   ]
-  visit_cols_suffixes = ['period1', 'period2', 'period3']
+  # visit_cols_suffixes = ['period1', 'period2', 'period3']
   # cols_we_want = ['AgeAtIndex', 'Is_increase_A1Clast_period3_to_4_change' , 'Is_decrease_visits_count_permonth_period3_to_4_change']
   cols_we_want = ['AgeAtIndex']
 
@@ -84,9 +84,10 @@ def get_continuous_column_list(column_names):
     cols_we_want = cols_we_want + [c for c in column_names if c.startswith(p)]
 
   #add columns for visit_cols_prefixes and visit_cols_suffixes 
-  cols_we_want = cols_we_want + [p+s for p in visit_cols_prefixes for s in visit_cols_suffixes]  
+  # cols_we_want = cols_we_want + [p+s for p in visit_cols_prefixes for s in visit_cols_suffixes]  
+  # cols_we_want = cols_we_want + [p+s for p in visit_cols_prefixes for s in visit_cols_suffixes]  
   cols_we_want = [c for c in cols_we_want if not 'period5' in c]
-
+  print(cols_we_want)
   return cols_we_want
 
 def get_group_details(src, group_1_id, group_2_id="Rest"):
