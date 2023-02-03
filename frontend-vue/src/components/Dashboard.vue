@@ -7,6 +7,7 @@
           class="btn btn-danger mr-2"
           @click="doClear()"
           v-if="filterId > 0"
+          alt="Clear Filters"
         >
           <i class="cil-x-circle btn-icon mr-1"></i>Clear
         </button>
@@ -14,6 +15,7 @@
           class="btn btn-primary"
           v-b-modal.filter-modal
           :disabled="isBusy"
+          alt="Filter Dashboard"
         >
           <i class="cil-filter btn-icon mr-1" v-if="!isBusy"></i>
           <i
@@ -70,7 +72,6 @@
       id="filter-modal"
       title="Dashboard Filter"
       @ok="doFilter"
-      :ok-only="true"
       ok-title="Filter"
     >
       <span v-for="(filter, index) in filters" :key="index">
