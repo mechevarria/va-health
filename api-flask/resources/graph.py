@@ -109,7 +109,6 @@ def get_simplied_group_network(src, name, color_name, chart_width):
   combs = list(combinations(groups.keys(), 2))
   data = []
   nodes = []
-  print(0)
   group_colors = get_group_coloring(src, nw, node_groups, color_name)
   _return_data['color_controls'] = color_range(list(group_colors.values()))
   scaled_group_colors = scale_colors(list(group_colors.values()))
@@ -121,11 +120,9 @@ def get_simplied_group_network(src, name, color_name, chart_width):
   #Create Nodes with edges
   for f, t in combs:
     if not set(groups[f]['row_indices']).isdisjoint(set(groups[t]['row_indices'])): data.append([f, t])
-  print(1)
   
   _return_data['data'] = data
   _return_data['nodes'] = nodes
-  print(2)
   
   return _return_data
 

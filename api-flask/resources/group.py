@@ -50,10 +50,10 @@ def get_continuous_column_list(column_names):
   'A1C_',
   'A1Clast',
   'Risk_score_',
-  # ]
+  ]
 
   # #Need for each period 1/2/3
-  # visit_cols_prefixes = [
+  visit_cols_prefixes = [
   'visits_count_',
   'visits_count_permonth_',
   'visits_count_Phone_',
@@ -75,7 +75,8 @@ def get_continuous_column_list(column_names):
   'visits_count_proportion_directcare_',
   'visits_count_proportion_lifestylecare_',
   ]
-  # visit_cols_suffixes = ['period1', 'period2', 'period3']
+  visit_cols_suffixes = ['period1', 'period2', 'period3',  'period1_to_2_change', 'period2_to_3_change', 'period1_to_3_change']
+
   # cols_we_want = ['AgeAtIndex', 'Is_increase_A1Clast_period3_to_4_change' , 'Is_decrease_visits_count_permonth_period3_to_4_change']
   cols_we_want = ['AgeAtIndex']
 
@@ -85,9 +86,8 @@ def get_continuous_column_list(column_names):
 
   #add columns for visit_cols_prefixes and visit_cols_suffixes 
   # cols_we_want = cols_we_want + [p+s for p in visit_cols_prefixes for s in visit_cols_suffixes]  
-  # cols_we_want = cols_we_want + [p+s for p in visit_cols_prefixes for s in visit_cols_suffixes]  
+  cols_we_want = cols_we_want + [p+s for p in visit_cols_prefixes for s in visit_cols_suffixes]  
   cols_we_want = [c for c in cols_we_want if not 'period5' in c]
-  print(cols_we_want)
   return cols_we_want
 
 def get_group_details(src, group_1_id, group_2_id="Rest"):
