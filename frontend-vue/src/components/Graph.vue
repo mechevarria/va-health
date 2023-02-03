@@ -1,15 +1,16 @@
 <template>
   <div class="card">
     <div class="card-header">
-      <div class="d-flex">
-        <div class="mr-auto mt-1">
+      <div class="d-flex d-flex justify-content-between">
+        <div>
           {{ `Graph ${label}` }}
           <i
             class="spinner-border spinner-border-sm mr-1 ml-1"
             v-if="isBusy"
           ></i>
         </div>
-        <div class="mr-3 mt-2">
+        <div>
+          <div class="app-label text-center">{{ selectedText }}</div>
           <div
             class="rounded app-gradient"
             :style="`background-image: linear-gradient(to right,${lowColor},${midColor},${highColor})`"
@@ -20,45 +21,106 @@
             <div class="app-label">{{ highLabel }}</div>
           </div>
         </div>
-        <div class="mr-3">
-          <b-dropdown
-            class="float-right"
-            id="color-dropdown"
-            right
-            text="Right align"
-            :disabled="isBusy"
-          >
-            <template #button-content>
-              <i class="cil-contrast mr-2 mb-1"></i>{{ selectedText }}
-            </template>
-            <b-dropdown-item-button
-              v-for="(option, index) in colorOptions"
-              :key="index"
-              @click="changeColor(option)"
-            >
-              {{ option.text }}
-            </b-dropdown-item-button>
-          </b-dropdown>
-        </div>
-        <div class="mt-2">
-          <b-form-checkbox
-            v-model="simplified"
-            :id="`simplified-${label}`"
-            :disabled="isBusy"
-            >Simplified</b-form-checkbox
-          >
+        <div class="py-2 pl-2">
+          <a role="button" alt="graph settings" v-b-modal="`graph-modal-${label}`">
+            <i class="cil-cog app-icon-hover text-primary c-icon"></i>
+          </a>
         </div>
       </div>
     </div>
-    <div class="card-body">
-      <div class="card-text" ref="chartContainer">
-        <highcharts
-          class="hc"
-          :options="graphOptions"
-          v-if="showChart"
-        ></highcharts>
-      </div>
+    <div class="card-body" ref="chartContainer">
+      <highcharts
+        class="hc"
+        :options="graphOptions"
+        v-if="showChart"
+      ></highcharts>
     </div>
+    <b-modal :id="`graph-modal-${label}`" :title="`Graph ${label} Options`" @ok="setConfig">
+      <div class="form-group">
+        <label>Color Graph Nodes By</label>
+        <b-form-select
+          v-model="modal.color"
+          :options="colorOptions"
+          :disabled="isBusy"
+          size="sm"
+        ></b-form-select>
+      </div>
+      <div class="form-group">
+        <label>Graph Color Style</label>
+        <b-form-radio
+          :disabled="isBusy"
+          v-model="modal.style"
+          value="redToGreen"
+        >
+          <div class="d-flex justify-content-between">
+            <div class="app-label">Red</div>
+            <div class="app-label">to</div>
+            <div class="app-label">Green</div>
+          </div>
+          <div
+            class="rounded app-gradient mb-3"
+            :style="`background-image: linear-gradient(to right,${modal.red},${modal.yellow},${modal.green})`"
+          ></div>
+        </b-form-radio>
+        <b-form-radio
+          :disabled="isBusy"
+          v-model="modal.style"
+          value="greenToRed"
+        >
+          <div class="d-flex justify-content-between">
+            <div class="app-label">Green</div>
+            <div class="app-label">to</div>
+            <div class="app-label">Red</div>
+          </div>
+          <div
+            class="rounded app-gradient mb-3"
+            :style="`background-image: linear-gradient(to right,${modal.green},${modal.yellow},${modal.red})`"
+          ></div>
+        </b-form-radio>
+        <b-form-radio
+          :disabled="isBusy"
+          v-model="modal.style"
+          value="whiteToGreen"
+        >
+          <div class="d-flex justify-content-between">
+            <div class="app-label">White</div>
+            <div class="app-label">to</div>
+            <div class="app-label">Green</div>
+          </div>
+          <div
+            class="rounded app-gradient mb-3"
+            :style="`background-image: linear-gradient(to right,${modal.white},${modal.midGreen},${modal.darkGreen})`"
+          ></div>
+        </b-form-radio>
+        <b-form-radio
+          :disabled="isBusy"
+          v-model="modal.style"
+          value="greenToWhite"
+        >
+          <div class="d-flex justify-content-between">
+            <div class="app-label">Green</div>
+            <div class="app-label">to</div>
+            <div class="app-label">White</div>
+          </div>
+          <div
+            class="rounded app-gradient mb-3"
+            :style="`background-image: linear-gradient(to right,${modal.darkGreen},${modal.midGreen},${modal.white})`"
+          ></div>
+        </b-form-radio>
+      </div>
+      <div class="form-group">
+        <label>Graph Layout</label>
+        <b-form-radio
+          :disabled="isBusy"
+          v-model="modal.layout"
+          value="simplified"
+          >Simple</b-form-radio
+        >
+        <b-form-radio :disabled="isBusy" v-model="modal.layout" value="detailed"
+          >Detailed</b-form-radio
+        >
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -88,6 +150,17 @@ export default {
       isBusy: false,
       simplified: true,
       showChart: true,
+      modal: {
+        color: '',
+        style: '',
+        layout: 'simplified',
+        green: '',
+        yellow: '',
+        red: '',
+        white: '#ffffff',
+        midGreen: '#9ef8c0',
+        darkGreen: '#3a9462'
+      },
       selectedColor: '',
       selectedText: '',
       colorScale: null,
@@ -140,16 +213,36 @@ export default {
       }
     }
   },
-  methods: {
-    changeColor(option) {
-      this.selectedColor = option.value
-      this.selectedText = option.text
+  watch: {
+    selectedColor(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        const option = this.colorOptions.find(
+          (option) => option.value === newValue
+        )
+        this.selectedText = option.text
+      }
+    },
+    filterId() {
       this.getGraph()
     },
+    doRedraw(label) {
+      if (this.doRedraw && this.label === label) {
+        this.showChart = false
+        setTimeout(() => {
+          this.showChart = true
+          this.$store.commit('noRedraw')
+        }, 10)
+      }
+    }
+  },
+  methods: {
     getGraph() {
       this.isBusy = true
       this.graphOptions.series[0].nodes = []
       this.graphOptions.series[0].data = []
+      this.highLabel = '--'
+      this.midLabel = '--'
+      this.lowLabel = '--'
 
       const url = '/api/graph'
       const body = {
@@ -171,7 +264,9 @@ export default {
 
           let nodes = res.data.nodes
           nodes.forEach((node) => {
-            node.color = this.colorScale(node.colorScale).toString()
+            node.marker.fillColor = this.colorScale(node.colorScale).toString()
+            node.marker.lineWidth = 1
+            node.marker.lineColor = '#3c4b64'
           })
           this.graphOptions.series[0].nodes = nodes
           this.graphOptions.series[0].data = res.data.data
@@ -183,38 +278,63 @@ export default {
         .finally(() => {
           this.isBusy = false
         })
-    }
-  },
-  watch: {
-    filterId() {
-      this.getGraph()
     },
-    simplified() {
-      this.getGraph()
-    },
-    doRedraw() {
-      if (this.doRedraw && this.label === 1) {
-        this.showChart = false
-        setTimeout(() => {
-          this.showChart = true
-          this.$store.commit('noRedraw')
-        }, 10)
+    setConfig() {
+      if (this.modal.layout === 'detailed') {
+        this.simplified = false
+      } else {
+        this.simplified = true
       }
+
+      this.selectedColor = this.modal.color
+
+      switch (this.modal.style) {
+        case 'redToGreen':
+          this.lowColor = this.modal.red
+          this.midColor = this.modal.yellow
+          this.highColor = this.modal.green
+          break
+        case 'greenToRed':
+          this.lowColor = this.modal.green
+          this.midColor = this.modal.yellow
+          this.highColor = this.modal.red
+          break
+        case 'greenToWhite':
+          this.lowColor = this.modal.darkGreen
+          this.midColor = this.modal.midGreen
+          this.highColor = this.modal.white
+          break
+        case 'whiteToGreen':
+          this.lowColor = this.modal.white
+          this.midColor = this.modal.midGreen
+          this.highColor = this.modal.darkGreen
+          break
+      }
+
+      this.colorScale = chroma.scale([
+        this.lowColor,
+        this.midColor,
+        this.highColor
+      ])
+
+      // load graph
+      this.getGraph()
     }
   },
   mounted() {
     if (this.label > 1) {
-      this.simplified = false
+      this.modal.layout = 'detailed'
     }
-    this.lowColor = chroma(this.colors.danger).darken(0.6)
-    this.midColor = chroma(this.colors.warning)
-    this.highColor = chroma(this.colors.success)
 
-    this.colorScale = chroma.scale([this.lowColor, this.midColor, this.highColor])
+    this.modal.green = chroma(this.colors.success)
+    this.modal.yellow = chroma(this.colors.warning)
+    this.modal.red = chroma(this.colors.danger).darken(0.6)
 
-    this.selectedColor = this.colorOptions[this.label - 1].value
-    this.selectedText = this.colorOptions[this.label - 1].text
-    this.getGraph()
+    this.modal.style = 'redToGreen'
+
+    this.modal.color = this.colorOptions[this.label - 1].value
+
+    this.setConfig()
   }
 }
 </script>
@@ -223,7 +343,10 @@ export default {
   font-size: 0.8em;
 }
 .app-gradient {
-  width: 146px;
-  height: 14px;
+  min-width: 146px;
+  height: 10px;
+}
+.app-icon-hover:hover {
+  font-weight: bold;
 }
 </style>
