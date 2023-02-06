@@ -227,11 +227,8 @@ export default {
     },
     doRedraw(label) {
       if (this.doRedraw && this.label === label) {
-        this.showChart = false
-        setTimeout(() => {
-          this.showChart = true
-          this.$store.commit('noRedraw')
-        }, 10)
+        this.getGraph()
+        this.$store.commit('noRedraw')
       }
     }
   },
