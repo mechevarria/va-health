@@ -322,10 +322,6 @@ export default {
     }
   },
   mounted() {
-    if (this.label > 1) {
-      this.modal.layout = 'detailed'
-    }
-
     this.modal.green = chroma(this.colors.success)
     this.modal.yellow = chroma(this.colors.warning)
     this.modal.red = chroma(this.colors.danger).darken(0.6)
