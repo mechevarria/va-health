@@ -123,7 +123,7 @@
             <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
           </p>
           <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-sm table-striped">
               <tr>
                 <th>Medicine</th>
                 <th>Pre</th>
@@ -160,7 +160,7 @@
             <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
           </p>
           <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-sm table-striped">
               <tr>
                 <th>Medicine</th>
                 <th>Period 1 - 2</th>
@@ -199,7 +199,7 @@
             <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
           </p>
           <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-sm table-striped">
               <tr>
                 <th>Visit Type</th>
                 <th>Period 1</th>
@@ -292,7 +292,7 @@
             <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
           </p>
           <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-sm table-striped">
               <tr>
                 <th>Medicine</th>
                 <th>Pre</th>
@@ -341,8 +341,9 @@
             <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
           </p>
           <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-sm table-striped">
               <tr>
+                <th>Prescribed</th>
                 <th>Medicine</th>
                 <th>Period 1 - 2</th>
                 <th>Period 3</th>
@@ -354,6 +355,12 @@
                   )"
                   :key="index"
                 >
+                  <td>
+                    <b-form-checkbox
+                      v-model="selectedMeds"
+                      :value="`${entry[0]}`"
+                    ></b-form-checkbox>
+                  </td>
                   <td>{{ entry[0] }}</td>
                   <td>
                     <b-progress
@@ -390,7 +397,7 @@
             <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
           </p>
           <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-sm table-striped">
               <tr>
                 <th>Visit Type</th>
                 <th>Period 1</th>
@@ -454,7 +461,7 @@
             <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
           </p>
           <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-sm table-striped">
               <tr>
                 <th>Medicine</th>
                 <th>Pre</th>
@@ -503,8 +510,9 @@
             <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
           </p>
           <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-sm table-striped">
               <tr>
+                <th>Prescribed</th>
                 <th>Medicine</th>
                 <th>Period 1 - 2</th>
                 <th>Period 3</th>
@@ -516,6 +524,10 @@
                   )"
                   :key="index"
                 >
+                  <b-form-checkbox
+                    v-model="selectedMeds"
+                    :value="`${entry[0]}`"
+                  ></b-form-checkbox>
                   <td>{{ entry[0] }}</td>
                   <td>
                     <b-progress
@@ -552,7 +564,7 @@
             <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
           </p>
           <div class="table-responsive">
-            <table class="table table-striped">
+            <table class="table table-sm table-striped">
               <tr>
                 <th>Visit Type</th>
                 <th>Period 1</th>
@@ -607,7 +619,7 @@
         </div>
       </div>
     </div>
-    <!-- <pre>{{ data }}</pre> -->
+    <!-- <pre>selectedMeds: {{ selectedMeds }}</pre> -->
   </span>
 </template>
 <script>
@@ -620,6 +632,7 @@ export default {
   data() {
     return {
       id: 0,
+      selectedMeds: [],
       selectedCriteria: 'meds',
       criteriaOptions: [
         { item: 'meds', name: 'Medicines' },
@@ -680,6 +693,14 @@ export default {
         .post(url, body)
         .then((res) => {
           this.data = res.data
+
+          // set default selectedMeds based on carepath
+          const meds = this.data.carepath.diabetic_meds
+          for (const key of Object.keys(meds)) {
+            if(meds[key]._period3 === 1) {
+              this.selectedMeds.push(key)
+            }
+          }
         })
         .catch((err) => {
           console.error(err)
