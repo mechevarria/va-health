@@ -37,6 +37,7 @@ def get_bloodtype(dict):
 def get_carepath(d):
     _dict = {}
     #DIABETIC MEDS
+    #These start with period1_2 or period3
     diabetic_med_keys = natural_sort([c for c in d.keys() if (c.startswith("meds_") 
                                                  and not c.startswith("meds_pre") 
                                                  and not c.startswith("meds_post") 
@@ -51,9 +52,10 @@ def get_carepath(d):
     for mp in diabetic_med_prefix:
       _[mp.replace('meds_', "")]={}
       for s in suffix: _[mp.replace('meds_', "")][s] = med_dict.get(mp+s, 0)
-            
+
     _dict['diabetic_meds'] = _
     #NON diabetic meds
+    #these start with meds_pre or meds_post
     non_diabetic_med_keys = natural_sort([c for c in d.keys() if (c.startswith("meds_pre") 
                                                  or c.startswith("meds_post") 
                                                  and not c.endswith("OccurrenceType") 
@@ -121,7 +123,7 @@ def compute_carepath_from_dataframe(d, df, threshold):
     
     _ = {}
     for dmp in diabetic_med_prefix:
-        _[dmp.replace('meds_', '')]={}
+        _[dmp.replace('meds_', '')]={'prescribed': False}
         for s in suffix: _[dmp.replace('meds_', '')][s] = df[dmp+s].sum()/100
 
     _dict['diabetic_meds'] = _
