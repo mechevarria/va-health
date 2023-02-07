@@ -62,3 +62,8 @@ class PatientCardSchema(Schema):
     A1C_Increase_Risk=fields.Str(required=True)
     Engagement_Decrease_Risk=fields.Str(required=True)
     Total_Risk=fields.Str(required=True)
+
+class PrescribedSchema(Schema):
+    patient_id = fields.Str(Required=True)
+    neighbor_criteria = fields.Str(validate=validate.OneOf(["meds", "visits"]), required=True)
+    medicines = fields.List(fields.String(required=True))

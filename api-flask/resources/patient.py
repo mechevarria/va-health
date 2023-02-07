@@ -6,7 +6,7 @@ import re
 from flask import request
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
-from schemas import PatientCardSchema, DetailedPatientSchema
+from schemas import PatientCardSchema, DetailedPatientSchema, PrescribedSchema
 
 from globals import user, get_all_group_id
 
@@ -110,7 +110,6 @@ def get_carepath(d):
 
 def compute_carepath_from_dataframe(d, df, threshold):
     _dict = {}
-    
     #get DIABETIC MED meds for carepath
     diabetic_med_keys = natural_sort([c for c in d.keys() if (c.startswith("meds_") 
                                                  and not c.startswith("meds_pre") 
@@ -123,7 +122,8 @@ def compute_carepath_from_dataframe(d, df, threshold):
     
     _ = {}
     for dmp in diabetic_med_prefix:
-        _[dmp.replace('meds_', '')]={'prescribed': False}
+        # _[dmp.replace('meds_', '')]={'prescribed': False}
+        _[dmp.replace('meds_', '')]={}
         for s in suffix: _[dmp.replace('meds_', '')][s] = df[dmp+s].sum()/100
 
     _dict['diabetic_meds'] = _
@@ -174,7 +174,8 @@ def compute_carepath_from_dataframe(d, df, threshold):
 
     return _dict
 
-def get_consesus_carepath(d, behavior_keys, threshold=70):
+
+def get_nn_carepath(d, behavior_keys, threshold=70, ai_recommended = False):
     
     #get list of nearest neighbors ids
     nn_ids = [str(d[k]) for k in behavior_keys]
@@ -188,37 +189,14 @@ def get_consesus_carepath(d, behavior_keys, threshold=70):
     #convert export to pandas dataframe
     cols = [src.id_to_colnames[i] for i in export['column_indices']]
     df = pd.DataFrame(export['data'], index=cols).T
-    print(f"A1Clast_period3_to_4_change in df: {'A1Clast_period3_to_4_change' in df.columns}" )
-    consensus_carepath = compute_carepath_from_dataframe(d, df, threshold)
+    if ai_recommended:
+      df = df[df['Is_increase_A1Clast_period3_to_4_change'] == 0]
+       
+    cp = compute_carepath_from_dataframe(d, df, threshold)
     #compute group change in A1c between period 3 and 4
-    consensus_carepath['average_a1c_change'] = df['A1Clast_period3_to_4_change'].sum()/df['A1Clast_period3_to_4_change'].count()
+    cp['average_a1c_change'] =  f"{df['A1Clast_period3_to_4_change'].sum()/df['A1Clast_period3_to_4_change'].count():.2f}"
 
-    return consensus_carepath
-
-
-def get_ai_recommended_carepath(d, behavior_keys, threshold=70):
-    
-    #get list of nearest neighbors ids
-    nn_ids = [str(d[k]) for k in behavior_keys]
-
-    src = user['connection'].get_source(name=user['source_name'])
-    #create filter set based on ids
-    fs = src.create_filter_set([{'column_name':"PatientICN", "in_set": nn_ids}])
-    export = src.export(filter_set=fs)
-    if len(export['data']) == 0: raise NameError(f"Patient neighbors not found!")
-
-    #convert export to pandas dataframe
-    cols = [src.id_to_colnames[i] for i in export['column_indices']]
-    df = pd.DataFrame(export['data'], index=cols).T
-    print("df shape before filter:", df.shape)
-    df = df[df['Is_increase_A1Clast_period3_to_4_change'] == 0]
-    print("df shape after filter:", df.shape)
-    recommended_carepath = compute_carepath_from_dataframe(d, df, threshold)
-    #compute group change in A1c between period 3 and 4
-    recommended_carepath['average_a1c_change'] = df['A1Clast_period3_to_4_change'].sum()/df['A1Clast_period3_to_4_change'].count()
-
-    return recommended_carepath
-
+    return cp
 
 @blp.route("/patient")
 class DefaultPatientService(MethodView):
@@ -333,11 +311,73 @@ class DetailedPatientService(MethodView):
 
       # return_data['carepath_consensus'] = return_data['carepath']
       # return_data['carepath_recommended'] = return_data['carepath']
-      return_data['carepath_consensus'] = get_consesus_carepath(zipdict, behavior_keys, patient_data['medicine_threshold'])
-      return_data['carepath_recommended'] = get_ai_recommended_carepath(zipdict, behavior_keys, patient_data['medicine_threshold'])
+      return_data['carepath_consensus'] = get_nn_carepath(zipdict, behavior_keys, patient_data['medicine_threshold'], False)
+      return_data['carepath_recommended'] = get_nn_carepath(zipdict, behavior_keys, patient_data['medicine_threshold'], True)
 
       return return_data
     except NameError:
       abort(400, message=f"Patient ({pid}) not found!")
     except Exception as e: 
       abort(http_status_code=404, message=f"Error getting Patient ({pid}) data from source. Error: {str(e)}")
+
+@blp.route("/patient/prescribed")
+class PrescribedPatientService(MethodView): 
+  '''Gets a1c results for cohort who took prescribed medicine'''
+  @blp.arguments(PrescribedSchema)
+  @blp.response(200)
+  def post(self, prescribed_data):
+    rtn_json = {}
+    try:
+       
+      src = user['connection'].get_source(name=user['source_name_holdout'])
+      pid = prescribed_data['patient_id']
+      fs = src.create_filter_set([{'column_name':"PatientICN", "in_set": [pid]}])
+      export = src.export(filter_set=fs)
+      if len(export['data']) == 0: raise NameError(f"Patient ({pid})not found!")
+
+      keys = [src.id_to_colnames[cid] for cid in export['column_indices']]
+      values = [d[0] for d in export['data']]
+
+      zipped = zip(keys,values)
+      zipdict = dict(zipped)
+
+      #get list of nearest neighbors ids
+      if prescribed_data['neighbor_criteria']=='meds':
+          behavior_keys = [k for k in zipdict.keys() if k.startswith('nn1_')]
+      else:
+          behavior_keys = [k for k in zipdict.keys() if k.startswith('nn2_')]
+      nn_ids = [str(zipdict[k]) for k in behavior_keys]
+
+      src = user['connection'].get_source(name=user['source_name'])
+      #create filter set based on ids
+      fs = src.create_filter_set([{'column_name':"PatientICN", "in_set": nn_ids}])
+      cols_to_export = ['PatientICN', "A1Clast_period3_to_4_change", "Is_increase_A1Clast_period3_to_4_change"]
+      med_cols = [c for c in src.column_names for m in prescribed_data['medicines'] if c.startswith(f'meds_{m}')]
+      med_cols = [c for c in med_cols if c.endswith('_period3')]
+
+      cols_to_export = cols_to_export + med_cols
+      cols_to_export = [src.colname_to_ids[c] for c in cols_to_export]
+
+      export = src.export(filter_set=fs, column_indices=cols_to_export)
+
+      if len(export['data']) == 0: raise NameError(f"Patient neighbors not found!")
+
+      #convert export to pandas dataframe
+      cols = [src.id_to_colnames[i] for i in export['column_indices']]
+      df = pd.DataFrame(export['data'], index=cols).T
+
+      #only select rows where all supplied meds are true
+      _df = df.copy()
+      for mc in med_cols:
+          print(mc)
+          _df = _df[_df[mc]==1] 
+          
+      rtn_json['consensus_prescribed_a1c_change'] = f"{_df['A1Clast_period3_to_4_change'].sum()/_df['A1Clast_period3_to_4_change'].count():.2f}"
+
+      _df = _df[_df['Is_increase_A1Clast_period3_to_4_change'] == 0]
+      rtn_json['recommended_prescribed_a1c_change'] = f"{_df['A1Clast_period3_to_4_change'].sum()/_df['A1Clast_period3_to_4_change'].count():.2f}"
+      return rtn_json
+    except:
+      abort(http_status_code=404, message=f"Error getting Patient prescribed cohort A1C values")
+
+    
