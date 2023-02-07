@@ -188,8 +188,12 @@ def get_consesus_carepath(d, behavior_keys, threshold=70):
     #convert export to pandas dataframe
     cols = [src.id_to_colnames[i] for i in export['column_indices']]
     df = pd.DataFrame(export['data'], index=cols).T
+    print(f"A1Clast_period3_to_4_change in df: {'A1Clast_period3_to_4_change' in df.columns}" )
+    consensus_carepath = compute_carepath_from_dataframe(d, df, threshold)
+    #compute group change in A1c between period 3 and 4
+    consensus_carepath['average_a1c_change'] = df['A1Clast_period3_to_4_change'].sum()/df['A1Clast_period3_to_4_change'].count()
 
-    return compute_carepath_from_dataframe(d, df, threshold)
+    return consensus_carepath
 
 
 def get_ai_recommended_carepath(d, behavior_keys, threshold=70):
@@ -209,8 +213,11 @@ def get_ai_recommended_carepath(d, behavior_keys, threshold=70):
     print("df shape before filter:", df.shape)
     df = df[df['Is_increase_A1Clast_period3_to_4_change'] == 0]
     print("df shape after filter:", df.shape)
+    recommended_carepath = compute_carepath_from_dataframe(d, df, threshold)
+    #compute group change in A1c between period 3 and 4
+    recommended_carepath['average_a1c_change'] = df['A1Clast_period3_to_4_change'].sum()/df['A1Clast_period3_to_4_change'].count()
 
-    return compute_carepath_from_dataframe(d, df, threshold)
+    return recommended_carepath
 
 
 @blp.route("/patient")
@@ -239,7 +246,6 @@ class DefaultPatientService(MethodView):
         "Engagement_Decrease_Risk": "Risk_score_is_decrease_visits_count_permonth_period3_to_4_change"
       }
 
-      column = "eric"
       for k, v in columns.items():
         column = k
 
@@ -258,17 +264,12 @@ class DefaultPatientService(MethodView):
 
         values[k] = _
 
-      print("Before CHanges")
-    
       df = pd.DataFrame(values)
       df.apply(pd.Series.explode).to_dict(orient='records')
 
       df['Total_Risk'] = df.apply(lambda row: ((2 if row['A1C_Increase_Risk'] > 0.66 else 1 if row['A1C_Increase_Risk'] > 0.33 else 0) + 
                             (2 if row['Engagement_Decrease_Risk'] > 0.66 else 1 if row['Engagement_Decrease_Risk'] > 0.33 else 0))/4, axis = 1)
-
-
                             
-      print("Got to here")
       return df.to_dict(orient='records')
 
     except Exception as e: 
@@ -281,7 +282,6 @@ class DetailedPatientService(MethodView):
   @blp.arguments(DetailedPatientSchema)
   @blp.response(200)
   def post(self, patient_data):
-    print("In call")
     '''Gets all KPI values the source'''
     pid = str(patient_data['patient_id'])
     try:
