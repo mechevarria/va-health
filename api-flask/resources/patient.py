@@ -124,7 +124,7 @@ def compute_carepath_from_dataframe(d, df, threshold):
     for dmp in diabetic_med_prefix:
         # _[dmp.replace('meds_', '')]={'prescribed': False}
         _[dmp.replace('meds_', '')]={}
-        for s in suffix: _[dmp.replace('meds_', '')][s] = df[dmp+s].sum()/100
+        for s in suffix: _[dmp.replace('meds_', '')][s] = df[dmp+s].sum()/len(df)
 
     _dict['diabetic_meds'] = _
 
@@ -155,7 +155,7 @@ def compute_carepath_from_dataframe(d, df, threshold):
             pass
             
         if (pre >= threshold or post >= threshold):
-            _[mp]={'pre': pre/100, 'post': post/100}
+            _[mp]={'pre': pre/len(df), 'post': post/len(df)}
                       
     _dict['meds'] = _
 
