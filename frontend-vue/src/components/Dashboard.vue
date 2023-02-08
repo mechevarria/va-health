@@ -28,8 +28,8 @@
     </h4>
     <div class="card" v-if="filterId > 0">
       <div class="d-flex flex-row">
-        <span v-for="(filter, index) in filters" :key="index">
-          <div v-if="filter.enabled" class="ml-4">
+        <template v-for="(filter, index) in filters">
+          <div v-if="filter.enabled" class="ml-4" :key="index">
             <div class="c-callout" :class="getClass(index)">
               <i class="cil-filter ml-1"></i>
               <small class="text-muted">{{ filter.label }}</small
@@ -42,7 +42,7 @@
               >
             </div>
           </div>
-        </span>
+        </template>
       </div>
     </div>
 
