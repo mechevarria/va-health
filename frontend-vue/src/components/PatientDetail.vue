@@ -268,7 +268,7 @@
         <button
           type="button"
           class="btn btn-primary"
-          @click="postDetails()"
+          @click="postDetails(false)"
           :disabled="isBusy"
         >
           <i class="cil-reload btn-icon mr-1" v-if="!isBusy"></i>
@@ -329,12 +329,26 @@
         <div class="card-body">
           <strong>Diabetic Medicines</strong>
           <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
-          <div class="d-flex">
-            <div class="c-callout" :class="getA1cClass(data.carepath_consensus.average_a1c_change)">
-              <small class="text-muted">Average A1C Change</small><br />
-              <strong class="h4">{{
-                data.carepath_consensus.average_a1c_change
-              }}</strong>
+          <div class="d-flex flex-row">
+            <div>
+              <div
+                class="c-callout"
+                :class="getA1cClass(prescribedA1cConsensus)"
+              >
+                <small class="text-muted">Prescribed A1C Change</small><br />
+                <strong class="h4">{{ prescribedA1cConsensus }}</strong>
+              </div>
+            </div>
+            <div>
+              <div
+                class="c-callout"
+                :class="getA1cClass(data.carepath_consensus.average_a1c_change)"
+              >
+                <small class="text-muted">Average A1C Change</small><br />
+                <strong class="h4">{{
+                  data.carepath_consensus.average_a1c_change
+                }}</strong>
+              </div>
             </div>
             <div class="align-self-center">
               <button
@@ -344,7 +358,10 @@
                 :disabled="isA1cBusy"
               >
                 <i class="cil-sync" v-if="!isA1cBusy"></i>
-                <i class="spinner-border spinner-border-sm" v-if="isA1cBusy"></i>
+                <i
+                  class="spinner-border spinner-border-sm"
+                  v-if="isA1cBusy"
+                ></i>
               </button>
             </div>
           </div>
@@ -486,12 +503,28 @@
         <div class="card-body">
           <strong>Diabetic Medicines</strong>
           <i class="spinner-border spinner-border-sm ml-1" v-if="isBusy"></i>
-          <div class="d-flex">
-            <div class="c-callout" :class="getA1cClass(data.carepath_recommended.average_a1c_change)">
-              <small class="text-muted">Average A1C Change</small><br />
-              <strong class="h4">{{
-                data.carepath_recommended.average_a1c_change
-              }}</strong>
+          <div class="d-flex flex-row">
+            <div>
+              <div
+                class="c-callout"
+                :class="getA1cClass(prescribedA1cRecommend)"
+              >
+                <small class="text-muted">Prescribed A1C Change</small><br />
+                <strong class="h4">{{ prescribedA1cRecommend }}</strong>
+              </div>
+            </div>
+            <div>
+              <div
+                class="c-callout"
+                :class="
+                  getA1cClass(data.carepath_recommended.average_a1c_change)
+                "
+              >
+                <small class="text-muted">Average A1C Change</small><br />
+                <strong class="h4">{{
+                  data.carepath_recommended.average_a1c_change
+                }}</strong>
+              </div>
             </div>
             <div class="align-self-center">
               <button
@@ -501,7 +534,10 @@
                 :disabled="isA1cBusy"
               >
                 <i class="cil-sync" v-if="!isA1cBusy"></i>
-                <i class="spinner-border spinner-border-sm" v-if="isA1cBusy"></i>
+                <i
+                  class="spinner-border spinner-border-sm"
+                  v-if="isA1cBusy"
+                ></i>
               </button>
             </div>
           </div>
@@ -609,6 +645,8 @@ export default {
       id: 0,
       selectedMeds: [],
       selectedCriteria: 'meds',
+      prescribedA1cConsensus: '0',
+      prescribedA1cRecommend: '0',
       criteriaOptions: [
         { item: 'meds', name: 'Medicines' },
         { item: 'visits', name: 'Visits' }
@@ -670,8 +708,8 @@ export default {
     },
     postA1cChange() {
       this.isA1cBusy = true
-      this.data.carepath_consensus.average_a1c_change = '0'
-      this.data.carepath_recommended.average_a1c_change = '0'
+      this.prescribedA1cConsensus = '0'
+      this.prescribedA1cRecommend = '0'
 
       const url = '/api/patient/prescribed'
       const body = {
@@ -682,9 +720,8 @@ export default {
       axios
         .post(url, body)
         .then((res) => {
-          this.data.carepath_consensus.average_a1c_change =
-            res.data.consensus_prescribed_a1c_change
-          this.data.carepath_recommended.average_a1c_change =
+          this.prescribedA1cConsensus = res.data.consensus_prescribed_a1c_change
+          this.prescribedA1cRecommend =
             res.data.recommended_prescribed_a1c_change
         })
         .catch((err) => {
@@ -695,7 +732,7 @@ export default {
           this.isA1cBusy = false
         })
     },
-    postDetails() {
+    postDetails(doA1c) {
       this.clearData()
       this.isBusy = true
       const url = '/api/patient'
@@ -724,12 +761,16 @@ export default {
         .finally(() => {
           this.isBusy = false
           this.isA1cBusy = false
+          
+          if(doA1c) {
+            this.postA1cChange()
+          }
         })
     }
   },
   created() {
     this.id = this.$route.params.id
-    this.postDetails()
+    this.postDetails(true)
   }
 }
 </script>
