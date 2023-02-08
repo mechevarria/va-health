@@ -341,7 +341,7 @@
                 type="button"
                 class="btn btn-sm btn-primary"
                 @click="postA1cChange"
-                :disabled="isBusy"
+                :disabled="isA1cBusy"
               >
                 <i class="cil-sync" v-if="!isA1cBusy"></i>
                 <i class="spinner-border spinner-border-sm" v-if="isA1cBusy"></i>
@@ -498,7 +498,7 @@
                 type="button"
                 class="btn btn-sm btn-primary"
                 @click="postA1cChange"
-                :disabled="isBusy"
+                :disabled="isA1cBusy"
               >
                 <i class="cil-sync" v-if="!isA1cBusy"></i>
                 <i class="spinner-border spinner-border-sm" v-if="isA1cBusy"></i>
@@ -616,7 +616,7 @@ export default {
       medicineThreshold: 70,
       data: {},
       isBusy: true,
-      isA1cBusy: false
+      isA1cBusy: true
     }
   },
   methods: {
@@ -723,6 +723,7 @@ export default {
         })
         .finally(() => {
           this.isBusy = false
+          this.isA1cBusy = false
         })
     }
   },
