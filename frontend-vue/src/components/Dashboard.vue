@@ -15,7 +15,7 @@
           class="btn btn-primary"
           v-b-modal.filter-modal
           :disabled="isBusy"
-          alt="Filter Dashboard"
+          role="button"
         >
           <i class="cil-filter btn-icon mr-1" v-if="!isBusy"></i>
           <i
