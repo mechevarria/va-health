@@ -81,9 +81,11 @@ import axios from 'axios'
 import { Chart } from 'highcharts-vue'
 import Highcharts from 'highcharts'
 import highchartsMore from 'highcharts/highcharts-more'
+import accessibility from 'highcharts/modules/accessibility'
 import msgMixin from '../mixins/msg-mixin'
 
 highchartsMore(Highcharts)
+accessibility(Highcharts)
 
 export default {
   name: 'AppExplainDetail',

@@ -128,11 +128,13 @@
 import { mapState } from 'vuex'
 import Highcharts from 'highcharts'
 import Networkgraph from 'highcharts/modules/networkgraph'
+import accessibility from 'highcharts/modules/accessibility'
 import axios from 'axios'
 import chroma from 'chroma-js'
 import msgMixin from '../mixins/msg-mixin'
 
 Networkgraph(Highcharts)
+accessibility(Highcharts)
 
 export default {
   name: 'AppGraph',
