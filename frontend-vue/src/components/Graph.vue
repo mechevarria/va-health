@@ -22,7 +22,7 @@
           </div>
         </div>
         <div class="py-2 pl-2">
-          <a role="button" alt="graph settings" v-b-modal="`graph-modal-${label}`">
+          <a role="button" aria-label="graph settings" v-b-modal="`graph-modal-${label}`" tabindex="2">
             <i class="cil-cog app-icon-hover text-primary c-icon"></i>
           </a>
         </div>
@@ -39,6 +39,7 @@
       <div class="form-group">
         <label>Color Graph Nodes By</label>
         <b-form-select
+          aria-label="graph color by"
           v-model="modal.color"
           :options="colorOptions"
           :disabled="isBusy"
@@ -48,6 +49,7 @@
       <div class="form-group">
         <label>Graph Color Style</label>
         <b-form-radio
+          aria-label="red to green"
           :disabled="isBusy"
           v-model="modal.style"
           value="redToGreen"
