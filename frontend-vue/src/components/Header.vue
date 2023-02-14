@@ -3,6 +3,7 @@
     <!-- shown in mobile view -->
     <button
       class="c-header-toggler c-class-toggler d-lg-none mfe-auto"
+      aria-label="toggle-sidebar"
       type="button"
       @click="toggleSidebar"
     >
@@ -17,6 +18,7 @@
       class="c-header-toggler c-class-toggler mfs-3 d-md-down-none"
       type="button"
       responsive="true"
+      aria-label="toggle-sidebar"
       @click="toggleSidebar"
     >
       <i class="c-icon c-icon-lg cil-menu"></i>
@@ -34,7 +36,7 @@
         no-caret
       >
         <template v-slot:button-content>
-          <a role="button">
+          <a role="button" aria-label="messages" tabindex="0">
             <i class="c-icon cil-bell"></i>
             <span class="badge badge-pill badge-info" v-if="messages.length > 0">{{messages.length}}</span>
           </a>
@@ -57,7 +59,7 @@
         no-caret
       >
         <template v-slot:button-content>
-          <a role="button">
+          <a role="button" aria-label="user menu" tabindex="1">
             <i class="mr-1 c-icon cil-user"></i>
           </a>
         </template>
