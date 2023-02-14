@@ -8,25 +8,22 @@
     </span>
     <div class="card-deck mb-2" v-if="groupId.length > 1 && !isBusy">
       <div class="card">
-        <div class="card-header">
-          Continuous Explains
-        </div>
+        <div class="card-header">Continuous Explains</div>
         <div class="card-body">
           <div class="d-flex justify-content-end">
-            <div class="badge bg-primary text-white mr-2">{{ primaryName }}</div>
-            <div class="badge  bg-info text-white">{{ secondaryName }}</div>
+            <div class="badge bg-primary text-white mr-2">
+              {{ primaryName }}
+            </div>
+            <div class="badge bg-info text-white">{{ secondaryName }}</div>
           </div>
-          <hr/>
+          <hr />
           <span v-for="(explain, index) in contExplains" :key="index">
             <div class="row">
               <div class="col-sm-6">
                 {{ explain.name }}
               </div>
               <div class="col-sm-6">
-                <highcharts
-                  class="hc"
-                  :options="explain.chart"
-                ></highcharts>
+                <highcharts class="hc" :options="explain.chart"></highcharts>
               </div>
             </div>
             <hr />
@@ -34,15 +31,15 @@
         </div>
       </div>
       <div class="card">
-        <div class="card-header">
-          Categorial Explains
-        </div>
+        <div class="card-header">Categorial Explains</div>
         <div class="card-body">
           <div class="d-flex justify-content-end">
-            <div class="badge bg-primary text-white mr-2">{{ primaryName }}</div>
-            <div class="badge  bg-info text-white">{{ secondaryName }}</div>
+            <div class="badge bg-primary text-white mr-2">
+              {{ primaryName }}
+            </div>
+            <div class="badge bg-info text-white">{{ secondaryName }}</div>
           </div>
-          <hr/>
+          <hr />
           <span v-for="(explain, index) in catExplains" :key="index">
             <div class="row">
               <div class="col-sm-6">
@@ -132,22 +129,30 @@ export default {
             if (explain.type == 'categorical') {
               this.catExplains.push(explain)
             } else {
-              explain.chart = JSON.parse(
-                JSON.stringify(this.defaultOptions)
-              )
+              explain.chart = JSON.parse(JSON.stringify(this.defaultOptions))
               // set boxplot data primary
-              explain.chart.series[0].data[0].low = explain.primary_group_quartiles[0]
-              explain.chart.series[0].data[0].q1 = explain.primary_group_quartiles[1]
-              explain.chart.series[0].data[0].median = explain.primary_group_quartiles[2]
-              explain.chart.series[0].data[0].q3 = explain.primary_group_quartiles[3]
-              explain.chart.series[0].data[0].high = explain.primary_group_quartiles[4]
+              explain.chart.series[0].data[0].low =
+                explain.primary_group_quartiles[0]
+              explain.chart.series[0].data[0].q1 =
+                explain.primary_group_quartiles[1]
+              explain.chart.series[0].data[0].median =
+                explain.primary_group_quartiles[2]
+              explain.chart.series[0].data[0].q3 =
+                explain.primary_group_quartiles[3]
+              explain.chart.series[0].data[0].high =
+                explain.primary_group_quartiles[4]
 
               // set boxplot data secondary
-              explain.chart.series[0].data[1].low = explain.secondary_group_quartiles[0]
-              explain.chart.series[0].data[1].q1 = explain.secondary_group_quartiles[1]
-              explain.chart.series[0].data[1].median = explain.secondary_group_quartiles[2]
-              explain.chart.series[0].data[1].q3 = explain.secondary_group_quartiles[3]
-              explain.chart.series[0].data[1].high = explain.secondary_group_quartiles[4]
+              explain.chart.series[0].data[1].low =
+                explain.secondary_group_quartiles[0]
+              explain.chart.series[0].data[1].q1 =
+                explain.secondary_group_quartiles[1]
+              explain.chart.series[0].data[1].median =
+                explain.secondary_group_quartiles[2]
+              explain.chart.series[0].data[1].q3 =
+                explain.secondary_group_quartiles[3]
+              explain.chart.series[0].data[1].high =
+                explain.secondary_group_quartiles[4]
 
               this.contExplains.push(explain)
             }
@@ -187,13 +192,19 @@ export default {
         xAxis: {
           visible: false,
           minPadding: 0,
-          maxPadding: 0
+          maxPadding: 0,
+          accessibility: {
+            description: 'X Axis'
+          }
         },
         yAxis: {
           visible: true,
           title: null,
           minPadding: 0,
-          maxPadding: 0
+          maxPadding: 0,
+          accessibility: {
+            description: 'Y Axis'
+          }
         },
         title: {
           text: null
@@ -203,6 +214,9 @@ export default {
         },
         series: [
           {
+            accessibility: {
+              description: 'primary vs secondary'
+            },
             data: [
               {
                 low: 0,
