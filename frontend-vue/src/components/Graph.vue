@@ -188,6 +188,9 @@ export default {
         },
         series: [
           {
+            accessibility: {
+              description: 'network graph'
+            },
             enableMouseTracking: true,
             layoutAlgorithm: {
               enableSimulation: false,
