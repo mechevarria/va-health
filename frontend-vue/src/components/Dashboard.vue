@@ -4,10 +4,11 @@
       Clinical Dashboard
       <span>
         <button
+          role="button"
           class="btn btn-danger mr-2"
           @click="doClear()"
           v-if="filterId > 0"
-          alt="Clear Filters"
+          aria-label="Clear"
         >
           <i class="cil-x-circle btn-icon mr-1"></i>Clear
         </button>
@@ -16,6 +17,7 @@
           v-b-modal.filter-modal
           :disabled="isBusy"
           role="button"
+          aria-label="Filter"
         >
           <i class="cil-filter btn-icon mr-1" v-if="!isBusy"></i>
           <i
@@ -79,6 +81,7 @@
           <div class="form-group col-md-5">
             <label>{{ filter.label }}</label>
             <b-form-select
+              :aria-label="filter.label"
               v-model="filter.value"
               :options="filter.valueOptions"
               :disabled="!filter.enabled"
@@ -88,6 +91,7 @@
           <div class="form-group col-md-5">
             <label v-if="filter.boolOptions">Is Equal</label>
             <b-form-select
+              aria-label="Is Equal"
               v-if="filter.boolOptions"
               v-model="filter.is_equal"
               :options="filter.boolOptions"
@@ -99,6 +103,7 @@
             <label v-if="index == 0">Enabled</label>
             <label v-else>&nbsp;</label>
             <b-form-checkbox
+              :aria-label="`filter-enabled-${index}`"
               :id="`filter-enabled-${index}`"
               v-model="filter.enabled"
             ></b-form-checkbox>
@@ -108,6 +113,7 @@
           <div class="form-group col-md-5">
             <label>{{ filter.label }} Min</label>
             <b-form-spinbutton
+              aria-label="Min"
               v-model="filter.min"
               :min="filter.inputMin"
               :max="filter.inputMax"
@@ -118,6 +124,7 @@
           <div class="form-group col-md-5">
             <label>{{ filter.label }} Max</label>
             <b-form-spinbutton
+              aria-label="Max"
               v-model="filter.max"
               :min="filter.inputMin"
               :max="filter.inputMax"
@@ -129,6 +136,7 @@
             <label v-if="index == 0">Enabled</label>
             <label v-else>&nbsp;</label>
             <b-form-checkbox
+              :aria-label="`filter-enabled-${index}`"
               :id="`filter-enabled-${index}`"
               v-model="filter.enabled"
             ></b-form-checkbox>
