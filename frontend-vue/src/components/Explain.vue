@@ -5,7 +5,7 @@
         <i class="spinner-border spinner-border-sm mb-1 ml-1" v-if="isBusy"></i>
       </h5>
 
-      <button type="button" class="btn btn-secondary" @click="clearGroup()" :disabled="isBusy">
+      <button type="button" class="btn btn-secondary" @click="clearGroup()" :disabled="isBusy" aria-label="clear">
         <span class="cil-x-circle icon mr-1"></span>Clear
       </button>
     </span>
