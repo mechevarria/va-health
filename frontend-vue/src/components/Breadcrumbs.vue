@@ -7,7 +7,7 @@
         :key="index"
         v-bind:class="{ active: index === breadcrumbs.length -1}"
       >
-        <router-link v-if="index !== breadcrumbs.length -1" :to="{ name: route }">{{ upperFirst(route) }}</router-link>
+        <router-link v-if="index !== breadcrumbs.length -1" :to="{ name: route }" :aria-label="route">{{ upperFirst(route) }}</router-link>
         <span v-else>{{ upperFirst(route) }}</span>
       </li>
     </ol>
