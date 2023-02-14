@@ -24,7 +24,7 @@
         </router-link>
       </li>
     </ul>
-    <button class="c-sidebar-minimizer c-class-toggler" type="button" @click="toggleMin"></button>
+    <button class="c-sidebar-minimizer c-class-toggler" type="button" aria-label="toggle sidebar min" @click="toggleMin"></button>
   </div>
 </template>
 
