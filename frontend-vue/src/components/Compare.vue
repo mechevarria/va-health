@@ -6,6 +6,7 @@
       </h4>
       <button
         type="button"
+        aria-label="compare"
         class="btn btn-primary float-right"
         @click="doCompare()"
         :disabled="isBusy"
@@ -27,6 +28,7 @@
           <button
             type="button"
             class="btn btn-sm"
+            aria-label="collapse"
             @click="showFilters = !showFilters"
           >
             <i v-if="!showFilters" class="cil-chevron-bottom btn-icon"></i>
@@ -59,6 +61,7 @@
                 <label v-if="index == 0">Enabled</label>
                 <label v-else>&nbsp;</label>
                 <b-form-checkbox
+                  :aria-label="`group-1-filter-enabled-${index}`"
                   :id="`group-1-filter-enabled-${index}`"
                   v-model="filter.enabled"
                 ></b-form-checkbox>
@@ -68,6 +71,7 @@
               <div class="form-group col-md-5">
                 <label>{{ filter.label }} Min</label>
                 <b-form-spinbutton
+                  aria-label="min"
                   v-model="filter.min"
                   :min="filter.inputMin"
                   :max="filter.inputMax"
@@ -78,6 +82,7 @@
               <div class="form-group col-md-5">
                 <label>{{ filter.label }} Max</label>
                 <b-form-spinbutton
+                  aria-label="max"
                   v-model="filter.max"
                   :min="filter.inputMin"
                   :max="filter.inputMax"
@@ -89,6 +94,7 @@
                 <label v-if="index == 0">Enabled</label>
                 <label v-else>&nbsp;</label>
                 <b-form-checkbox
+                  :aria-label="`group-1-filter-enabled-${index}`"
                   :id="`group-1-filter-enabled-${index}`"
                   v-model="filter.enabled"
                 ></b-form-checkbox>
@@ -105,6 +111,7 @@
           <button
             type="button"
             class="btn btn-sm"
+            aria-label="collapse"
             @click="showFilters = !showFilters"
           >
             <i v-if="!showFilters" class="cil-chevron-bottom btn-icon"></i>
@@ -114,7 +121,7 @@
         <div class="card-body" v-if="showFilters">
           <div class="form-row">
             <div class="form-group col-md-12">
-              <b-form-checkbox id="compare-rest" v-model="compareRest">
+              <b-form-checkbox id="compare-rest" v-model="compareRest" aria-label="compare-rest">
                 Compare against the rest of the data?
               </b-form-checkbox>
             </div>
@@ -145,6 +152,7 @@
                   <label v-if="index == 0">Enabled</label>
                   <label v-else>&nbsp;</label>
                   <b-form-checkbox
+                    :aria-label="`group-2-filter-enabled-${index}`"
                     :id="`group-2-filter-enabled-${index}`"
                     v-model="filter.enabled"
                   ></b-form-checkbox>
@@ -154,6 +162,7 @@
                 <div class="form-group col-md-5">
                   <label>{{ filter.label }} Min</label>
                   <b-form-spinbutton
+                    aria-label="min"
                     v-model="filter.min"
                     :min="filter.inputMin"
                     :max="filter.inputMax"
@@ -164,6 +173,7 @@
                 <div class="form-group col-md-5">
                   <label>{{ filter.label }} Max</label>
                   <b-form-spinbutton
+                    aria-label="max"
                     v-model="filter.max"
                     :min="filter.inputMin"
                     :max="filter.inputMax"
@@ -175,6 +185,7 @@
                   <label v-if="index == 0">Enabled</label>
                   <label v-else>&nbsp;</label>
                   <b-form-checkbox
+                    :aria-label="`group-2-filter-enabled-${index}`"
                     :id="`group-2-filter-enabled-${index}`"
                     v-model="filter.enabled"
                   ></b-form-checkbox>
